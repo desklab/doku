@@ -1,0 +1,49 @@
+.menu {
+  .menu-item {
+    display: list-item !important;
+
+    & > button {
+      appearance: none !important;
+      border-radius: $border-radius;
+      box-sizing: border-box;
+      color: inherit;
+      display: inline-block;
+      margin: 0 (-$unit-2);
+      padding: $unit-1 $unit-2;
+      background: transparent;
+      border: none;
+      width: calc(100% + #{$unit-4});
+      text-align: left;
+      text-decoration: none;
+
+      &:focus,
+      &:hover {
+        background: $secondary-color;
+        color: $primary-color;
+      }
+
+      &:active,
+      &.active {
+        background: $secondary-color;
+        color: $primary-color;
+        @include control-shadow();
+      }
+    }
+  }
+
+  .menu-item-error {
+    & > a, button {
+      &:focus,
+      &:hover {
+        background: transparentize($error-color, 0.9);
+        color: $error-color;
+      }
+
+      &:active,
+      &.active {
+        background: transparentize($error-color, 0.9);
+        color: $error-color;
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<header class="navbar p-3 border-bottom">
+    <section class="navbar-section">
+        <a href="{{ url_for('base.index') }}" class="navbar-brand mr-2">Doku</a>
+    </section>
+    <section class="navbar-section">
+        <div class="dropdown dropdown-right">
+            <a class="btn btn-link-icon dropdown-toggle" tabindex="0">
+                <i data-feather="user"></i>
+            </a>
+            <ul class="menu text-left">
+                <li class="menu-item">
+                    <div class="tile tile-centered">
+                        <div class="tile-icon icon-bg icon-bg-sm bg-dark">
+                            <i height="12px" width="12px" data-feather="user"></i>
+                        </div>
+                        <div class="tile-content">{{ session['user'] }}</div>
+                    </div>
+                </li>
+                <li class="divider"></li>
+                <li class="menu-item"><a href="#">Account</a>
+                <li class="menu-item"><a href="{{ url_for('auth.logout') }}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+</header>

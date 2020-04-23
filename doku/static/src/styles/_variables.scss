@@ -1,0 +1,88 @@
+$white:    #fff;
+$gray-50: #f5f7fa;
+$gray-100: #f0f2f5;
+$gray-200: #e6eaed;
+$gray-300: #d5dade;
+$gray-400: #b5b9bd;
+$gray-500: #989c9e;
+$gray-600: #6d6f73;
+$gray-700: #5c5e61;
+$gray-800: #3c3d40;
+$gray-900: #1f2021;
+$black: #000000;
+
+$grays: (
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900
+);
+
+
+$primary-color-900: #316543;
+$primary-color-800: #3d8556;
+$primary-color-700: #449661;
+$primary-color-600: #4da96e;
+$primary-color-500: #55b979;
+$primary-color-400: #6dc38d;
+$primary-color-300: #87cea1;
+$primary-color-200: #a9dbbb;
+$primary-color-100: #cae9d5;
+$primary-color-50: #e9f6ee;
+
+$primary-color: $primary-color-800;
+// $secondary-color: $primary-color-50;
+$secondary-color: transparentize($primary-color, 0.9);
+$success-color: $primary-color-600;
+$dark-color: $gray-800;
+$bg-color-dark: $gray-100;
+
+$base-font-family: "Open Sans", "Segoe UI", Roboto;
+$mono-font-family: "Fira Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace;
+$big-font-family: "Poppins";
+
+$html-font-size: 20px !default;
+$html-line-height: 1.5 !default;
+$font-size: .8rem !default;
+$font-size-sm: .7rem !default;
+$font-size-tiny: .55rem !default;
+$font-size-lg: .9rem !default;
+$line-height: 1.2rem !default;
+
+$unit-o: .05rem !default;
+$unit-h0: .075rem !default;
+$unit-h: .1rem !default;
+$unit-h1: .125rem !default;
+$unit-1: .2rem !default;
+$unit-2: .4rem !default;
+$unit-3: .6rem !default;
+$unit-4: .8rem !default;
+$unit-5: 1rem !default;
+$unit-6: 1.2rem !default;
+$unit-7: 1.4rem !default;
+$unit-8: 1.6rem !default;
+$unit-9: 1.8rem !default;
+$unit-10: 2rem !default;
+$unit-12: 2.4rem !default;
+$unit-14: 2.8rem !default;
+$unit-16: 3.2rem !default;
+
+$control-size-lg: $unit-12;
+
+$border-width: $unit-h0;
+$border-width-lg: $unit-h1;
+$border-color: $gray-200;
+$border-radius-sm: $unit-h;
+$border-radius-lg: $unit-2;
+$border-radius-xl: $unit-3;
+$rounded-pill: 50%;
+
+$shadow-color: rgba(12, 12, 13, 0.1);
+$shadow: 0 2px 8px $shadow-color;
+$shadow-sm: 0 1px 4px $shadow-color;
+$shadow-lg: 0 4px 16px $shadow-color;

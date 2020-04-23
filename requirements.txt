@@ -1,0 +1,15 @@
+werkzeug
+itsdangerous
+sqlalchemy
+marshmallow>=3.5.1
+marshmallow_sqlalchemy
+Flask-Babel
+markdown>=3.2.1
+jinja2
+flask
+Pygments>=2.6.1
+flask-sqlalchemy
+alembic>=1.4.2
+click
+redis
+WeasyPrint>=51

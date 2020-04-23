@@ -1,0 +1,150 @@
+html {
+  height: 100%;
+}
+
+.doku-edit {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+
+  .doku-edit-cols {
+    flex: 1 1 auto;
+  }
+
+  .navbar {
+    border-bottom: 0 !important;
+  }
+
+  .doku-edit-left {
+    display: flex;
+    flex-direction: column;
+
+    .tab-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+      &.tab-content-vars {
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+        .doku-edit-vars {
+          overflow-y: auto;
+          height: 100px;
+          flex: 1 0 auto;
+          padding: $unit-3;
+
+          .doku-inline-var {
+            height: auto;
+            border: solid $border-width $border-color;
+            border-radius: $border-radius;
+            margin-bottom: $unit-2;
+
+            .doku-inline-head {
+              background: $bg-color;
+              padding: $unit-4;
+
+              .dropdown {
+                float: right;
+              }
+
+              &:hover {
+                background: $gray-50;
+              }
+
+              &:active {
+                @include control-shadow();
+              }
+            }
+          }
+        }
+      }
+
+      &.tab-content-template {
+        .editor {
+          flex: 1 0 auto;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+
+          .CodeMirror {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+
+            .CodeMirror-scroll {
+              overflow-y: auto;
+              height: 100px;
+              flex: 1 0 auto;
+              flex-grow: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .tab {
+      margin-bottom: 0;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $unit-2 $unit-3;
+      border-top: solid $border-width $border-color;
+      vertical-align: center;
+      position: relative;
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  .doku-edit-right {
+    background: $gray-100;
+    height: 100%;
+    flex: 0 1 auto !important;
+    display: flex;
+
+    .doku-preview {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .doku-preview-toolbar {
+        width: 100%;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        padding-top: $unit-2;
+        padding-bottom: $unit-2;
+        padding-left: $unit-3;
+        padding-right: $unit-3;
+        background: $light-color;
+        border-bottom: solid $gray-300 $border-width;
+      }
+
+      .doku-preview-document {
+        overflow-y: auto;
+        height: 1px;
+        flex: 1 1 auto;
+        padding-top: $unit-2;
+        padding-left: $unit-3;
+        padding-right: $unit-5;
+        width: 100%;
+
+        .doku-edit-page {
+          margin-bottom: $unit-2;
+          background: $white;
+          box-shadow: rgba(0, 0, 0, 0.2) 0 4px 6px, rgba(0, 0, 0, 0.06) 0 0 4px;
+        }
+      }
+    }
+  }
+}
+
+.cm-s-base16-light.CodeMirror {
+  background-color: $gray-100 !important;
+}

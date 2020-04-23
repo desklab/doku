@@ -1,0 +1,10 @@
+.navbar {
+  background: $white;
+  height: $unit-16;
+  z-index: 300;
+  border-bottom: solid $border-color $border-width;
+  .navbar-brand {
+    font-family: $big-font-family;
+    color: $dark-color !important;
+  }
+}

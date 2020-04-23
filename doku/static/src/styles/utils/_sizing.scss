@@ -1,0 +1,33 @@
+@mixin sizing-variant-height($name, $value) {
+  .h-#{$name} {
+    height: $value !important;
+  }
+  .min-h-#{$name} {
+    min-height: $value !important;
+  }
+  .max-h-#{$name} {
+    max-height: $value !important;
+  }
+}
+
+@mixin sizing-variant-width($name, $value) {
+  .w-#{$name} {
+    width: $value !important;
+  }
+  .min-w-#{$name} {
+    min-width: $value !important;
+  }
+  .max-w-#{$name} {
+    max-width: $value !important;
+  }
+}
+
+@include sizing-variant-height("100", 100%);
+@include sizing-variant-height("100-vh", 100vh);
+@include sizing-variant-height("50", 50%);
+@include sizing-variant-height("50-vh", 50vh);
+
+@include sizing-variant-width("100", 100%);
+@include sizing-variant-width("100-vw", 100vw);
+@include sizing-variant-width("50", 50%);
+@include sizing-variant-width("50-vw", 50vw);

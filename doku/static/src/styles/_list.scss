@@ -1,0 +1,31 @@
+table.list {
+  border-collapse:separate;
+  border: solid $border-color $border-width;
+  border-radius: $border-radius !important;
+  thead {
+    tr {
+      height: $unit-14;
+      th {
+        font-size: $font-size-tiny;
+        color: $gray-500;
+        border-bottom: solid $border-color $border-width;
+      }
+    }
+  }
+  tbody {
+    tr{
+      td {
+        font-size: $font-size-sm;
+        padding: $unit-4;
+      }
+      &:active {
+        @include control-shadow();
+      }
+    }
+    tr:last-of-type {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body_class %}doku-edit{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div id="edit"></div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        window.documentId = {{ document_id }};
+        window.renderUrl = '{{ url_for('document.render', document_id=document_id) }}';
+        window.documentObj = {{ document_json|tojson }};
+        {{ create_csrf_token(output=False) }}
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='edit.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='pdf.worker.bundle.js') }}"></script>
+{% endblock %}

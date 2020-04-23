@@ -1,0 +1,22 @@
+.resize {
+  display: flex;
+
+  &.resize-vertical {
+    flex-direction: row;
+    width: 300px;
+  }
+
+  &.resize-horizontal {
+    flex-direction: column;
+  }
+
+  .resize-handle {
+    width: $border-width;
+    background: $border-color;
+    height: 100%;
+    cursor: ew-resize;
+    &:active {
+      background: $border-color-dark;
+    }
+  }
+}

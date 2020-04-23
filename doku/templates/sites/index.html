@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    {% include "components/full_search.html" %}
+    <div id="app"></div>
+    <div class="container grid-md">
+        <div class="columns">
+            {% include "components/project_table.html" %}
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        window.apiUrl = '{{ url_for('api.v1.document.create') }}';
+        window.templateApi = '{{ url_for('api.v1.template.get') }}';
+    </script>
+    {{ create_csrf_token(output=False) }}
+    <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
+{% endblock %}

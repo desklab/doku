@@ -1,0 +1,15 @@
+.doku-search-lg {
+  background: $gray-200;
+  border: none;
+  font-family: $mono-font-family;
+  color: $gray-800;
+  &::placeholder {
+    font-weight: 400;
+    color: $gray-600;
+  }
+}
+
+.input-group-btn {
+  border-top-right-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+}
