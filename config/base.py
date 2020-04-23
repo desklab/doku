@@ -25,7 +25,7 @@ dictConfig({
 })
 
 REDIS_CONFIG = {
-    'host': os.environ.get('REDIS_HOST', 'localhost')
+    'host': os.environ.get('REDIS_HOST', 'localhost'),
     'port': os.environ.get('REDIS_PORT', 6379),
     'password': os.environ.get('REDIS_PASSWORD', None)
 }
