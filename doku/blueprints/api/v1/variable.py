@@ -10,56 +10,26 @@ from doku.utils.db import get_or_404
 bp = Blueprint('api.v1.variable', __name__)
 
 
-@bp.route('/<int:variable_id>', methods=['POST'])
-def update(variable_id: int):
-    variable: Variable = get_or_404(
-        db.session.query(Variable).filter_by(id=variable_id)
-    )
-    schema = VariableSchema(
-        unknown=EXCLUDE, session=db.session,
-        instance=variable, partial=True
-    )
+@bp.route('/', methods=['GET'])
+def get_all():
+    return VariableSchema.get_all()
 
-    data = dict(request.form.copy())
-    if request.json is not None:
-        data.update(request.json)
 
-    try:
-        variable = schema.load(data)
-    except ValidationError as e:
-        return jsonify(e.messages), BadRequest.code
+@bp.route('/<int:variable_id>/', methods=['GET'])
+def get(variable_id: int):
+    return VariableSchema.get(variable_id)
 
-    db.session.commit()
 
-    result = schema.dump(variable)
-    return jsonify(result)
+@bp.route('/', methods=['PUT'])
+def update():
+    return VariableSchema.update()
 
 
 @bp.route('/', methods=['POST'])
 def create():
-    schema = VariableSchema(unknown=EXCLUDE, session=db.session)
-
-    data = dict(request.form.copy())
-    if request.json is not None:
-        data.update(request.json)
-
-    try:
-        variable = schema.load(data)
-    except ValidationError as e:
-        return jsonify(e.messages), BadRequest.code
-
-    db.session.add(variable)
-    db.session.commit()
-
-    result = schema.dump(variable)
-    return jsonify(result)
+    return VariableSchema.create()
 
 
-@bp.route('/<int:variable_id>', methods=['DELETE'])
+@bp.route('/<int:variable_id>/', methods=['DELETE'])
 def delete(variable_id: int):
-    variable: Variable = get_or_404(
-        db.session.query(Variable).filter_by(id=variable_id)
-    )
-    db.session.delete(variable)
-    db.session.commit()
-    return jsonify({'success': True})
+    return VariableSchema.delete(variable_id)
