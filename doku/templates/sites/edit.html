@@ -6,9 +6,9 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-        window.documentId = {{ document_id }};
-        window.renderUrl = '{{ url_for('document.render', document_id=document_id) }}';
         window.documentObj = {{ document_json|tojson }};
+        window.variableApi = '{{ url_for('api.v1.variable.update') }}'
+        window.documentApi = '{{ url_for('api.v1.document.update') }}'
         {{ create_csrf_token(output=False) }}
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='edit.bundle.js') }}"></script>

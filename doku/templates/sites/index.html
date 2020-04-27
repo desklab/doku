@@ -3,7 +3,7 @@
     {{ super() }}
     {% include "components/full_search.html" %}
     <div id="app"></div>
-    <div class="container grid-md">
+    <div class="container grid-lg">
         <div class="columns">
             {% include "components/project_table.html" %}
         </div>
@@ -11,8 +11,7 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-        window.apiUrl = '{{ url_for('api.v1.document.create') }}';
-        window.templateApi = '{{ url_for('api.v1.template.get') }}';
+        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
     </script>
     {{ create_csrf_token(output=False) }}
     <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
