@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         {% for document in documents %}
-            <tr class="c-hand" onclick="window.location.href='{{ url_for('document.index', document_id=document.id) }}'">
+            <tr>
                 <td>
                     <a href="{{ url_for('document.index', document_id=document.id) }}">
                         {{ document.name }}
