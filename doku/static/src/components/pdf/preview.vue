@@ -24,12 +24,13 @@
   export default {
     name: 'app',
     components: {
-      PDFDocument, resize
       PDFDocument, resize, DownloadIcon
     },
+    props: [
+      'url'
+    ],
     data() {
       return {
-        url: window.renderUrl,
         scale: 1
       }
     },

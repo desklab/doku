@@ -9,9 +9,7 @@
         Unused
       </span>
       <div class="dropdown dropdown-right">
-        <transition name="fade-out">
-          <span v-if="$data._showDone" class="text-dark mr-2">Done!</span>
-        </transition>
+        <AnimatedNotice ref="saveNotice"></AnimatedNotice>
         <div class="btn-group btn-sm">
           <button @click.self="save" ref="saveButton" class="btn btn-sm btn-primary">Save</button>
           <a class="btn btn-sm p-0 dropdown-toggle btn-primary" tabindex="0">
@@ -41,7 +39,7 @@
           <plus-icon size="18"></plus-icon>
           Add
         </button>
-        <InlineVariable v-for="childVariable in variable.children" :key="childVariable.name" :variable="childVariable"></InlineVariable>
+        <InlineVariable ref='children' v-for="childVariable in variable.children" :key="childVariable.id" :document-id="documentId" :variable="childVariable"></InlineVariable>
         <Modal class="modal-sm" ref="addModal" v-bind:title="'Add Child'">
           <div class="modal-body">
             <div class="content">
@@ -52,6 +50,7 @@
             </div>
           </div>
           <div class="modal-footer">
+            <AnimatedNotice ref="addNotice"></AnimatedNotice>
             <button @click="addChild" class="btn btn btn-primary">
               Save
             </button>
@@ -62,17 +61,18 @@
         </Modal>
       </div>
     </div>
-    <Modal class="modal-sm" ref="deleteModal" v-bind:title="'Delete Variable'">
+    <Modal class="modal-sm" ref="removeModal" v-bind:title="'Delete Variable'">
       <div class="modal-body">
         <div class="content">
-          Do you really want to delete <code>{{ variable.name }}</code>
+          Do you really want to remove <code>{{ variable.name }}</code>
         </div>
       </div>
       <div class="modal-footer">
-        <button @click="remove" class="btn btn btn-error">
+        <AnimatedNotice ref="removeNotice"></AnimatedNotice>
+        <button @click="remove($event, true)" class="btn btn btn-error">
           Delete
         </button>
-        <button @click="$refs.deleteModal.close()" class="btn btn-link">
+        <button @click="$refs.removeModal.close()" class="btn btn-link">
           Close
         </button>
       </div>
@@ -82,15 +82,13 @@
 
 <script>
   import ClipboardJS from 'clipboard';
-  import axios from "axios";
+  import {mapActions} from 'vuex';
   import { MoreVerticalIcon, CopyIcon, PlusIcon, TrashIcon } from 'vue-feather-icons';
 
   import Editor from './Editor.vue';
   import Modal from "./Modal";
-
-
-  axios.defaults.xsrfCookieName = 'csrf_token';
-  axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
+  import AnimatedNotice from "./AnimatedNotice";
+  import * as actionTypes from '../../store/types/actions';
 
   export default {
     name: 'InlineVariable',
@@ -104,8 +102,8 @@
       }
     },
     components: {
+      AnimatedNotice,
       Modal,
-      Editor
       Editor,
       CopyIcon, MoreVerticalIcon, PlusIcon, TrashIcon
     },
@@ -124,60 +122,74 @@
       showCode: function (newValue, oldValue) {
         if (newValue) {
           if (!this.variable.is_list) {
-            setTimeout(() => {
+            this.$nextTick(() => {
               this.$refs.editor.editor.refresh();
               this.$refs.editor.editor.focus();
-            }, 100);
+            });
           }
         }
       }
     },
     methods: {
+      ...mapActions('document', [
+        actionTypes.REMOVE_VARIABLE,
+      ]),
       save(event) {
         event.target.classList.add('loading');
         let data = {
           content: this.$refs.editor.getValue()
         };
-        let url = this.variable.api_url;
-        axios
-          .post(url, data)
-          .then((response) => {
-            this._animateShowDone();
-            this.variable = response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-          .finally(() => {
-            event.target.classList.remove('loading');
-          });
+        // TODO add this
       },
-      remove(event) {
-        event.target.classList.add('loading');
-        axios.delete(this.variable.delete_url)
-          .then((response) => {
-            this.$refs.deleteModal.close();
-          })
-          .finally(() => {
-            event.target.classList.remove('loading');
-          });
-      },
-      refreshEditor() {
-        if (this.showCode) {
-          this.$refs.editor.editor.refresh();
+      remove(event, sure) {
+        if (!sure) {
+          this.$refs.removeModal.open();
+          return;
         }
-      },
-      _animateShowDone() {
-        this.$data._showDone = true;
-        setTimeout(() => {
-          this.$data._showDone = false
-        }, 2000);
+        event.target.classList.add('loading');
+        this.removeVariable(this.variable.id)
+          .then(() => {
+            if (this.$refs.removeModal !== undefined) {
+              // As this element is probably going to be removed, closing the
+              // modal is redundant. Also, $refs will no longer be available.
+              this.$refs.removeModal.close();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$refs.removeNotice.trigger('Failed!', 'text-error');
+          })
+          .finally(() => {
+            event.target.classList.remove('loading');
+          });
       },
       getData() {
-        return {
+        // Define default data object
+        let _data = {
           id: this.variable.id,
-          content: !this.variable.is_list ? this.$refs.editor.getValue() : ''
+          document_id: this.documentId
         }
+
+        if (this.variable.is_list) {
+          // This variable is a list. Thus, the children property
+          // (which is a list) has to be populated. This is done by
+          // iterating over all children and requesting their data
+          // recursively.
+          _data.children = [];
+          _data.content = '';
+          // Note: If only one children is present, the children ref is
+          // not an array. This case must be
+          if (Array.isArray(this.$refs.children)) {
+            _data.children.push(
+              ...this.$refs.children.map(c => c.getData())
+            );
+          } else {
+            _data.children.push(this.$refs.children.getData());
+          }
+        } else {
+          _data.content = this.$refs.editor.getValue();
+        }
+        return _data;
       },
       addChild(event) {
         let childNameInput = document.getElementById('childNameInput');
@@ -189,23 +201,20 @@
           childNameInput.classList.add('is-error');
           return;
         }
-        event.target.classList.add('loading');
-        axios
-          .post(this.variable.create_url, {
-            name: childNameInput.value,
-            parent_id: this.variable.id,
-            document_id: this.documentId,
-          })
-          .then(function (response) {
-            this.variable.children.push(response.data);
-          })
-          .catch(function (error) {
-            console.error(error);
-          })
-          .finally(function () {
-            event.target.classList.remove('loading');
-          });
-      }
+        // event.target.classList.add('loading');
+        // axios
+        //   .post(this.variable.create_url, {
+        //     name: childNameInput.value,
+        //     parent_id: this.variable.id,
+        //     document_id: this.documentId,
+        //   });
+        // TODO add this again
+      },
+      updateEditor() {
+        if (this.showCode) {
+          this.$refs.editor.editor.refresh();
+        }
+      },
     }
   }
 </script>

@@ -40,13 +40,9 @@
 </template>
 
 <script>
-  import modal from '../components/ui/Modal.vue';
-  import axios from 'axios';
-
-
-  axios.defaults.xsrfCookieName = 'csrf_token';
-  axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
+  import { axiosInstance as axios } from '../api';
   import {PlusIcon} from 'vue-feather-icons';
+  import Modal from '../components/ui/Modal.vue';
 
   export default {
     name: 'home',
