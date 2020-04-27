@@ -39,7 +39,6 @@ class Template(db.Model, DateMixin):
     base_style_id = db.Column(
         db.Integer,
         db.ForeignKey('doku_stylesheet.id'),
-
         nullable=True
     )
     source = db.Column(db.UnicodeText, nullable=True, default=DEFAULT_TEMPLATE)
@@ -78,7 +77,7 @@ class Template(db.Model, DateMixin):
             var.name: var.as_list for var in variables
             if var.is_list
         })
-        html = HTML(string=template.render(**context))
+        html = HTML(string=template.render(**context), base_url='.')
         return html.write_pdf(stylesheets=stylesheets)
 
 
