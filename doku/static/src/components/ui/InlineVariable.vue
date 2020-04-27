@@ -15,19 +15,19 @@
         <div class="btn-group btn-sm">
           <button @click.self="save" ref="saveButton" class="btn btn-sm btn-primary">Save</button>
           <a class="btn btn-sm p-0 dropdown-toggle btn-primary" tabindex="0">
-            <i height="16px" data-feather="more-vertical"></i>
+            <more-vertical-icon size="16"></more-vertical-icon>
           </a>
           <ul class="menu">
             <li v-if="!variable.is_list" class="menu-item">
               <a href="#" id="copy">
-                <i height="14px" data-feather="copy"></i>
+                <copy-icon size="14"></copy-icon>
                 Copy
               </a>
             </li>
             <li class="menu-item menu-item-error text-error">
-              <button @click="$refs.deleteModal.open()">
-                <i height="14px" data-feather="trash"></i>
-                Delete
+              <button @click="remove">
+                <trash-icon size="14"></trash-icon>
+                Remove
               </button>
             </li>
           </ul>
@@ -38,7 +38,7 @@
       <Editor v-if="!variable.is_list" ref="editor" v-bind:mode="'text/x-markdown'" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
       <div class="m-2" v-else>
         <button @click="$refs.addModal.open()" class="btn btn-sm mb-2">
-          <i height="18px" width="18px" data-feather="plus"></i>
+          <plus-icon size="18"></plus-icon>
           Add
         </button>
         <InlineVariable v-for="childVariable in variable.children" :key="childVariable.name" :variable="childVariable"></InlineVariable>
@@ -83,6 +83,7 @@
 <script>
   import ClipboardJS from 'clipboard';
   import axios from "axios";
+  import { MoreVerticalIcon, CopyIcon, PlusIcon, TrashIcon } from 'vue-feather-icons';
 
   import Editor from './Editor.vue';
   import Modal from "./Modal";
@@ -105,6 +106,8 @@
     components: {
       Modal,
       Editor
+      Editor,
+      CopyIcon, MoreVerticalIcon, PlusIcon, TrashIcon
     },
     data() {
       return {

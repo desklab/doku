@@ -2,7 +2,7 @@
   <div class="doku-document-toolbar">
     <h3 class="m-0">Documents</h3>
     <button @click="openModal" class="btn btn-sm">
-      <i height="18px" width="18px" data-feather="plus"></i>
+      <plus-icon size="18"></plus-icon>
       Create new document
     </button>
     <modal ref="modal" v-bind:title="'New Document'">
@@ -46,11 +46,12 @@
 
   axios.defaults.xsrfCookieName = 'csrf_token';
   axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
+  import {PlusIcon} from 'vue-feather-icons';
 
   export default {
     name: 'home',
     components: {
-      modal
+      Modal, PlusIcon
     },
     data() {
       return {

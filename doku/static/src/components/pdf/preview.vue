@@ -6,7 +6,7 @@
           Refresh
         </button>
         <a v-bind:href="url" class="btn btn-sm btn-link-icon">
-          <i data-feather="download"></i>
+          <download-icon></download-icon>
         </a>
       </div>
       <PDFDocument ref="document" class="doku-preview-document" v-bind="{url, scale}"/>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+  import { DownloadIcon } from 'vue-feather-icons';
+
   import PDFDocument from './document.vue';
   import resize from "../ui/Resize";
 
@@ -23,6 +25,7 @@
     name: 'app',
     components: {
       PDFDocument, resize
+      PDFDocument, resize, DownloadIcon
     },
     data() {
       return {
