@@ -53,20 +53,21 @@ html {
               &:hover {
                 background: $gray-50;
               }
-
-              &:active {
-                @include control-shadow();
-              }
             }
           }
         }
       }
 
       &.tab-content-template {
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
         .editor {
           flex: 1 0 auto;
-          height: 100%;
           display: flex;
+
           flex-direction: column;
 
           .CodeMirror {

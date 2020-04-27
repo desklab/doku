@@ -18,9 +18,6 @@ table.list {
         font-size: $font-size-sm;
         padding: $unit-4;
       }
-      &:active {
-        @include control-shadow();
-      }
     }
     tr:last-of-type {
       td {
