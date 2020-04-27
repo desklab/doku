@@ -2,6 +2,7 @@ from typing import Optional, List
 
 import markdown
 from sqlalchemy.orm import Session
+from sqlalchemy import event
 
 from doku.models import db, DateMixin
 
@@ -60,12 +61,11 @@ class Variable(db.Model, DateMixin):
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
 
     name = db.Column(db.String(255), unique=False, nullable=False)
-    content = db.Column(db.UnicodeText, nullable=False, default='')
+    content = db.Column(db.UnicodeText, nullable=False, default='', )
     compiled_content = db.Column(
         db.UnicodeText,
         nullable=False,
-        default=compile_content,
-        onupdate=compile_content
+        default=''
     )
     document_id = db.Column(
         db.Integer,
@@ -97,3 +97,15 @@ class Variable(db.Model, DateMixin):
         if not self.is_list:
             raise ValueError(f'{self.name} is not a list')
         return [var.compiled_content for var in self.children]
+
+
+@event.listens_for(Variable, 'before_update')
+@event.listens_for(Variable, 'before_insert')
+def before_any_compiler(mapper, connection, target):
+    content = target.content
+    if content is None or content is '':
+        target.content = ''
+        target.compiled_content = ''
+        return
+    else:
+        target.compiled_content = markdown.markdown(content, extensions=['codehilite'])
