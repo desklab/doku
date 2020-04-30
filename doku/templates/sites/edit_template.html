@@ -6,14 +6,12 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-        window.documentObj = {{ document_json|tojson }};
-        window.variables = {{ variable_json|tojson }};
         window.templateObj = {{ template_json|tojson }};
-        window.variableApi = '{{ url_for('api.v1.variable.update') }}'
-        window.documentApi = '{{ url_for('api.v1.document.update') }}'
+        window.stylesheets = {{ stylesheets_json|tojson }};
         window.templateApi = '{{ url_for('api.v1.template.update') }}'
+        window.stylesheetApi = '{{ url_for('api.v1.stylesheet.update') }}'
         {{ create_csrf_token(output=False) }}
     </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='edit.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='edit_template.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='pdf.worker.bundle.js') }}"></script>
 {% endblock %}

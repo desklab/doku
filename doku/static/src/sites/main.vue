@@ -40,8 +40,11 @@
 </template>
 
 <script>
-  import { axiosInstance as axios } from '../api';
   import {PlusIcon} from 'vue-feather-icons';
+  import feather from 'feather-icons';
+
+  import templateApi from '../api/template';
+  import documentApi from '../api/document';
   import Modal from '../components/ui/Modal.vue';
 
   export default {
@@ -55,11 +58,12 @@
       }
     },
     mounted() {
-      axios
-        .get(window.templateApi)
-        .then(response => {
+      templateApi.fetchTemplates()
+        .then((response) =>{
           this.templates = response.data;
-        });
+        })
+        .catch(console.error);
+      feather.replace();
     },
     methods: {
       openModal() {
@@ -78,19 +82,18 @@
           return;
         }
         event.target.classList.add('loading');
-        axios
-          .post(window.apiUrl, {
-            name: documentNameInput.value,
-            public: documentPublicInput.checked,
-            template_id: documentTemplateSelect.value || null,
-          })
-          .then(function (response) {
+        let template_id = documentTemplateSelect.value;
+        let data = {
+          name: documentNameInput.value,
+          public: documentPublicInput.checked,
+          template_id: (template_id === "") ? null : template_id
+        }
+        documentApi.createDocument(data)
+          .then((response) => {
             window.location.href = response.data.public_url;
           })
-          .catch(function (error) {
-            console.log(error);
-          })
-          .finally(function() {
+          .catch(console.error)
+          .finally(() => {
             event.target.classList.remove('loading');
           });
       }

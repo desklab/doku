@@ -3,7 +3,7 @@
     <div class="column doku-edit-left">
       <Tabs class="tab-block" v-bind:tabs="tabs"></Tabs>
       <VariableEditor ref="varEditor" v-show="tabs[0].active" class="tab-content tab-content-vars"></VariableEditor>
-      <TemplateEditor v-show="tabs[1].active" class="tab-content tab-content-template" ref="templateEditor" v-bind:value="document.template.source"></TemplateEditor>
+      <TemplateEditor v-show="tabs[1].active" class="tab-content tab-content-template" ref="templateEditor" v-bind:value="template.source"></TemplateEditor>
     </div>
     <div class="column doku-edit-right">
       <Preview v-bind:url="document.render_url"></Preview>
@@ -42,7 +42,9 @@
       Editor, Preview, Tabs, InlineVariable, modal, StylesModal
     },
     computed: mapState({
-      document: state => state.document.document
+      document: state => state.document.document,
+      template: state => state.template.template,
+      variables: state => state.variable.variables
     }),
     data() {
       return {
@@ -77,16 +79,19 @@
       },
     },
     methods: {
-      ...mapActions('document', [
-        'updateDocument',
-        'updateVariables',
-      ]),
       _keyListeners(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
           e.preventDefault();
           this.save();
         }
       },
+      save() {
+        if (this.tabs[0].active) {
+          this.$refs.varEditor.save(undefined, false);
+        } else if (this.tabs[1].active) {
+          this.$refs.templateEditor.save();
+        }
+      }
     }
   }
 </script>

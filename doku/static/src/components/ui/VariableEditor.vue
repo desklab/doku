@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="doku-edit-vars">
-      <InlineVariable ref="vars" v-for="variable in document.variables.filter(v => v.parent == null)" :document-id="document.id" :variable="variable"></InlineVariable>
+      <InlineVariable ref="vars" v-for="variable in variables.filter(v => v.parent == null)" :document-id="document.id" :variable="variable"></InlineVariable>
     </div>
     <div class="editor-toolbar">
       <span></span>
@@ -53,10 +53,11 @@
       }
     },
     computed: mapState({
-      document: state => state.document.document
+      document: state => state.document.document,
+      variables: state => state.variable.variables
     }),
     methods: {
-      ...mapActions('document', [
+      ...mapActions('variable', [
         actionTypes.UPDATE_VARIABLES,
       ]),
       closeConfirmModal() {

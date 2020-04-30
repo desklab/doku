@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "clipboard": "^2.0.6",
     "codemirror": "^5.52.2",
+    "feather-icons": "^4.28.0",
     "pdfjs-dist": "^2.3.200",
     "spectre.css": "^0.5.8",
     "vue": "^2.6.11",

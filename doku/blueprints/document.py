@@ -6,7 +6,8 @@ from weasyprint import HTML
 
 from doku import db
 from doku.models.document import Document
-from doku.models.schemas.document import DocumentSchema
+from doku.models.schemas import TemplateSchema
+from doku.models.schemas.document import DocumentSchema, VariableSchema
 from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
 
@@ -20,13 +21,15 @@ def index(document_id: int):
     document: Document = get_or_404(
         db.session.query(Document).filter_by(id=document_id)
     )
-    schema = DocumentSchema(session=db.session, instance=document)
-    dump = schema.dumps(document)
-
+    doc_schema = DocumentSchema(session=db.session, instance=document)
+    var_schemas = VariableSchema(session=db.session, many=True)
+    template_schema = TemplateSchema(session=db.session)
     return render_template(
         'sites/edit.html',
         document_id=document_id,
-        document_json=dump
+        document_json=doc_schema.dumps(document),
+        variable_json=var_schemas.dumps(document.variables, many=True),
+        template_json=template_schema.dumps(document.template)
     )
 
 

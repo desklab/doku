@@ -2,12 +2,8 @@
   <div class="doku-inline-var">
     <div v-on:click.self="showCode =! showCode" class="doku-inline-head">
       <code>{{ variable.name }}</code>
-      <span v-if="variable.is_list" class="chip">
-        List
-      </span>
-      <span v-if="!variable.used" class="chip">
-        Unused
-      </span>
+      <span v-if="variable.is_list" class="chip">List</span>
+      <span v-if="!variable.used" class="chip">Unused</span>
       <div class="dropdown dropdown-right">
         <AnimatedNotice ref="saveNotice"></AnimatedNotice>
         <div class="btn-group btn-sm">
@@ -17,10 +13,10 @@
           </a>
           <ul class="menu">
             <li v-if="!variable.is_list" class="menu-item">
-              <a href="#" id="copy">
+              <button :id="'copy'+String(variable.id)">
                 <copy-icon size="14"></copy-icon>
                 Copy
-              </a>
+              </button>
             </li>
             <li class="menu-item menu-item-error text-error">
               <button @click="remove">
@@ -32,7 +28,16 @@
         </div>
       </div>
     </div>
-    <div v-show="showCode">
+    <div v-show="showCode" class="doku-inline-var-code">
+      <div class="doku-inline-var-controls">
+        <animated-toggle v-if="!variable.is_list" ref="markdownToggle" v-bind:is-checked="variable.use_markdown">
+          <template v-slot:on>Markdown</template>
+          <template v-slot:off>Raw</template>
+        </animated-toggle>
+        <div class="form-inline">
+          <input type="text" placeholder="CSS Class" class="form-input input-sm" ref="cssClassInput" :value="variable.css_class">
+        </div>
+      </div>
       <Editor v-if="!variable.is_list" ref="editor" v-bind:mode="'text/x-markdown'" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
       <div class="m-2" v-else>
         <button @click="$refs.addModal.open()" class="btn btn-sm mb-2">
@@ -83,12 +88,13 @@
 <script>
   import ClipboardJS from 'clipboard';
   import {mapActions} from 'vuex';
-  import { MoreVerticalIcon, CopyIcon, PlusIcon, TrashIcon } from 'vue-feather-icons';
+  import {MoreVerticalIcon, CopyIcon, PlusIcon, TrashIcon} from 'vue-feather-icons';
 
   import Editor from './Editor.vue';
   import Modal from "./Modal";
   import AnimatedNotice from "./AnimatedNotice";
   import * as actionTypes from '../../store/types/actions';
+  import AnimatedToggle from "./AnimatedToggle";
 
   export default {
     name: 'InlineVariable',
@@ -102,6 +108,7 @@
       }
     },
     components: {
+      AnimatedToggle,
       AnimatedNotice,
       Modal,
       Editor,
@@ -114,7 +121,7 @@
       }
     },
     mounted() {
-      new ClipboardJS('#copy', {
+      new ClipboardJS('#copy' + String(this.variable.id), {
         text: () => this.$refs.editor.getValue()
       });
     },
@@ -131,15 +138,25 @@
       }
     },
     methods: {
-      ...mapActions('document', [
+      ...mapActions('variable', [
         actionTypes.REMOVE_VARIABLE,
+        actionTypes.UPDATE_VARIABLE,
+        actionTypes.CREATE_VARIABLE
       ]),
       save(event) {
         event.target.classList.add('loading');
-        let data = {
-          content: this.$refs.editor.getValue()
-        };
-        // TODO add this
+        let data = this.getData();
+        this.updateVariable(data)
+          .then(() => {
+            this.$refs.saveNotice.trigger('Success!', 'text-dark');
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$refs.saveNotice.trigger('Failed!', 'text-error');
+          })
+          .finally(() => {
+            event.target.classList.remove('loading');
+          });
       },
       remove(event, sure) {
         if (!sure) {
@@ -167,7 +184,8 @@
         // Define default data object
         let _data = {
           id: this.variable.id,
-          document_id: this.documentId
+          document_id: this.documentId,
+          css_class: this.$refs.cssClassInput.value,
         }
 
         if (this.variable.is_list) {
@@ -187,6 +205,7 @@
             _data.children.push(this.$refs.children.getData());
           }
         } else {
+          _data.use_markdown = this.$refs.markdownToggle.checked
           _data.content = this.$refs.editor.getValue();
         }
         return _data;
@@ -201,14 +220,27 @@
           childNameInput.classList.add('is-error');
           return;
         }
-        // event.target.classList.add('loading');
-        // axios
-        //   .post(this.variable.create_url, {
-        //     name: childNameInput.value,
-        //     parent_id: this.variable.id,
-        //     document_id: this.documentId,
-        //   });
-        // TODO add this again
+        let data = {
+          name: childNameInput.value,
+          parent_id: this.variable.id,
+          document_id: this.documentId
+        }
+        event.target.classList.add('loading');
+        this.createVariable(data)
+          .then(() => {
+            this.$nextTick(() => {
+              if (this.$refs.addModal !== undefined) {
+                this.$refs.addModal.close()
+              }
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$refs.addNotice.trigger('Failed!', 'text-error');
+          })
+          .finally(() => {
+            event.target.classList.add('loading');
+          });
       },
       updateEditor() {
         if (this.showCode) {

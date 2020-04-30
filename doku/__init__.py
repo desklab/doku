@@ -10,7 +10,7 @@ from redis import Redis
 
 from doku.models import db
 from doku.models import base
-from doku.blueprints import auth, base, document
+from doku.blueprints import auth, base, document, template
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.session import RedisSessionInterface
@@ -67,6 +67,7 @@ def create_app(name='doku', config='config.dev',
         app.register_blueprint(base.bp)
         app.register_blueprint(auth.bp)
         app.register_blueprint(document.bp, url_prefix='/document')
+        app.register_blueprint(template.bp, url_prefix='/template')
         api.init_api(app)
 
     return app

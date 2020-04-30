@@ -3,10 +3,8 @@
     {{ super() }}
     {% include "components/full_search.html" %}
     <div id="app"></div>
-    <div class="container grid-lg">
-        <div class="columns">
-            {% include "components/project_table.html" %}
-        </div>
+    <div class="mx-2">
+        {% include "components/project_table.html" %}
     </div>
 {% endblock %}
 {% block extra_js %}

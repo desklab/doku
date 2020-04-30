@@ -42,6 +42,17 @@ html {
             border-radius: $border-radius;
             margin-bottom: $unit-2;
 
+            .doku-inline-var-code {
+              border-top: solid $border-width $border-color;
+              .doku-inline-var-controls {
+                display: flex;
+                justify-content: space-between;
+                padding: $unit-2;
+                background: $gray-100;
+                border-bottom: solid $border-width $border-color;
+              }
+            }
+
             .doku-inline-head {
               background: $bg-color;
               padding: $unit-4;

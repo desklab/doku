@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>NAME</th>
-            <th>AUTHOR</th>
+            <th>TEMPLATE</th>
             <th>LAST UPDATED</th>
         </tr>
     </thead>
@@ -15,7 +15,9 @@
                     </a>
                 </td>
                 <td>
-                    Jonas
+                    <a href="{{ url_for('template.index', template_id=document.template.id) }}">
+                        {{ document.template.name }}
+                    </a>
                 </td>
                 <td>
                     <span class="tooltip" data-tooltip="{{ document.last_updated_format }}">

@@ -12,8 +12,8 @@ from doku.utils.db import get_or_404, get_or_create
 bp = Blueprint('api.v1.stylesheet', __name__)
 
 
-@bp.route('/<int:stylesheet_id>', methods=['PUT'])
-def update(stylesheet_id: int):
+@bp.route('/upload/<int:stylesheet_id>', methods=['PUT'])
+def upload(stylesheet_id: int):
     style: Stylesheet = get_or_404(
         db.session.query(Stylesheet).filter_by(id=stylesheet_id)
     )
@@ -38,3 +38,28 @@ def update(stylesheet_id: int):
 
     result = schema.dump(stylesheet)
     return jsonify(result)
+
+
+@bp.route('/', methods=['PUT'])
+def update():
+    return StylesheetSchema.update()
+
+
+@bp.route('/', methods=['POST'])
+def create():
+    return StylesheetSchema.create()
+
+
+@bp.route('/', methods=['GET'])
+def get_all():
+    return StylesheetSchema.get_all()
+
+
+@bp.route('/<int:template_id>/', methods=['GET'])
+def get(template_id: int):
+    return StylesheetSchema.get(template_id)
+
+
+@bp.route('/<int:template_id>/', methods=['DELTE'])
+def delete(template_id: int):
+    return StylesheetSchema.delete(template_id)

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Editor :value="document.template.source" class="editor" ref="editor"></Editor>
+    <Editor :value="template.source" class="editor" ref="editor"></Editor>
     <div class="editor-toolbar">
       <button @click="$refs.stylesModal.open()" class="btn btn-sm">Styles</button>
       <div>
@@ -10,7 +10,7 @@
         </button>
       </div>
     </div>
-    <StylesheetModal v-bind:stylesheets="document.template.styles" v-bind:base-style="document.template.base_style" ref="stylesModal"></StylesheetModal>
+    <StylesheetModal v-bind:stylesheets="stylesheets" v-bind:base-style="template.base_style" ref="stylesModal"></StylesheetModal>
   </div>
 </template>
 
@@ -31,16 +31,19 @@
       StylesheetModal, Editor
     },
     computed: mapState({
-      document: state => state.document.document
+      template: state => state.template.template,
+      stylesheets: state => state.stylesheet.stylesheets
     }),
     methods: {
-      ...mapActions('document', [
-        actionTypes.UPDATE_DOCUMENT_TEMPLATE,
+      ...mapActions('template', [
+        actionTypes.UPDATE_TEMPLATE,
       ]),
       save(event) {
-        event.target.classList.add('loading');
-        this.updateDocumentTemplate({
-          id: this.document.template.id,
+        if (event !== undefined) {
+          event.target.classList.add('loading');
+        }
+        this.updateTemplate({
+          id: this.template.id,
           source: this.$refs.editor.getValue()
         })
           .then(() => {
@@ -51,7 +54,9 @@
             this.$refs.saveNotice.trigger('Failed!', 'text-error');
           })
           .finally(() => {
-            event.target.classList.remove('loading');
+            if (event !== undefined) {
+              event.target.classList.remove('loading');
+            }
           });
       },
       updateEditor() {

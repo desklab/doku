@@ -8,14 +8,15 @@ from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
 from doku.models.document import Variable
-from doku.models.schemas.api import ApiSchemaMixin
+from doku.models.schemas.common import ApiSchemaMixin, DokuSchema
 from doku.models.template import Template, Stylesheet
 from doku.utils.db import get_or_create
 
 
-class TemplateSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
+class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     class Meta:
         model = Template
+        exclude = ('documents', 'styles')
         load_instance = True
 
     API_NAME = 'template'
@@ -27,10 +28,19 @@ class TemplateSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
     base_style = Nested('StylesheetSchema', exclude=('base_templates',))
     styles = Nested('StylesheetSchema', many=True, exclude=('templates',))
     available_fields = fields.List(fields.String, dump_only=True)
+    add_styles_url = fields.Method(
+        '_add_styles_url', dump_only=True, allow_none=True
+    )
+
+    def _add_styles_url(self, template) -> Optional[str]:
+        if template.id is None:
+            return None
+        return url_for('api.v1.template.add_stylesheet',
+                       template_id=template.id)
 
     @classmethod
     def update(cls, commit=True):
-        data = cls._all_request_data()
+        data = cls.all_request_data()
         schema = cls(partial=True, session=db.session,
                      many=isinstance(data, list))
         try:
@@ -46,10 +56,13 @@ class TemplateSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
         return jsonify(result)
 
 
-class StylesheetSchema(SQLAlchemySchema, DateSchemaMixin):
+class StylesheetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     class Meta:
         model = Stylesheet
+        exclude = ('base_templates', 'templates')
         load_instance = True
+
+    API_NAME = 'template'
 
     id = auto_field()
     name = auto_field()
@@ -57,11 +70,11 @@ class StylesheetSchema(SQLAlchemySchema, DateSchemaMixin):
     base_templates = Nested('TemplateSchema', exclude=('base_style',), many=True)
     templates = Nested('TemplateSchema', exclude=('styles',), many=True)
 
-    update_url = fields.Method(
-        'get_update_url', dump_only=True, allow_none=True
+    upload_url = fields.Method(
+        '_upload_url', dump_only=True, allow_none=True
     )
 
-    def get_update_url(self, stylesheet) -> Optional[str]:
+    def _upload_url(self, stylesheet) -> Optional[str]:
         if stylesheet.id is None:
             return None
-        return url_for('api.v1.stylesheet.update', stylesheet_id=stylesheet.id)
+        return url_for('api.v1.stylesheet.upload', stylesheet_id=stylesheet.id)

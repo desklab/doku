@@ -1,0 +1,43 @@
+$_animationTime: 0.1s;
+
+.slide-up-enter-active {
+  position: absolute;
+  animation: doku-slide-up $_animationTime ease-in;
+}
+
+.slide-up-leave-active {
+  position: absolute;
+  animation: doku-slide-up $_animationTime reverse ease-out;
+}
+
+@keyframes doku-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down-enter-active {
+  position: absolute;
+  animation: doku-slide-down $_animationTime ease-in;
+}
+
+.slide-down-leave-active {
+  position: absolute;
+  animation: doku-slide-down $_animationTime reverse ease-out;
+}
+
+@keyframes doku-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

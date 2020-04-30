@@ -8,20 +8,23 @@ from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
 from doku.models.document import Document, Variable
-from doku.models.schemas.api import ApiSchemaMixin
+from doku.models.schemas.common import ApiSchemaMixin, DokuSchema
 from doku.models.template import Template, DEFAULT_TEMPLATE, Stylesheet
 from doku.utils.db import get_or_create
 
 
-class DocumentSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
+class DocumentSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     class Meta:
         model = Document
+        exclude = ('template', 'variables')
         load_instance = True
 
     API_NAME = 'document'
 
     id = auto_field()
     name = auto_field()
+    public = auto_field()
+    template_id = auto_field(load_only=True)
     template = Nested('TemplateSchema', exclude=('documents',))
     variables = Nested(
         'VariableSchema',
@@ -30,15 +33,21 @@ class DocumentSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
         partial=True
     )
     render_url = fields.Method('_render_url', dump_only=True, allow_none=True)
+    public_url = fields.Method('_public_url', dump_only=True, allow_none=True)
 
     def _render_url(self, instance) -> Optional[str]:
         if instance.id is None:
             return None
         return url_for('document.render', document_id=instance.id)
 
+    def _public_url(self, instance) -> Optional[str]:
+        if instance.id is None:
+            return None
+        return url_for('document.index', document_id=instance.id)
+
     @classmethod
     def create(cls, commit=True):
-        data = cls._all_request_data()
+        data = cls.all_request_data()
         schema = cls(
             unknown=RAISE, session=db.session, partial=True,
             many=isinstance(data, list)
@@ -55,6 +64,9 @@ class DocumentSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
             document.template = template
             db.session.add(stylesheet)
             db.session.add(template)
+        else:
+            document.template = db.session.query(Template).filter_by(
+                id=document.template_id).one()
         for name in document.template.available_fields:
             variable = Variable(document=document, name=name)
             db.session.add(variable)
@@ -66,7 +78,7 @@ class DocumentSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
 
     @classmethod
     def update(cls, commit=True):
-        data = cls._all_request_data()
+        data = cls.all_request_data()
         schema = cls(
             unknown=EXCLUDE, partial=True,
             session=db.session,
@@ -84,7 +96,7 @@ class DocumentSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
         return jsonify(result)
 
 
-class VariableSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
+class VariableSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     class Meta:
         model = Variable
         load_instance = True
@@ -93,6 +105,8 @@ class VariableSchema(SQLAlchemySchema, DateSchemaMixin, ApiSchemaMixin):
 
     id = auto_field()
     name = auto_field()
+    use_markdown = auto_field()
+    css_class = auto_field()
     content = auto_field()
     compiled_content = auto_field(dump_only=True)
     document_id = auto_field(load_only=True)
