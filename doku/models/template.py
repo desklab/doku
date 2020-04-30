@@ -2,6 +2,7 @@ import functools
 
 from jinja2 import Environment, meta, Template as Jinja2Template
 from weasyprint import HTML, CSS
+from pygments.formatters.html import HtmlFormatter
 
 from doku.models import db, DateMixin
 
@@ -77,7 +78,10 @@ class Template(db.Model, DateMixin):
             var.name: var.as_list for var in variables
             if var.is_list
         })
-        html = HTML(string=template.render(**context), base_url='.')
+        source = template.render(**context)
+        if 'codehilite' in source:
+            stylesheets.append(CSS(string=HtmlFormatter().get_style_defs()))
+        html = HTML(string=source, base_url='.')
         return html.write_pdf(stylesheets=stylesheets)
 
 

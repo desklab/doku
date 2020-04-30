@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import event
 
 from doku.models import db, DateMixin
+from doku.utils.markdown.extensions import RootClassTreeprocessor, \
+    RootClassExtension
 
 
 class Document(db.Model, DateMixin):
@@ -40,15 +42,6 @@ class Document(db.Model, DateMixin):
         return self.template.render(self.variables)
 
 
-def compile_content(context) -> Optional[str]:
-    if 'content' not in context.current_parameters:
-        raise ValueError('content not in current_parameters')
-    content = context.current_parameters['content']
-    if content is None:
-        return ''
-    return markdown.markdown(content, extensions=['codehilite'])
-
-
 class Variable(db.Model, DateMixin):
     """Variable
 
@@ -61,7 +54,9 @@ class Variable(db.Model, DateMixin):
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
 
     name = db.Column(db.String(255), unique=False, nullable=False)
-    content = db.Column(db.UnicodeText, nullable=False, default='', )
+    use_markdown = db.Column(db.Boolean, default=True)
+    css_class = db.Column(db.String(255), unique=False, nullable=True, default='')
+    content = db.Column(db.UnicodeText, nullable=False, default='')
     compiled_content = db.Column(
         db.UnicodeText,
         nullable=False,
@@ -86,6 +81,8 @@ class Variable(db.Model, DateMixin):
 
     @property
     def used(self) -> bool:
+        if self.parent_id is not None:
+            return True
         return self.name in self.document.template.available_fields
 
     @property
@@ -108,4 +105,13 @@ def before_any_compiler(mapper, connection, target):
         target.compiled_content = ''
         return
     else:
-        target.compiled_content = markdown.markdown(content, extensions=['codehilite'])
+        if target.use_markdown:
+            target.compiled_content = markdown.markdown(
+                content, extensions=[
+                    RootClassExtension(root_class=target.css_class),
+                    'codehilite',
+                    'fenced_code'
+                ],
+            )
+        else:
+            target.compiled_content = content
