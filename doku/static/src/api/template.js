@@ -12,5 +12,10 @@ export default {
   },
   addStylesheet(url, stylesheet) {
     return axios.post(url, stylesheet);
+  },
+  removeStylesheet(url, stylesheet) {
+    // Note: axios.delete does not support a request body. It accepts
+    // two parameters: url and optional config.
+    return axios.delete(url, {data: stylesheet});
   }
 }

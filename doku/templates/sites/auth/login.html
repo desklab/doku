@@ -14,7 +14,7 @@
                             <div {% if error %}class="has-error"{% endif %}>
                                 <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}">
                                 <div id="emailGroup" class="form-group">
-                                    <label class="form-label" for="login-email">E-Mail or username</label>
+                                    <label class="form-label" for="login-email">E-Mail</label>
                                     <input class="form-input" name="email" id="email" placeholder="E-Mail">
                                     {% if error %}
                                         <p id="email-error" class="form-input-hint is-error">{{ error }}</p>
@@ -25,13 +25,6 @@
                                     <input class="form-input" autocomplete="password" type="password" name="password" id="password" placeholder="Password">
                                     <p class="form-input-hint"><a class="text-dark" href="#">Forgot your password?</a></p>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-checkbox" for="remember">
-                                    <input type="checkbox" name="remember" value="true" id="remember">
-                                    <i class="form-icon"></i>
-                                    Remember me?
-                                </label>
                             </div>
                             <div class="form-group text-center w-100">
                                 <button type="submit" id="login" class="btn w-100 btn-lg active">

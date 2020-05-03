@@ -10,7 +10,7 @@
         </button>
       </div>
     </div>
-    <StylesheetModal v-bind:stylesheets="stylesheets" v-bind:base-style="template.base_style" ref="stylesModal"></StylesheetModal>
+    <StylesheetModal ref="stylesModal"></StylesheetModal>
   </div>
 </template>
 

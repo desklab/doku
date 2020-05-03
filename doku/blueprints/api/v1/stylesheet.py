@@ -8,8 +8,15 @@ from doku.models.document import Variable
 from doku.models.schemas import DocumentSchema, TemplateSchema, StylesheetSchema
 from doku.models.template import Template, Stylesheet
 from doku.utils.db import get_or_404, get_or_create
+from doku.utils.decorators import login_required
 
 bp = Blueprint('api.v1.stylesheet', __name__)
+
+
+@bp.before_request
+@login_required
+def login_check():
+    pass
 
 
 @bp.route('/upload/<int:stylesheet_id>', methods=['PUT'])
@@ -60,6 +67,6 @@ def get(template_id: int):
     return StylesheetSchema.get(template_id)
 
 
-@bp.route('/<int:template_id>/', methods=['DELTE'])
+@bp.route('/<int:template_id>/', methods=['DELETE'])
 def delete(template_id: int):
     return StylesheetSchema.delete(template_id)

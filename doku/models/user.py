@@ -16,12 +16,15 @@ class User(db.Model):
 
     def __init__(self, *args, **kwargs):
         if 'password' in kwargs:
-            kwargs['password'] = self._hash_password(kwargs.get('password'))
+            self.set_password(kwargs.pop('password'))
         super().__init__(*args, **kwargs)
 
     @staticmethod
     def _hash_password(password):
         return generate_password_hash(password.encode(), salt_length=12).encode()
+
+    def set_password(self, password):
+        self.password = self._hash_password(password)
 
     def check_password(self, password):
         return check_password_hash(self.password.decode(), password)

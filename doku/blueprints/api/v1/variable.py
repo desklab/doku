@@ -1,13 +1,15 @@
-from flask import Blueprint, request, jsonify
-from marshmallow import ValidationError, EXCLUDE
-from werkzeug.exceptions import BadRequest
+from flask import Blueprint
 
-from doku.models import db
-from doku.models.document import Variable
 from doku.models.schemas import VariableSchema
-from doku.utils.db import get_or_404
+from doku.utils.decorators import login_required
 
 bp = Blueprint('api.v1.variable', __name__)
+
+
+@bp.before_request
+@login_required
+def login_check():
+    pass
 
 
 @bp.route('/', methods=['GET'])

@@ -1,5 +1,6 @@
 import stylesheetApi from '../../api/stylesheet';
 import * as mutationTypes from '../types/mutations';
+import * as actionTypes from '../types/actions';
 
 const state = {
   stylesheets: (window.stylesheets !== undefined) ? JSON.parse(window.stylesheets) : [],
@@ -22,6 +23,16 @@ const actions = {
           resolve();
         })
         .catch(reject);
+    });
+  },
+  updateStylesheet({commit, state, dispatch}, data) {
+    return new Promise((resolve, reject) => {
+      stylesheetApi.updateStylesheets(data)
+        .then(response => {
+          commit(mutationTypes.SET_STYLESHEET, response.data);
+          resolve();
+        })
+        .catch(reject)
     });
   },
   fetchStylesheets({commit, state}, options) {

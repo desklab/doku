@@ -2,7 +2,7 @@ from typing import Optional
 
 from flask import url_for, jsonify
 from marshmallow import fields, ValidationError
-from marshmallow_sqlalchemy import auto_field, SQLAlchemySchema
+from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 from werkzeug.exceptions import BadRequest
 
@@ -31,11 +31,20 @@ class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     add_styles_url = fields.Method(
         '_add_styles_url', dump_only=True, allow_none=True
     )
+    remove_styles_url = fields.Method(
+        '_remove_styles_url', dump_only=True, allow_none=True
+    )
 
     def _add_styles_url(self, template) -> Optional[str]:
         if template.id is None:
             return None
         return url_for('api.v1.template.add_stylesheet',
+                       template_id=template.id)
+
+    def _remove_styles_url(self, template) -> Optional[str]:
+        if template.id is None:
+            return None
+        return url_for('api.v1.template.remove_stylesheet',
                        template_id=template.id)
 
     @classmethod

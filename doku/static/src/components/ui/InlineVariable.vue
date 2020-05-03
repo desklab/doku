@@ -5,7 +5,7 @@
       <span v-if="variable.is_list" class="chip">List</span>
       <span v-if="!variable.used" class="chip">Unused</span>
       <div class="dropdown dropdown-right">
-        <AnimatedNotice ref="saveNotice"></AnimatedNotice>
+        <animated-notice ref="saveNotice"></animated-notice>
         <div class="btn-group btn-sm">
           <button @click.self="save" ref="saveButton" class="btn btn-sm btn-primary">Save</button>
           <a class="btn btn-sm p-0 dropdown-toggle btn-primary" tabindex="0">

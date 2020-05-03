@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="container">
+        <div class="columns">
+            <div class="column col-6 col-xs-12">
+                <form method="post" action="{{ url_for('auth.change_password') }}">
+                    <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}">
+                    <div class="form-group input-inline{% if error_old %} has-error{% endif %}">
+                        <label class="form-label" for="oldPasswordInput">Old Password</label>
+                        <input class="form-input" type="password" id="oldPasswordInput" name="password" placeholder="Old Password">
+                        {% if error_old %}
+                            <p class="form-input-hint">{{ error_old }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group input-inline">
+                        <label class="form-label" for="oldPasswordInput">New Password</label>
+                        <input class="form-input" type="password" id="newPasswordInput" name="new_password" placeholder="New Password">
+                    </div>
+                    <div class="form-group input-inline{% if error_new %} has-error{% endif %}">
+                        <label class="form-label" for="oldPasswordInput">Repeat Password</label>
+                        <input class="form-input" type="password" id="repeatPasswordInput" name="rpt_password" placeholder="Repeat Password">
+                        {% if error_new %}
+                            <p class="form-input-hint">{{ error_new }}</p>
+                        {% endif %}
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    {{ create_csrf_token(output=False) }}
+    <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
+{% endblock %}

@@ -53,6 +53,26 @@ const actions = {
           resolve()
         }).catch(reject);
     });
+  },
+  removeStylesheet({commit, dispatch, state}, data) {
+    return new Promise((resolve, reject) => {
+      if (!data.hasOwnProperty('url')) {
+        throw Error('Missing url');
+      }
+      if (!data.hasOwnProperty('data')) {
+        throw Error('Missing form data');
+      }
+      templateApi.removeStylesheet(data.url, data.data)
+        .then(res => {
+          commit(mutationTypes.SET_TEMPLATE, res.data);
+          commit(
+            ns.stylesheet(mutationTypes.SET_STYLESHEETS),
+            res.data.styles,
+            {root: true}
+          );
+          resolve()
+        }).catch(reject);
+    });
   }
 }
 

@@ -1,7 +1,8 @@
 werkzeug
 itsdangerous
 sqlalchemy
-marshmallow>=3.5.1
+psycopg2-binary
+marshmallow>=3.5.2
 marshmallow_sqlalchemy
 Flask-Babel
 markdown>=3.2.1

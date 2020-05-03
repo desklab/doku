@@ -30,5 +30,7 @@ REDIS_CONFIG = {
     'password': os.environ.get('REDIS_PASSWORD', None)
 }
 
+SESSION_COOKIE_NAME = 'doku_session'
+
 SESSION_PREFIX = 'doku_session_'
 SQLALCHEMY_TRACK_MODIFICATIONS = False

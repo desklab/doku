@@ -2,8 +2,8 @@
   <modal ref="modal" class="modal-lg" v-bind:title="'Stylesheets'">
     <div class="modal-body">
       <div class="content">
-        <StyleItem v-bind:stylesheet="baseStyle" v-bind:isBase="true" class="mb-2"></StyleItem>
-        <StyleItem v-for="style in stylesheets" class="mb-2" v-bind:stylesheet="style" v-bind:isBase="false"></StyleItem>
+        <StyleItem v-bind:stylesheet="template.base_style" v-bind:isBase="true" class="mb-2"></StyleItem>
+        <StyleItem v-for="style in stylesheets" class="mb-2" v-bind:stylesheet="style" v-bind:isBase="false" v-bind:remove-url="template.remove_styles_url"></StyleItem>
       </div>
     </div>
     <div class="modal-footer">
@@ -33,9 +33,9 @@
   export default {
     name: 'StylesheetModal',
     components: {Modal, StyleItem},
-    props: ['stylesheets', 'baseStyle'],
     computed: mapState({
       template: state => state.template.template,
+      stylesheets: state => state.stylesheet.stylesheets
     }),
     data() {
       return {
@@ -61,7 +61,7 @@
       add() {
         let stylesheet_id = this.$refs.select.value;
         let url = this.template.add_styles_url;
-        if (stylesheet_id !== "") {
+        if (stylesheet_id === "") {
           stylesheetApi.createStylesheet({name: 'New Stylesheet'})
             .then(res => {
               this.addStylesheet({url: url, data: {id: res.data.id}});

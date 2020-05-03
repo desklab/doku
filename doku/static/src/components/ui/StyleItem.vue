@@ -1,21 +1,26 @@
 <template>
   <div class="border rounded p-4 bg-gray">
-    {{ stylesheet.name }}
+    <text-edit v-bind:text="stylesheet.name" v-bind:save="saveName" v-bind:placeholder="'Name'"></text-edit>
     <span v-if="isBase" class="chip">
         Base
     </span>
-    <input ref="sourceFile" name="source" type="file" size="50" accept="text/*">
-    <button @click="upload" class="btn btn-sm btn-primary float-right">Upload</button>
+    <input ref="sourceFile" name="source" type="file" accept="text/css">
+    <div class="btn-group btn-sm float-right">
+      <animated-notice ref="notice"></animated-notice>
+      <button @click="upload" class="btn btn-sm btn-primary float-right">Upload</button>
+      <button @click="remove" v-if="!isBase" class="btn btn-sm" tabindex="0">
+        <x-icon size="16"></x-icon>
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
   import {mapActions} from "vuex";
+  import {MoreVerticalIcon, XIcon} from 'vue-feather-icons';
   import * as actionTypes from "../../store/types/actions";
-
-  axios.defaults.xsrfCookieName = 'csrf_token';
-  axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
+  import AnimatedNotice from "./AnimatedNotice";
+  import TextEdit from "./TextEdit";
 
   export default {
     name: 'StyleItem',
@@ -30,11 +35,22 @@
       isUsed: {
         type: Boolean,
         default: false
+      },
+      removeUrl: {
+        type: String
       }
+    },
+    components: {
+      TextEdit,
+      AnimatedNotice, MoreVerticalIcon, XIcon
     },
     methods: {
       ...mapActions('stylesheet', [
-        actionTypes.UPLOAD_STYLESHEET
+        actionTypes.UPLOAD_STYLESHEET,
+        actionTypes.UPDATE_STYLESHEET
+      ]),
+      ...mapActions('template', [
+        actionTypes.REMOVE_STYLESHEET_FROM_TEMPLATE
       ]),
       upload(event) {
         event.target.classList.add('loading');
@@ -43,9 +59,51 @@
         this.uploadStylesheet({
           url: this.stylesheet.upload_url,
           formData: formData
-        }).finally(() => {
-          event.target.classList.remove('loading');
-        });
+        })
+          .then(() => {
+            this.$refs.notice.trigger('Success!', 'text-dark');
+          })
+          .catch(err => {
+            console.error(err);
+            this.$refs.notice.trigger('Failed!', 'text-error');
+          })
+          .finally(() => {
+            event.target.classList.remove('loading');
+          });
+      },
+      remove(event) {
+        event.target.classList.add('loading');
+        let data = {
+          url: this.removeUrl,
+          data: {
+            id: this.stylesheet.id
+          }
+        };
+        this.removeStylesheet(data)
+          .then(() => {
+            // This element should be removed anyway
+          })
+          .catch(err => {
+            console.error(err);
+            this.$refs.notice.trigger('Failed!', 'text-error');
+          })
+          .finally(() => {
+            event.target.classList.remove('loading');
+          });
+      },
+      saveName(name) {
+        let data = {
+          id: this.stylesheet.id,
+          name: name
+        };
+        this.updateStylesheet(data)
+          .then(() => {
+            this.$refs.notice.trigger('Success!', 'text-dark');
+          })
+          .catch(err => {
+            console.error(err);
+            this.$refs.notice.trigger('Failed!', 'text-error');
+          });
       }
     },
   }
