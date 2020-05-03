@@ -44,4 +44,4 @@ USER doku
 
 EXPOSE 8000
 WORKDIR /app
-CMD /docker-entrypoint.sh
+CMD ./docker-entrypoint.sh
