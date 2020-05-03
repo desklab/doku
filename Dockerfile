@@ -8,7 +8,7 @@ ENV DOKU_CONFIG config.prod
 
 # Install Node.js
 RUN apt-get update
-RUN apt-get -y install curl gnupg build-essential
+RUN apt-get -y install curl gnupg build-essential python3-dev python3-pip python3-setuptools python3-wheel python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get -y install nodejs
 
@@ -27,7 +27,7 @@ RUN npm run build
 RUN rm -rf node_modules
 
 RUN apt-get clean
-RUN apt-get remove -y --purge curl gnupg nodejs build-essential
+RUN apt-get remove -y --purge curl gnupg nodejs
 
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app
