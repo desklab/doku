@@ -43,4 +43,5 @@ RUN chown -R doku /app
 USER doku
 
 EXPOSE 8000
-CMD /app/docker-entrypoint.sh
+WORKDIR /app
+CMD /docker-entrypoint.sh

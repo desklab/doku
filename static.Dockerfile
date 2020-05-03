@@ -25,7 +25,7 @@ RUN ls
 RUN mkdir /www
 RUN mkdir /www/data
 
-RUN mv dist /www/data
+RUN mv dist /www/data/static
 RUN rm -rf ./*
 
 RUN apt-get clean
