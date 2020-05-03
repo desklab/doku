@@ -16,7 +16,7 @@ from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.session import RedisSessionInterface
 
 
-def create_app(name='doku', config='config.dev',
+def create_app(name='doku', config=None,
                minimal=False, test=False) -> Flask:
     """
     App Factory - create_app
@@ -36,6 +36,7 @@ def create_app(name='doku', config='config.dev',
     :param test: Enable the testing environment. This will overwrite
         the ``config`` parameter.
     """
+    config = os.environ.get('DOKU_CONFIG', 'config.dev')
     if test:
         # Overwrite the config parameter to use a testing environment
         config = 'config.test'
