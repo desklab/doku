@@ -32,6 +32,7 @@ RUN apt-get remove -y --purge curl gnupg nodejs build-essential
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app
 RUN pip --no-cache-dir install -r requirements.txt
+RUN pip install gunicorn
 
 RUN rm -rf ~/.cache/pip/*
 
