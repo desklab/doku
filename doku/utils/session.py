@@ -103,6 +103,8 @@ class RedisSessionInterface(SessionInterface):
             except (TypeError, JSONDecodeError) as e:
                 app.logger.info('Failed to load session: %s' % e)
                 return self.empty_session()
+        else:
+            return self.empty_session()
 
     def empty_session(self) -> SessionMixin:
         """ Create new empty Session

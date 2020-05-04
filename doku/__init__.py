@@ -7,7 +7,6 @@ from sqlalchemy.sql import exists
 from flask import Flask, request
 from flask.cli import FlaskGroup
 from redis import Redis
-
 from doku.models import db
 from doku.models import base
 from doku.blueprints import auth, base, document, template

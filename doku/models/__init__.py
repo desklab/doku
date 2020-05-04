@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask_babel import format_timedelta, format_datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -20,7 +20,9 @@ class DateMixin:
 
     @property
     def last_updated_timedelta(self):
-        return format_timedelta(datetime.now() - self.last_updated)
+        now = datetime.now(tz=timezone.utc)
+        last_updated = self.last_updated.astimezone(tz=timezone.utc)
+        return format_timedelta(now - last_updated)
 
     @property
     def last_updated_format(self):
