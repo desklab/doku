@@ -68,8 +68,6 @@ class RedisSessionInterface(SessionInterface):
     _KEY_LENGTH = 32
     _serializer = json
 
-    null_session_class = NotImplementedError('test')
-
     def __init__(self, app: Flask, redis: Redis, prefix: str = 'session_',
                  session_class: type(SessionMixin) = Session,
                  permanent: bool = True):
