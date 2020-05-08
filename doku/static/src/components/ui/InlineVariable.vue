@@ -195,14 +195,16 @@
           // recursively.
           _data.children = [];
           _data.content = '';
-          // Note: If only one children is present, the children ref is
-          // not an array. This case must be
-          if (Array.isArray(this.$refs.children)) {
-            _data.children.push(
-              ...this.$refs.children.map(c => c.getData())
-            );
-          } else {
-            _data.children.push(this.$refs.children.getData());
+          if (this.$refs.children !== undefined ) {
+            // Note: If only one children is present, the children ref is
+            // not an array. This case must be
+            if (Array.isArray(this.$refs.children)) {
+              _data.children.push(
+                ...this.$refs.children.map(c => c.getData())
+              );
+            } else {
+              _data.children.push(this.$refs.children.getData());
+            }
           }
         } else {
           _data.use_markdown = this.$refs.markdownToggle.checked
