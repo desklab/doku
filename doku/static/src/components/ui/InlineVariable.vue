@@ -49,8 +49,8 @@
           <div class="modal-body">
             <div class="content">
               <div class="form-group p-2">
-                <label class="form-label" for="childNameInput">Name</label>
-                <input v-on:keyup="$event.target.classList.remove('is-error')" name="name" class="form-input" type="text" id="childNameInput" placeholder="Name" pattern="^.{1,}$" required>
+                <label class="form-label">Name</label>
+                <input v-on:keyup="$event.target.classList.remove('is-error')" ref="childNameInput" name="name" class="form-input" type="text" placeholder="Name" pattern="^.{1,}$" required>
               </div>
             </div>
           </div>
@@ -211,17 +211,16 @@
         return _data;
       },
       addChild(event) {
-        let childNameInput = document.getElementById('childNameInput');
         let existingNames = this.variable.children.map(c => c.name);
         if (
-          !childNameInput.checkValidity()
-          || existingNames.includes(childNameInput.value)
+          !this.$refs.childNameInput.checkValidity()
+          || existingNames.includes(this.$refs.childNameInput.value)
         ) {
-          childNameInput.classList.add('is-error');
+          this.$refs.childNameInput.classList.add('is-error');
           return;
         }
         let data = {
-          name: childNameInput.value,
+          name: this.$refs.childNameInput.value,
           parent_id: this.variable.id,
           document_id: this.documentId
         }
