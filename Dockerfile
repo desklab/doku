@@ -29,6 +29,11 @@ RUN rm -rf node_modules
 RUN apt-get clean
 RUN apt-get remove -y --purge curl gnupg nodejs
 
+# Install fonts
+RUN apt-get -y install fonts-comfortaa
+ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Regular.ttf /usr/local/share/fonts/
+ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /usr/local/share/fonts/ 
+
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app
 RUN pip --no-cache-dir install -r requirements.txt
