@@ -1,8 +1,10 @@
+from datetime import datetime, timezone
 from typing import Optional, List
 
+from flask_babel import format_timedelta, format_datetime
 import markdown
 from sqlalchemy.orm import Session
-from sqlalchemy import event
+from sqlalchemy import event, asc
 
 from doku.models import db, DateMixin
 from doku.utils.markdown.extensions import RootClassTreeprocessor, \
@@ -27,6 +29,10 @@ class Document(db.Model, DateMixin):
     template = db.relationship('Template', back_populates='documents')
     variables = db.relationship('Variable', back_populates='document')
 
+    recent_variable = db.relationship(
+        'Variable', order_by='desc(Variable.last_updated)', lazy='dynamic'
+    )
+
     def __str__(self):
         return self.name
 
@@ -40,6 +46,24 @@ class Document(db.Model, DateMixin):
 
     def render(self):
         return self.template.render(self.variables)
+
+    @property
+    def last_updated_child(self):
+        if not hasattr(self, '_recent_child_updated'):
+            self._recent_child_updated = (
+                self.recent_variable.first().last_updated
+            )
+        return self._recent_child_updated
+
+    @property
+    def last_updated_timedelta(self):
+        now = datetime.now(tz=timezone.utc)
+        last_updated = self.last_updated_child.astimezone(tz=timezone.utc)
+        return format_timedelta(now - last_updated)
+
+    @property
+    def last_updated_format(self):
+        return format_datetime(self.last_updated_child)
 
 
 class Variable(db.Model, DateMixin):
