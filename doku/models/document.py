@@ -27,7 +27,10 @@ class Document(db.Model, DateMixin):
     )
 
     template = db.relationship('Template', back_populates='documents')
-    variables = db.relationship('Variable', back_populates='document')
+    variables = db.relationship(
+        'Variable', cascade='all,delete',
+        back_populates='document'
+    )
 
     recent_variable = db.relationship(
         'Variable', order_by='desc(Variable.last_updated)', lazy='dynamic'
@@ -98,7 +101,7 @@ class Variable(db.Model, DateMixin):
     )
 
     children = db.relationship(
-        'Variable',
+        'Variable', cascade='all,delete',
         backref=db.backref('parent', remote_side=[id])
     )
     document = db.relationship('Document', back_populates='variables')
