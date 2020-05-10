@@ -8,5 +8,8 @@ export default {
   },
   createDocument(document) {
     return axios.post(DOCUMENT_API, document);
-  }
+  },
+  removeDocument(documentId) {
+    return axios.delete(`${DOCUMENT_API}${documentId}/`);
+  },
 }

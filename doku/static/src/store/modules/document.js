@@ -9,15 +9,25 @@ const state = {
 const getters = {}
 
 const actions = {
-  updateDocument({commit, state}, document) {
+  updateDocument({commit}, data) {
     return new Promise((resolve, reject) => {
-      documentApi.updateDocument(document)
+      documentApi.updateDocument(data)
         .then(response => {
-          commit(mutationTypes.SET_DOCUMENT, response.data)
+          commit(mutationTypes.SET_DOCUMENT, response.data);
+          resolve();
         })
-        .catch(reject);
+        .catch(reject)
     });
   },
+  removeDocument({commit}, data) {
+    return new Promise((resolve, reject) => {
+      documentApi.removeDocument(data)
+        .then(response => {
+          resolve();
+        })
+        .catch(reject)
+    });
+  }
 }
 
 const mutations = {
