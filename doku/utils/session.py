@@ -146,9 +146,11 @@ class RedisSessionInterface(SessionInterface):
             value=raw_session
         )
         sid_signed = self._signer.sign(session.sid)
-        response.set_cookie(app.session_cookie_name, sid_signed,
-                            domain=domain, path=path, httponly=httponly,
-                            expires=expires, secure=secure, samesite=samesite)
+        response.set_cookie(
+            app.session_cookie_name, sid_signed,
+            domain=domain, path=path, httponly=httponly,
+            expires=expires, secure=secure, samesite=samesite
+        )
 
     def _get_unique_sid(self) -> str:
         """Get Unique Session ID

@@ -15,3 +15,10 @@ sql_host = os.environ.get('DOKU_DB_HOST')
 sql_db = os.environ.get('DOKU_DB_DATABASE')
 SQLALCHEMY_DATABASE_URI = \
     f'postgresql://{sql_user}:{sql_password}@{sql_host}/{sql_db}'
+
+
+# CSRF Settings
+CSRF_COOKIE_SECURE = True
+
+# Session Settings
+SESSION_COOKIE_SECURE = True

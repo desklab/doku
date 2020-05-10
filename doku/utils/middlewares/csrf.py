@@ -126,7 +126,9 @@ class CSRFMiddleware:
             ).decode()
             response.set_cookie(
                 self._config['COOKIE_NAME'], value=signed_token,
-                httponly=False
+                httponly=False, secure=self._config['COOKIE_SECURE'],
+                samesite=self._config['COOKIE_SAMESITE'],
+                max_age=None
             )
             return response
 
@@ -151,6 +153,9 @@ class CSRFMiddleware:
             ),
             'COOKIE_SECURE': app_config.get(
                 'CSRF_COOKIE_SECURE', False
+            ),
+            'COOKIE_SAMESITE': app_config.get(
+                'CSRF_COOKIE_SAMESITE', 'Lax'
             ),
             'HEADER_NAME': app_config.get(
                 'CSRF_HEADER_NAME', 'X-CSRF-TOKEN'

@@ -30,7 +30,15 @@ REDIS_CONFIG = {
     'password': os.environ.get('REDIS_PASSWORD', None)
 }
 
-SESSION_COOKIE_NAME = 'doku_session'
-
-SESSION_PREFIX = 'doku_session_'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# CSRF Settings
+CSRF_COOKIE_NAME = 'csrf_token'
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_HEADER_NAME = 'X-CSRF-TOKEN'
+
+# Session Settings
+SESSION_PREFIX = 'doku_session_'
+SESSION_COOKIE_NAME = 'doku_session'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
