@@ -3,14 +3,14 @@
     <div class="modal-body">
       <div class="content">
         <StyleItem v-bind:stylesheet="template.base_style" v-bind:isBase="true" class="mb-2"></StyleItem>
-        <StyleItem v-for="style in stylesheets" class="mb-2" v-bind:stylesheet="style" v-bind:isBase="false" v-bind:remove-url="template.remove_styles_url"></StyleItem>
+        <StyleItem v-for="style in stylesheets" class="mb-2" v-bind:stylesheet="style" v-bind:isBase="false" v-bind:remove-url="template.remove_styles_url" :key="style.id"></StyleItem>
       </div>
     </div>
     <div class="modal-footer">
       <div class="form-inline float-left">
         <select ref="select" name="template" class="form-select">
           <option value="">Create new</option>
-          <option v-for="style in allStylesheets" :value="style.id">{{ style.name }}</option>
+          <option v-for="style in allStylesheets" :value="style.id" :key="style.id">{{ style.name }}</option>
         </select>
       </div>
       <button @click="add" class="btn btn-primary ml-2 float-left">

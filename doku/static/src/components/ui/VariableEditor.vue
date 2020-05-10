@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="doku-edit-vars">
-      <InlineVariable ref="vars" v-for="variable in variables.filter(v => v.parent == null)" :document-id="document.id" :variable="variable"></InlineVariable>
+      <InlineVariable ref="vars" v-for="variable in variables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable"></InlineVariable>
     </div>
     <div class="editor-toolbar">
       <span></span>
@@ -12,7 +12,7 @@
         </button>
       </div>
     </div>
-    <Modal ref="confirmModal" class="modal-sm" v-bind:title="'Save All'">
+    <Modal ref="confirmModal" class="modal-sm" title="Save All">
       <div class="modal-body">
         <div class="content">
           Do you really want to save all variables

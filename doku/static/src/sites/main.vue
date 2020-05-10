@@ -22,7 +22,7 @@
             <label class="form-label" for="documentTemplateSelect">Template</label>
             <select id="documentTemplateSelect" name="template" class="form-select">
               <option value="">Create new</option>
-              <option v-for="template in templates" :value="template.id">{{ template.name }}</option>
+              <option v-for="template in templates" :value="template.id" :key="template.id">{{ template.name }}</option>
             </select>
           </div>
         </div>
