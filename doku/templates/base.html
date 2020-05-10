@@ -8,12 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.min.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='runtime.bundle.js') }}"></script>
 </head>
 <body class="{% block body_class %}{% endblock %}">
     {% block content %}
         {% include 'components/navbar.html' %}
     {% endblock %}
-    <script type="text/javascript" src="{{ url_for('static', filename='vendor.bundle.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='runtime.bundle.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
