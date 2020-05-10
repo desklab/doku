@@ -24,13 +24,13 @@ html {
       display: flex;
       flex-direction: column;
 
-      &.tab-content-vars {
+      &.tab-content-vars, &.tab-content-settings {
         height: 100%;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
 
-        .doku-edit-vars {
+        .doku-edit-vars, .doku-edit-settings {
           overflow-y: auto;
           height: 100px;
           flex: 1 0 auto;

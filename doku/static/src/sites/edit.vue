@@ -2,11 +2,12 @@
   <div class="columns col-gapless doku-edit-cols">
     <div class="column doku-edit-left">
       <Tabs class="tab-block" v-bind:tabs="tabs"></Tabs>
-      <VariableEditor ref="varEditor" v-show="tabs[0].active" class="tab-content tab-content-vars"></VariableEditor>
-      <TemplateEditor v-show="tabs[1].active" class="tab-content tab-content-template" ref="templateEditor" v-bind:value="template.source"></TemplateEditor>
+      <variable-editor ref="varEditor" v-show="tabs[0].active" class="tab-content tab-content-vars"></variable-editor>
+      <template-editor v-show="tabs[1].active" class="tab-content tab-content-template" ref="templateEditor" v-bind:value="template.source"></template-editor>
+      <document-settings v-show="tabs[2].active" class="tab-content tab-content-settings" ref="documentSettings"></document-settings>
     </div>
     <div class="column doku-edit-right">
-      <Preview v-bind:url="document.render_url"></Preview>
+      <preview v-bind:url="document.render_url"></preview>
     </div>
   </div>
 </template>
@@ -18,10 +19,11 @@
   import modal from '../components/ui/Modal.vue';
   import StylesModal from '../components/ui/StylesheetModal.vue';
   import Tabs from '../components/ui/Tabs.vue';
-  import Editor from '../components/ui/Editor';
+
   import InlineVariable from '../components/ui/InlineVariable';
-  import VariableEditor from "../components/ui/VariableEditor";
-  import TemplateEditor from "../components/ui/TemplateEditor";
+  import VariableEditor from '../components/ui/VariableEditor';
+  import DocumentSettings from '../components/ui/DocumentSettings';
+  import TemplateEditor from '../components/ui/TemplateEditor';
 
   const TABS = [
     {
@@ -31,6 +33,10 @@
     {
       title: 'Template',
       active: false,
+    },
+    {
+      title: 'Settings',
+      active: false
     }
   ];
 
@@ -39,7 +45,9 @@
     components: {
       TemplateEditor,
       VariableEditor,
-      Editor, Preview, Tabs, InlineVariable, modal, StylesModal
+      DocumentSettings,
+      Preview,
+      Tabs,
     },
     computed: mapState({
       document: state => state.document.document,

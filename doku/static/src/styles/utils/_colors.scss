@@ -1,1 +1,4 @@
 @include bg-color-variant(".bg-primary-light", $primary-color-100);
+
+$warning-color-light: transparentize($warning-color, 0.75);
+@include bg-color-variant(".bg-warning-light", $warning-color-light);
