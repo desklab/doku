@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import feather from 'feather-icons';
 
 import store from './store'
 import EditTemplate from './sites/edit_template.vue';
@@ -8,4 +9,5 @@ new Vue({
   el: '#edit',
   store,
   render: h => h(EditTemplate),
+  mounted: () => feather.replace()
 });

@@ -63,7 +63,6 @@
           this.templates = response.data;
         })
         .catch(console.error);
-      feather.replace();
     },
     methods: {
       openModal() {
