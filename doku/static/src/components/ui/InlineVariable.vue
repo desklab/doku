@@ -240,7 +240,7 @@
             this.$refs.addNotice.trigger('Failed!', 'text-error');
           })
           .finally(() => {
-            event.target.classList.add('loading');
+            event.target.classList.remove('loading');
           });
       },
       updateEditor() {
