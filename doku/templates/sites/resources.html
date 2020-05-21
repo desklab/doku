@@ -19,6 +19,9 @@
                 <img src="{{ resource.url }}" alt="...">
             </figure>
             <span class="ml-2">{{ resource.name }}</span>
+            <code class="ml-2">
+                ![{{ resource.name }}](resources/{{ resource.filename }})
+            </code>
         </div>
     {% endfor %}
 {% endblock %}
