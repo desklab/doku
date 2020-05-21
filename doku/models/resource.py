@@ -34,7 +34,7 @@ def generate_filename(filename, k=8):
     :returns: Original filename with additional random string of size k
     """
     filename = secure_filename(filename)  # Overwrite insecure filename
-    new_name = _random_filename(filename, k=k)
+    new_name = filename  # Try with original filename first
     while db.session.query(
         Resource.query.filter_by(filename=new_name).exists()).scalar():
         new_name = _random_filename(filename, k=k)
