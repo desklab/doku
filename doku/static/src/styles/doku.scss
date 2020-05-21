@@ -22,7 +22,7 @@
 
 // Components
 // @import "~spectre.css/src/accordions";
-// @import "~spectre.css/src/avatars";
+@import "~spectre.css/src/avatars";
 // @import "~spectre.css/src/badges";
 // @import "~spectre.css/src/breadcrumbs";
 // @import "~spectre.css/src/bars";
@@ -40,6 +40,7 @@
 @import "~spectre.css/src/tabs";
 @import "~spectre.css/src/tiles";
 @import "~spectre.css/src/toasts";
+@import "toasts";
 @import "~spectre.css/src/tooltips";
 
 // Utility classes

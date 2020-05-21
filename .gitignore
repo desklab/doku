@@ -73,3 +73,7 @@ npm-debug.log*
 .cache/
 .pytest_cache
 coverage/
+
+# doku related
+/resources
+config/local.py

@@ -12,6 +12,18 @@
     <script type="text/javascript" src="{{ url_for('static', filename='runtime.bundle.js') }}"></script>
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="toast-messages">
+                {% for message in messages %}
+                    <div class="toast">
+                        <button class="btn btn-clear float-right"></button>
+                        {{message}}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
     {% block content %}
         {% include 'components/navbar.html' %}
     {% endblock %}

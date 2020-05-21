@@ -11,7 +11,7 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from doku.models import db
 from doku.models import base
-from doku.blueprints import auth, base, document, template
+from doku.blueprints import auth, base, document, template, resources
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.session import RedisSessionInterface
@@ -61,6 +61,9 @@ def create_app(name='doku', config=None,
         app, redis, app.config.get('SESSION_PREFIX', 'session_')
     )
 
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    
     # Flask extensions
     babel = Babel(app)
     db.init_app(app)
@@ -79,6 +82,7 @@ def create_app(name='doku', config=None,
         app.register_blueprint(auth.bp)
         app.register_blueprint(document.bp, url_prefix='/document')
         app.register_blueprint(template.bp, url_prefix='/template')
+        app.register_blueprint(resources.bp, url_prefix='/resources')
         api.init_api(app)
 
     return app

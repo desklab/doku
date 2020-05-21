@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="border rounded p-4 m-4 bg-gray">
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
+            <label class="form-label d-inline-block text-small p-0 m-0" for="inputName">Name</label>
+            <div class="form-inline mx-2">
+                <input class="form-input input-sm" type="text" name="name" id="inputName" placeholder="Name">
+            </div>
+            <input ref="sourceFile" name="file" type="file" accept="image/*">
+            <button type="submit" class="btn btn-sm btn-primary float-right">Upload</button>
+        </form>
+        </div>
+    </div>
+    {% for resource in resources %}
+        <div class="border rounded p-4 m-4 bg-gray">
+            <figure class="avatar avatar-xl">
+                <img src="{{ resource.url }}" alt="...">
+            </figure>
+            <span class="ml-2">{{ resource.name }}</span>
+        </div>
+    {% endfor %}
+{% endblock %}

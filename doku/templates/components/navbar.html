@@ -1,6 +1,8 @@
 <header class="navbar p-3 border-bottom">
     <section class="navbar-section">
-        <a href="{{ url_for('base.index') }}" class="navbar-brand mr-2">Doku</a>
+        <a href="{{ url_for('base.index') }}" class="navbar-brand mr-4">Doku</a>
+        <a href="{{ url_for('base.index') }}" class="ml-4 btn btn-link text-dark">Documents</a>
+        <a href="{{ url_for('resources.index') }}" class="ml-2 btn btn-link text-dark">Resources</a>
     </section>
     <section class="navbar-section">
         <div class="dropdown dropdown-right">

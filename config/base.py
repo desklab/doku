@@ -32,6 +32,9 @@ REDIS_CONFIG = {
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+# File upload
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'resources')
+
 # CSRF Settings
 CSRF_COOKIE_NAME = 'csrf_token'
 CSRF_COOKIE_SAMESITE = 'Lax'
