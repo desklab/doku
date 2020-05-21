@@ -42,3 +42,11 @@ SESSION_PREFIX = 'doku_session_'
 SESSION_COOKIE_NAME = 'doku_session'
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Sentry Settings
+SENTRY_DSN = os.environ.get('SENTRY_DSN', None)
+
+try:
+    from .local import *
+except ImportError:
+    pass

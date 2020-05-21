@@ -7,6 +7,8 @@ from sqlalchemy.sql import exists
 from flask import Flask, request
 from flask.cli import FlaskGroup
 from redis import Redis
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 from doku.models import db
 from doku.models import base
 from doku.blueprints import auth, base, document, template
@@ -39,9 +41,18 @@ def create_app(name='doku', config=None,
     if test:
         # Overwrite the config parameter to use a testing environment
         config = 'config.test'
+    config_module = import_module(config)
+
+    # Only initialize sentry if in production and SENTRY_DSN is set
+    _env = os.environ.get('FLASK_ENV', 'development')
+    if _env == 'production' and config_module.SENTRY_DSN is not None:
+        sentry_sdk.init(
+            dsn=config_module.SENTRY_DSN,
+            integrations=[FlaskIntegration()]
+        )
 
     app = Flask(name, instance_relative_config=True)
-    app.config.from_object(import_module(config))
+    app.config.from_object(config_module)
     app.static_url_path = app.config.get('STATIC_FOLDER')
     app.static_folder = os.path.join(app.root_path, app.static_url_path)
 

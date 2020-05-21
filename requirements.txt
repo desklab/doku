@@ -8,6 +8,7 @@ Flask-Babel
 markdown>=3.2.1
 jinja2
 flask
+sentry-sdk[flask]>=0.14.4
 Pygments>=2.6.1
 flask-sqlalchemy
 alembic>=1.4.2
