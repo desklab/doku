@@ -12,20 +12,24 @@
     <script type="text/javascript" src="{{ url_for('static', filename='runtime.bundle.js') }}"></script>
 </head>
 <body class="{% block body_class %}{% endblock %}">
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="toast-messages">
-                {% for message in messages %}
-                    <div class="toast">
-                        <button class="btn btn-clear float-right"></button>
-                        {{message}}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    {% block content %}
-        {% include 'components/navbar.html' %}
-    {% endblock %}
+    {% include 'components/toasts.html' %}
+    <div class="sidebar-layout">
+        {% include 'components/sidebar.html' %}
+        <div class="sidebar-content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    <script type="text/javascript">
+        function toggleSidebar() {
+            let sidebar = document.getElementById('sidebar');
+            let old = sidebar.classList.contains('active');
+            localStorage.setItem('doku_sidebar', !old);
+            sidebar.classList.toggle('active');
+        }
+        if (localStorage.getItem('doku_sidebar') == 'true') {
+            document.getElementById('sidebar').classList.add('active');
+        }
+    </script>
     {% block extra_js %}{% endblock %}
 </body>

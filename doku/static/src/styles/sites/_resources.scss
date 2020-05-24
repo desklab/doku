@@ -1,0 +1,9 @@
+.resource-item {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    img {
+        max-height: 96px;
+        max-width: 96px;
+    }
+}

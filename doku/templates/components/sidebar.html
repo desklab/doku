@@ -1,0 +1,26 @@
+<div id="sidebar" onload="window.setUpSidebar()" class="sidebar-container">
+    <div class="sidebar-header sidebar-item">
+        <a onclick="toggleSidebar()" class="sidebar-icon">
+            <i data-feather="menu"></i>
+        </a>
+        <a href="{{ url_for('base.index') }}" class="sidebar-brand sidebar-link">
+            Doku
+        </a>
+    </div>
+    <a href="{{ url_for('base.index') }}" class="sidebar-item mt-4{% if request.endpoint == 'base.index' %} actvie{% endif %}">
+        <div class="sidebar-icon">
+            <i data-feather="file-text"></i>
+        </div>
+        <div class="sidebar-link">
+            Documents
+        </div>
+    </a>
+    <a href="{{ url_for('resources.index') }}" class="sidebar-item{% if request.endpoint == 'resources.index' %} actvie{% endif %}">
+        <div class="sidebar-icon">
+            <i data-feather="image"></i>
+        </div>
+        <div class="sidebar-link">
+            Resources
+        </div>
+    </a>
+</div>
