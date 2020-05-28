@@ -15,6 +15,7 @@ body {
     width: $unit-12;
     overflow: hidden;
     transition: width .1s;
+    border-right: solid $border-width $border-color;
     .sidebar-item {
       height: $unit-12;
       display: flex;

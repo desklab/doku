@@ -155,3 +155,7 @@ html {
 .cm-s-base16-light.CodeMirror {
   background-color: $gray-100 !important;
 }
+
+.cm-s-base16-light .CodeMirror-gutters {
+  background-color: $gray-100 !important;
+}
