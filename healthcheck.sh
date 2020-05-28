@@ -1,0 +1,1 @@
+curl --insecure --fail --silent --show-error "${HEALTH_CHECK_URL}" || exit 1
