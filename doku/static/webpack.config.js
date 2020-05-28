@@ -3,12 +3,14 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 
 module.exports = {
   entry: {
     main: './src/main.js',
     edit: './src/edit.js',
-    edit_template: './src/edit_template.js'
+    edit_template: './src/edit_template.js',
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -18,7 +20,8 @@ module.exports = {
   optimization: {
     splitChunks: {
       chunks: 'all',
-      name: 'vendor'
+      name: 'vendor',
+      minChunks: 2
     },
     runtimeChunk: {
       name: 'runtime'
@@ -113,7 +116,8 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new webpack.IgnorePlugin({resourceRegExp: /..\/..\/lib\/codemirror/})
   ],
   resolve: {
     alias: {
