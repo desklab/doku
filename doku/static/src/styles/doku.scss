@@ -1,52 +1,52 @@
 @import "variables";
 
-@import "~spectre.css/src/variables";
+@import "~spectre.css/src/_variables.scss";
 @import "mixins";
 
-@import "~spectre.css/src/normalize";
-@import "~spectre.css/src/base";
+@import "~spectre.css/src/_normalize.scss";
+@import "~spectre.css/src/_base.scss";
 
 // Elements
-@import "~spectre.css/src/typography";
-@import "~spectre.css/src/tables";
-@import "~spectre.css/src/buttons";
-@import "~spectre.css/src/forms";
-@import "~spectre.css/src/labels";
-@import "~spectre.css/src/codes";
-// @import "~spectre.css/src/media";
+@import "~spectre.css/src/_typography.scss";
+@import "~spectre.css/src/_tables.scss";
+@import "~spectre.css/src/_buttons.scss";
+@import "~spectre.css/src/_forms.scss";
+@import "~spectre.css/src/_labels.scss";
+@import "~spectre.css/src/_codes.scss";
+// @import "~spectre.css/src/_media.scss";
 
 // Layout
-@import "~spectre.css/src/layout";
-// @import "~spectre.css/src/hero";
-@import "~spectre.css/src/navbar";
+@import "~spectre.css/src/_layout.scss";
+// @import "~spectre.css/src/_hero.scss";
+@import "~spectre.css/src/_navbar.scss";
 @import "sidebar";
 
 // Components
-// @import "~spectre.css/src/accordions";
-// @import "~spectre.css/src/avatars";
-// @import "~spectre.css/src/badges";
-// @import "~spectre.css/src/breadcrumbs";
-// @import "~spectre.css/src/bars";
-@import "~spectre.css/src/cards";
-@import "~spectre.css/src/chips";
-@import "~spectre.css/src/dropdowns";
-// @import "~spectre.css/src/empty";
-@import "~spectre.css/src/menus";
-@import "~spectre.css/src/modals";
-@import "~spectre.css/src/navs";
-// @import "~spectre.css/src/pagination";
-// @import "~spectre.css/src/panels";
-// @import "~spectre.css/src/popovers";
-// @import "~spectre.css/src/steps";
-@import "~spectre.css/src/tabs";
-@import "~spectre.css/src/tiles";
-@import "~spectre.css/src/toasts";
+// @import "~spectre.css/src/_accordions.scss";
+// @import "~spectre.css/src/_avatars.scss";
+// @import "~spectre.css/src/_badges.scss";
+// @import "~spectre.css/src/_breadcrumbs.scss";
+// @import "~spectre.css/src/_bars.scss";
+@import "~spectre.css/src/_cards.scss";
+@import "~spectre.css/src/_chips.scss";
+@import "~spectre.css/src/_dropdowns.scss";
+// @import "~spectre.css/src/_empty.scss";
+@import "~spectre.css/src/_menus.scss";
+@import "~spectre.css/src/_modals.scss";
+@import "~spectre.css/src/_navs.scss";
+// @import "~spectre.css/src/_pagination.scss";
+// @import "~spectre.css/src/_panels.scss";
+// @import "~spectre.css/src/_popovers.scss";
+// @import "~spectre.css/src/_steps.scss";
+@import "~spectre.css/src/_tabs.scss";
+@import "~spectre.css/src/_tiles.scss";
+@import "~spectre.css/src/_toasts.scss";
 @import "toasts";
-@import "~spectre.css/src/tooltips";
+@import "~spectre.css/src/_tooltips.scss";
 
 // Utility classes
-@import "~spectre.css/src/animations";
-@import "~spectre.css/src/utilities";
+@import "~spectre.css/src/_animations.scss";
+@import "~spectre.css/src/_utilities.scss";
 
 @import "navbar";
 @import "typography";
