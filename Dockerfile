@@ -6,7 +6,8 @@ ENV FLASK_ENV production
 ENV FLASK_DEBUG 0
 ENV DOKU_CONFIG config.prod
 
-ENV HEALTH_CHECK_URL http://0.0.0.0:8000/api/v1/heartbeat
+ENV HEALTHCHECK_URL http://0.0.0.0:8000/api/v1/heartbeat
+ENV HEALTHCHECK_HOST 0.0.0.0:8000
 
 
 # Install Node.js

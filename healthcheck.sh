@@ -1,1 +1,1 @@
-curl --insecure --fail --silent --show-error "${HEALTH_CHECK_URL}" || exit 1
+curl -H "Host : ${HEALTHCHECK_HOST}" --insecure --fail --silent --show-error "${HEALTH_CHECK_URL}" || exit 1
