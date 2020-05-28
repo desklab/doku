@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --watch --hide-modules",
-    "build": "cross-env NODE_ENV=production webpack --hide-modules -p",
+    "build": "cross-env NODE_ENV=production webpack --hide-modules -p"
   },
   "dependencies": {
     "axios": "^0.19.2",
