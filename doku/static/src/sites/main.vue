@@ -41,7 +41,6 @@
 
 <script>
   import {PlusIcon} from 'vue-feather-icons';
-  import feather from 'feather-icons';
 
   import templateApi from '../api/template';
   import documentApi from '../api/document';

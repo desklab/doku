@@ -3,15 +3,14 @@
 </template>
 
 <script>
-  import CodeMirror from 'codemirror/lib/codemirror';
+  import { CodeMirror } from "codemirror/src/edit/main.js"
   import 'codemirror/lib/codemirror.css';
   import 'codemirror/theme/base16-light.css';
-  import 'codemirror/addon/hint/show-hint.js';
-  import 'codemirror/addon/hint/show-hint.css';
-  import 'codemirror/addon/hint/html-hint';
-  import 'codemirror/addon/hint/anyword-hint';
-  import 'codemirror/mode/htmlmixed/htmlmixed.js';
-  import 'codemirror/mode/markdown/markdown.js';
+  import xml from '../../codemirror/xml';
+  import markdown from '../../codemirror/markdown';
+
+  xml(CodeMirror);
+  markdown(CodeMirror);
 
   export default {
     name: 'Editor',
