@@ -17,7 +17,7 @@ RUN apt-get -y install curl build-essential python3-dev python3-pip python3-setu
 # Install fonts
 RUN apt-get -y install fonts-comfortaa
 ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Regular.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /usr/local/share/fonts/ 
+ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /usr/local/share/fonts/
 
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app
@@ -34,6 +34,8 @@ RUN chmod +x /app/healthcheck.sh
 RUN chown -R doku /app
 
 USER doku
+
+CMD mkdir /app/resources
 
 EXPOSE 8000
 WORKDIR /app
