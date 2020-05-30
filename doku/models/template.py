@@ -5,6 +5,7 @@ from weasyprint import HTML, CSS
 from pygments.formatters.html import HtmlFormatter
 
 from doku.models import db, DateMixin
+from doku.utils.weasyfetch import url_fetcher
 
 DEFAULT_TEMPLATE = """<html>
 <head>
@@ -81,7 +82,7 @@ class Template(db.Model, DateMixin):
         source = template.render(**context)
         if 'codehilite' in source:
             stylesheets.append(CSS(string=HtmlFormatter().get_style_defs()))
-        html = HTML(string=source, base_url='.')
+        html = HTML(string=source, base_url='.', url_fetcher=url_fetcher)
         return html.write_pdf(stylesheets=stylesheets)
 
 
