@@ -22,3 +22,5 @@ CSRF_COOKIE_SECURE = True
 
 # Session Settings
 SESSION_COOKIE_SECURE = True
+
+UPLOAD_FOLDER = os.environ.get('DOKU_UPLOAD_FOLDER', '/app/resources')

@@ -29,13 +29,13 @@ RUN rm -rf ~/.cache/pip/*
 COPY . /app/
 
 RUN useradd doku
+CMD mkdir /app/resources
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/healthcheck.sh
 RUN chown -R doku /app
 
 USER doku
 
-CMD mkdir /app/resources
 
 EXPOSE 8000
 WORKDIR /app
