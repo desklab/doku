@@ -101,19 +101,7 @@ class CSRFMiddleware:
 
         @self._app.context_processor
         def inject_csrf_context():
-            def create_csrf_token(output=True) -> str:
-                g._csrf_should_set = True
-                secret = self._create_string()
-                g._csrf_secret = secret
-                if output:
-                    token = self._mask(secret)
-                    random_token = self._create_string()
-                    return self._signer.sign(
-                        f'{token}.{random_token}'
-                    ).decode()
-                else:
-                    return ''
-            return dict(create_csrf_token=create_csrf_token)
+            return dict(create_csrf_token=self.create_csrf_token)
 
         @self._app.after_request
         def _set_csrf_cookie(response: Response):
@@ -192,5 +180,17 @@ class CSRFMiddleware:
         secret_raw = int(cipher, base=16) ^ int(mask, base=16)
         return secret_raw.to_bytes(length=length, byteorder='big').hex()
 
+    def create_csrf_token(self, output=True) -> str:
+        g._csrf_should_set = True
+        secret = self._create_string()
+        g._csrf_secret = secret
+        if output:
+            token = self._mask(secret)
+            random_token = self._create_string()
+            return self._signer.sign(
+                f'{token}.{random_token}'
+            ).decode()
+        else:
+            return ''
 
 csrf = CSRFMiddleware()
