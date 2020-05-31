@@ -3,10 +3,11 @@
         <div class="toast-messages">
             {% for message in messages %}
                 <div class="toast">
-                    <button class="btn btn-clear float-right"></button>
+                    <button class="btn btn-clear float-right toast-message-dismiss"></button>
                     {{message}}
                 </div>
             {% endfor %}
         </div>
+        {% include "components/toast_js.html" %}
     {% endif %}
 {% endwith %}

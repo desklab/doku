@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    const animationClassName = 'fade-in-leave-active';
+    
+    function removeElement(el) {
+        el.classList.add(animationClassName);
+        setTimeout(function() {
+            el.remove();
+        }, 100);
+    }
+
+    let toastsDismiss = document.getElementsByClassName('toast-message-dismiss');
+    for (let i = 0; i < toastsDismiss.length; i++) {
+        setTimeout(function() {
+            removeElement(toastsDismiss[i].parentElement);
+        }, 5000 + i * 100);
+        toastsDismiss[i].addEventListener('click', function() {
+            removeElement(toastsDismiss[i].parentElement);
+        });
+    }
+</script>
