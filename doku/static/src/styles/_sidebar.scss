@@ -1,7 +1,13 @@
 $off-canvas-breakpoint: $size-lg !default;
 
+html {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   height: 100%;
+  width: 100%;
 }
 
 .sidebar-layout {
@@ -66,7 +72,7 @@ body {
     overflow-y: auto;
     height: 100%;
     min-height: 100vh;
-    flex: 1 0 auto;
     display: block;
+    flex-basis: 100%;
   }
 }
