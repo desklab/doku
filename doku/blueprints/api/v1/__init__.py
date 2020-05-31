@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify
 
 
-bp = Blueprint('api.v1', __name__)
+bp = Blueprint("api.v1", __name__)
 
 
-@bp.route('/heartbeat', methods=['GET'])
+@bp.route("/heartbeat", methods=["GET"])
 def dashboard():
-    return jsonify({'status': 'healthy'})
+    return jsonify({"status": "healthy"})

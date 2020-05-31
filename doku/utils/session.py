@@ -24,7 +24,6 @@ from itsdangerous import Signer, BadSignature, want_bytes
 
 
 class Session(CallbackDict, SessionMixin):
-
     @staticmethod
     def _on_update(self):
         """On update
@@ -36,8 +35,7 @@ class Session(CallbackDict, SessionMixin):
         self.modified = True
 
     def __init__(self, initial=None, sid=None, permanent=None):
-        super(Session, self).__init__(initial=initial,
-                                      on_update=self._on_update)
+        super(Session, self).__init__(initial=initial, on_update=self._on_update)
         self.sid = sid
         if permanent is not None:
             self.permanent = permanent
@@ -45,11 +43,11 @@ class Session(CallbackDict, SessionMixin):
 
     @property
     def authenticated(self) -> bool:
-        return self.get('authenticated', False)
+        return self.get("authenticated", False)
 
     @authenticated.setter
     def authenticated(self, set_value: bool):
-        self['authenticated'] = set_value
+        self["authenticated"] = set_value
 
 
 class RedisSessionInterface(SessionInterface):
@@ -64,19 +62,25 @@ class RedisSessionInterface(SessionInterface):
         used to save the actual session instance.
     :param permanent: Whether the session should be permanent
     """
-    _empty = ['', None, (), [], {}]
+
+    _empty = ["", None, (), [], {}]
     _KEY_LENGTH = 32
     _serializer = json
 
-    def __init__(self, app: Flask, redis: Redis, prefix: str = 'session_',
-                 session_class: type(SessionMixin) = Session,
-                 permanent: bool = True):
+    def __init__(
+        self,
+        app: Flask,
+        redis: Redis,
+        prefix: str = "session_",
+        session_class: type(SessionMixin) = Session,
+        permanent: bool = True,
+    ):
         self._app = app
         self._redis: Redis = redis
         self._signer: Signer = Signer(
             self._app.secret_key,
-            key_derivation='hmac',
-            salt=app.config.get('SESSION_SALT', 'salty-session')
+            key_derivation="hmac",
+            salt=app.config.get("SESSION_SALT", "salty-session"),
         )
         self.prefix: str = prefix
         self.session_class = session_class
@@ -91,8 +95,9 @@ class RedisSessionInterface(SessionInterface):
             sid_bytes = self._signer.unsign(sid_signed)
             sid = sid_bytes.decode()
         except BadSignature:
-            app.logger.info('Session cookie has bad signature. '
-                            'A new session will be created')
+            app.logger.info(
+                "Session cookie has bad signature. " "A new session will be created"
+            )
             return self.empty_session()
         # Get the raw session instance from redis
         raw_session = self._redis.get(self.get_key(sid))
@@ -101,7 +106,7 @@ class RedisSessionInterface(SessionInterface):
                 session = self._serializer.loads(raw_session)
                 return self.session_class(initial=session, sid=sid)
             except (TypeError, JSONDecodeError) as e:
-                app.logger.info('Failed to load session: %s' % e)
+                app.logger.info("Failed to load session: %s" % e)
                 return self.empty_session()
         else:
             return self.empty_session()
@@ -109,8 +114,7 @@ class RedisSessionInterface(SessionInterface):
     def empty_session(self) -> SessionMixin:
         """ Create new empty Session
         """
-        return self.session_class(sid=self._get_unique_sid(),
-                                  permanent=self.permanent)
+        return self.session_class(sid=self._get_unique_sid(), permanent=self.permanent)
 
     def save_session(self, app: Flask, session: Session, response: Response):
         if session is None:
@@ -127,9 +131,7 @@ class RedisSessionInterface(SessionInterface):
                 # traces
                 self._redis.delete(self.get_key(session.sid))
                 response.delete_cookie(
-                    app.session_cookie_name,
-                    domain=domain,
-                    path=path
+                    app.session_cookie_name, domain=domain, path=path
                 )
             return
 
@@ -143,13 +145,18 @@ class RedisSessionInterface(SessionInterface):
         self._redis.setex(
             name=self.get_key(session.sid),
             time=app.permanent_session_lifetime,
-            value=raw_session
+            value=raw_session,
         )
         sid_signed = self._signer.sign(session.sid)
         response.set_cookie(
-            app.session_cookie_name, sid_signed,
-            domain=domain, path=path, httponly=httponly,
-            expires=expires, secure=secure, samesite=samesite
+            app.session_cookie_name,
+            sid_signed,
+            domain=domain,
+            path=path,
+            httponly=httponly,
+            expires=expires,
+            secure=secure,
+            samesite=samesite,
         )
 
     def _get_unique_sid(self) -> str:

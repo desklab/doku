@@ -13,10 +13,10 @@ from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
 
 
-bp = Blueprint('template', __name__)
+bp = Blueprint("template", __name__)
 
 
-@bp.route('/<int:template_id>', methods=['GET'])
+@bp.route("/<int:template_id>", methods=["GET"])
 @login_required
 def index(template_id: int):
     template: Template = get_or_404(
@@ -25,7 +25,7 @@ def index(template_id: int):
     template_schema = TemplateSchema(session=db.session)
     stylesheet_schemas = StylesheetSchema(session=db.session, many=True)
     return render_template(
-        'sites/edit_template.html',
+        "sites/edit_template.html",
         template_json=template_schema.dumps(template),
-        stylesheets_json=stylesheet_schemas.dumps(template.styles)
+        stylesheets_json=stylesheet_schemas.dumps(template.styles),
     )

@@ -8,14 +8,9 @@ db = SQLAlchemy(session_options={"autoflush": False})
 
 
 class DateMixin:
-    created_on = db.Column(
-        db.DateTime(timezone=True),
-        default=datetime.now
-    )
+    created_on = db.Column(db.DateTime(timezone=True), default=datetime.now)
     last_updated = db.Column(
-        db.DateTime(timezone=True),
-        default=datetime.now,
-        onupdate=datetime.now
+        db.DateTime(timezone=True), default=datetime.now, onupdate=datetime.now
     )
 
     @property

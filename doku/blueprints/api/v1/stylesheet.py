@@ -10,7 +10,7 @@ from doku.models.template import Template, Stylesheet
 from doku.utils.db import get_or_404, get_or_create
 from doku.utils.decorators import login_required
 
-bp = Blueprint('api.v1.stylesheet', __name__)
+bp = Blueprint("api.v1.stylesheet", __name__)
 
 
 @bp.before_request
@@ -19,21 +19,22 @@ def login_check():
     pass
 
 
-@bp.route('/upload/<int:stylesheet_id>', methods=['PUT'])
+@bp.route("/upload/<int:stylesheet_id>", methods=["PUT"])
 def upload(stylesheet_id: int):
     style: Stylesheet = get_or_404(
         db.session.query(Stylesheet).filter_by(id=stylesheet_id)
     )
-    schema = StylesheetSchema(unknown=EXCLUDE, session=db.session,
-                              instance=style, partial=True)
+    schema = StylesheetSchema(
+        unknown=EXCLUDE, session=db.session, instance=style, partial=True
+    )
 
     data = dict(request.form.copy())
     if request.json is not None:
         data.update(request.json)
 
-    if request.files.get('source', None) is not None:
-        file: FileStorage = request.files.get('source')
-        data['source'] = file.read()
+    if request.files.get("source", None) is not None:
+        file: FileStorage = request.files.get("source")
+        data["source"] = file.read()
         file.close()
 
     try:
@@ -47,26 +48,26 @@ def upload(stylesheet_id: int):
     return jsonify(result)
 
 
-@bp.route('/', methods=['PUT'])
+@bp.route("/", methods=["PUT"])
 def update():
     return StylesheetSchema.update()
 
 
-@bp.route('/', methods=['POST'])
+@bp.route("/", methods=["POST"])
 def create():
     return StylesheetSchema.create()
 
 
-@bp.route('/', methods=['GET'])
+@bp.route("/", methods=["GET"])
 def get_all():
     return StylesheetSchema.get_all()
 
 
-@bp.route('/<int:template_id>/', methods=['GET'])
+@bp.route("/<int:template_id>/", methods=["GET"])
 def get(template_id: int):
     return StylesheetSchema.get(template_id)
 
 
-@bp.route('/<int:template_id>/', methods=['DELETE'])
+@bp.route("/<int:template_id>/", methods=["DELETE"])
 def delete(template_id: int):
     return StylesheetSchema.delete(template_id)

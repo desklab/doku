@@ -7,11 +7,11 @@ from doku.models.document import Document
 from doku.utils.decorators import login_required
 
 
-bp = Blueprint('base', __name__)
+bp = Blueprint("base", __name__)
 
 
-@bp.route('/', methods=['GET'])
+@bp.route("/", methods=["GET"])
 @login_required
 def index():
     documents = db.session.query(Document).all()
-    return render_template('sites/index.html', documents=documents)
+    return render_template("sites/index.html", documents=documents)

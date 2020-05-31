@@ -7,7 +7,7 @@ class User(db.Model):
     """User Model
     """
 
-    __tablename__ = 'doku_user'
+    __tablename__ = "doku_user"
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
 
     username = db.Column(db.String(48), nullable=False, unique=True)
@@ -15,8 +15,8 @@ class User(db.Model):
     password = db.Column(db.LargeBinary, nullable=False)
 
     def __init__(self, *args, **kwargs):
-        if 'password' in kwargs:
-            self.set_password(kwargs.pop('password'))
+        if "password" in kwargs:
+            self.set_password(kwargs.pop("password"))
         super().__init__(*args, **kwargs)
 
     @staticmethod

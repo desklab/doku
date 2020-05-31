@@ -1,4 +1,4 @@
-.PHONY: test run clean build npm-install pip-install
+.PHONY: test run clean build npm-install pip-install lint black
 
 test:
 	python -m unittest
@@ -25,3 +25,8 @@ npm-install:
 pip-install:
 	pip install -r requirements.txt
 
+lint:
+	flake8 doku --extend-exclude ./doku/static
+
+black:
+	black --exclude doku/static/ doku

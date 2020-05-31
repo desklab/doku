@@ -5,7 +5,7 @@ from werkzeug.exceptions import NotFound
 from doku import db
 
 
-def get_or_404(query: Query, query_type: str = 'one'):
+def get_or_404(query: Query, query_type: str = "one"):
     """
 
     .. todo :: use flask-sqlalchemy's get_or_404 instead
@@ -15,12 +15,12 @@ def get_or_404(query: Query, query_type: str = 'one'):
     :param query_type: String identifier for method. Either ``one`` or ``all``
     """
     try:
-        if query_type == 'one':
+        if query_type == "one":
             return query.one()
-        elif query_type == 'all':
+        elif query_type == "all":
             return query.all()
         else:
-            raise ValueError(f'Unexpected type {query_type}. Allowed types: one, all')
+            raise ValueError(f"Unexpected type {query_type}. Allowed types: one, all")
     except NoResultFound:
         raise NotFound()
 

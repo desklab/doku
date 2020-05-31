@@ -8,21 +8,20 @@ class RootClassTreeprocessor(Treeprocessor):
         self.root_class = root_class
 
     def run(self, root):
-        if self.root_class not in ['', None]:
-            root.set('class', self.root_class)
+        if self.root_class not in ["", None]:
+            root.set("class", self.root_class)
 
 
 class RootClassExtension(Extension):
-
     def __init__(self, **kwargs):
-        self.config = {'root_class': ['', 'CSS class for root element']}
+        self.config = {"root_class": ["", "CSS class for root element"]}
         super(RootClassExtension, self).__init__(**kwargs)
 
     def extendMarkdown(self, md):
-        if self.getConfig('root_class') in ['', None]:
+        if self.getConfig("root_class") in ["", None]:
             return
         _processor = RootClassTreeprocessor(
-            md=md, root_class=self.getConfig('root_class')
+            md=md, root_class=self.getConfig("root_class")
         )
         md.stripTopLevelTags = False
-        md.treeprocessors.register(_processor, 'root_tree_class', 15)
+        md.treeprocessors.register(_processor, "root_tree_class", 15)

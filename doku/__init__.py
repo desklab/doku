@@ -17,8 +17,7 @@ from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.session import RedisSessionInterface
 
 
-def create_app(name='doku', config=None,
-               minimal=False, test=False) -> Flask:
+def create_app(name="doku", config=None, minimal=False, test=False) -> Flask:
     """
     App Factory - create_app
 
@@ -37,40 +36,37 @@ def create_app(name='doku', config=None,
     :param test: Enable the testing environment. This will overwrite
         the ``config`` parameter.
     """
-    config = os.environ.get('DOKU_CONFIG', 'config.dev')
+    config = os.environ.get("DOKU_CONFIG", "config.dev")
     if test:
         # Overwrite the config parameter to use a testing environment
-        config = 'config.test'
+        config = "config.test"
     config_module = import_module(config)
 
     # Only initialize sentry if in production and SENTRY_DSN is set
-    _env = os.environ.get('FLASK_ENV', 'development')
-    if _env == 'production' and config_module.SENTRY_DSN is not None:
-        sentry_sdk.init(
-            dsn=config_module.SENTRY_DSN,
-            integrations=[FlaskIntegration()]
-        )
+    _env = os.environ.get("FLASK_ENV", "development")
+    if _env == "production" and config_module.SENTRY_DSN is not None:
+        sentry_sdk.init(dsn=config_module.SENTRY_DSN, integrations=[FlaskIntegration()])
 
     app = Flask(name, instance_relative_config=True)
     app.config.from_object(config_module)
-    app.static_url_path = app.config.get('STATIC_FOLDER')
+    app.static_url_path = app.config.get("STATIC_FOLDER")
     app.static_folder = os.path.join(app.root_path, app.static_url_path)
 
-    redis = Redis(**app.config['REDIS_CONFIG'])
+    redis = Redis(**app.config["REDIS_CONFIG"])
     app.session_interface = RedisSessionInterface(
-        app, redis, app.config.get('SESSION_PREFIX', 'session_')
+        app, redis, app.config.get("SESSION_PREFIX", "session_")
     )
 
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
-    
+    if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+        os.makedirs(app.config["UPLOAD_FOLDER"])
+
     # Flask extensions
     babel = Babel(app)
     db.init_app(app)
 
     @babel.localeselector
     def get_locale():
-        return request.accept_languages.best_match(['de', 'en'])
+        return request.accept_languages.best_match(["de", "en"])
 
     # WSGI middlewares
     if not minimal:
@@ -80,9 +76,9 @@ def create_app(name='doku', config=None,
     if not minimal:
         app.register_blueprint(base.bp)
         app.register_blueprint(auth.bp)
-        app.register_blueprint(document.bp, url_prefix='/document')
-        app.register_blueprint(template.bp, url_prefix='/template')
-        app.register_blueprint(resources.bp, url_prefix='/resources')
+        app.register_blueprint(document.bp, url_prefix="/document")
+        app.register_blueprint(template.bp, url_prefix="/template")
+        app.register_blueprint(resources.bp, url_prefix="/resources")
         api.init_api(app)
 
     return app
@@ -99,7 +95,7 @@ def cli():
     pass
 
 
-@cli.command('create-user', help='Create new user')
+@cli.command("create-user", help="Create new user")
 def create_user():
     import getpass
     from doku.models.user import User
@@ -110,42 +106,34 @@ def create_user():
     with app.app_context():
         username = None
         while not username:
-            username = click.prompt('User name', default=default_username)
-            if db.session.query(
-                    exists().where(User.username == username)).scalar():
+            username = click.prompt("User name", default=default_username)
+            if db.session.query(exists().where(User.username == username)).scalar():
                 click.secho(
-                    f'User with username {username} already exists!',
-                    fg='red', err=True
+                    f"User with username {username} already exists!", fg="red", err=True
                 )
                 username = None
 
         email = None
         while not email:
-            email = input('E-Mail: ') or None
+            email = input("E-Mail: ") or None
             if not email:
-                click.secho(
-                    'This field can not be left empty!',
-                    fg='red', err=True
-                )
+                click.secho("This field can not be left empty!", fg="red", err=True)
 
         password = None
         while not password:
-            password = getpass.getpass(f'Password: ')
+            password = getpass.getpass(f"Password: ")
             if not password:
-                click.secho(
-                    'This field can not be left empty!',
-                    fg='red', err=True
-                )
+                click.secho("This field can not be left empty!", fg="red", err=True)
 
         user = User(username=username, email=email, password=password)
         db.session.add(user)
         db.session.commit()
-        click.secho(f'Created user {user.username}', fg='green')
+        click.secho(f"Created user {user.username}", fg="green")
 
 
-@cli.command('init-db')
+@cli.command("init-db")
 def init_db():
     app: Flask = cli.create_app(minimal=True)
     with app.app_context():
         db.create_all(app=app)
-        click.secho(f'Initialized database', fg='green')
+        click.secho(f"Initialized database", fg="green")
