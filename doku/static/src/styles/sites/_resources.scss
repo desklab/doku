@@ -1,9 +1,35 @@
 .resource-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  .resource-res {
+    height: $unit-16;
+    width: $unit-16;
     display: flex;
     align-items: center;
-    flex-direction: row;
+
     img {
-        max-height: 96px;
-        max-width: 96px;
+      max-height: $unit-16;
+      max-width: $unit-16;
     }
+  }
+
+  .resource-desc {
+    margin-left: $unit-3;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    flex-grow: 1;
+    * {
+      margin-top: $unit-1;
+    }
+    :first-child {
+      margin-top: 0 !important;
+    }
+  }
+}
+
+.resource-form {
+  white-space: nowrap;
 }
