@@ -1,36 +1,14 @@
 {% extends "base.html" %}
+{% block body_class %}doku-edit{% endblock %}
 {% block content %}
     {{ super() }}
-    <div class="container">
-        <div class="border rounded p-4 m-3 bg-gray resource-form">
-            <form action="" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
-                <label class="form-label d-inline-block text-small p-0 m-0" for="inputName">Name</label>
-                <div class="form-inline mx-2">
-                    <input class="form-input input-sm" type="text" name="name" id="inputName" placeholder="Name">
-                </div>
-                <input ref="sourceFile" name="file" type="file" accept="image/*">
-                <button type="submit" class="btn btn-sm btn-primary ">Upload
-                </button>
-            </form>
-        </div>
-        <div class="columns m-3">
-            {% for resource in resources %}
-                <div class="column col-12 resource-item border rounded p-4 mb-2 bg-gray">
-                    <div class="resource-res">
-                        <img src="{{ resource.url }}" alt="...">
-                    </div>
-                    <div class="resource-desc">
-                        <span class="ml-2"><b>{{ resource.name }}</b></span>
-                        <span class="ml-2">
-                            <b>Usage:</b> <code>![{{ resource.name }}](dokures:{{ resource.filename }})</code>
-                        </span>
-                    </div>
-                    <div class="resource-end">
-                        {# <button class="btn btn-error btn-sm">Remove</button> #}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    <div id="resources"></div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.resourceApi = '{{ url_for('api.v1.resource.update') }}'
+        {{ create_csrf_token(output=False) }}
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='resources.bundle.js') }}"></script>
 {% endblock %}

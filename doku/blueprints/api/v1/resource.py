@@ -27,11 +27,11 @@ def get_all():
     return ResourceSchema.get_all()
 
 
-@bp.route("/<int:document_id>/", methods=["GET"])
+@bp.route("/<int:document_id>/", methods=["GET"]) #TODO: is document_id correct?
 def get(document_id: int):
     return ResourceSchema.get(document_id)
 
 
-@bp.route("/<int:document_id>/", methods=["DELETE"])
+@bp.route("/<int:document_id>/", methods=["DELETE"]) #TODO: is document_id correct?
 def delete(document_id: int):
     return ResourceSchema.delete(document_id)
