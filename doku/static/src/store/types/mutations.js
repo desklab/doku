@@ -9,3 +9,5 @@ export const REMOVE_VARIABLE = 'removeVariable';
 export const SET_TEMPLATE = 'setTemplate';
 export const SET_STYLESHEET = 'setStylesheet';
 export const SET_STYLESHEETS = 'setStylesheets';
+export const SET_RESOURCE = 'setResource';
+export const SET_RESOURCES = 'setResources';
