@@ -15,7 +15,7 @@ from doku import db
 from doku.models.resource import Resource, generate_filename
 from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
-
+from doku.models.schemas.resource import ResourceSchema
 
 bp = Blueprint("resources", __name__)
 
@@ -40,7 +40,12 @@ def index():
                 db.session.add(resource)
                 db.session.commit()
     resources = db.session.query(Resource).all()
-    return render_template("sites/resources.html", resources=resources)
+
+    resource_schemas = ResourceSchema(session=db.session, many=True)
+    return render_template(
+        "sites/resources.html",
+        resources_json=resource_schemas.dumps(resources),
+    )
 
 
 @bp.route("/view/<int:resource_id>", methods=["GET"])

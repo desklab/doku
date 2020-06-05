@@ -10,24 +10,40 @@
             </span>
         </div>
         <div class="resource-end">
+            <animated-notice ref="deleteNotice"></animated-notice>
             <button class="btn btn-error btn-sm" @click="remove" >Remove</button>
         </div>
     </div>
 </template>
 
 <script>
+  import * as actionTypes from '../../store/types/actions';
+  import {mapState, mapActions} from 'vuex';
+  import AnimatedNotice from "./AnimatedNotice";
+
   export default {
+    components: {
+      AnimatedNotice
+    },
     methods: {
+      ...mapActions('resource', [
+        actionTypes.REMOVE_RESOURCE,
+      ]),
       remove(event) {
-        this.removeResource(this.resource.id)   
-          .then(() => {window.location.href = '/';})
+        event.target.classList.add('loading');
+        let data = {
+          	url: this.resource.delete_url,
+            id: this.resource.id
+        }
+        this.removeResource(data)
           .catch((err) => {
             console.error(err);
             this.$refs.deleteNotice.trigger('Failed!', 'text-error');
             event.target.classList.remove('loading');
           });
       }
-    }
+    },
+    props: ['resource']
   }
 </script>
 

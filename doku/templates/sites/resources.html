@@ -7,6 +7,7 @@
 
 {% block extra_js %}
     <script>
+        window.resources = {{ resources_json|tojson }};
         window.resourceApi = '{{ url_for('api.v1.resource.update') }}'
         {{ create_csrf_token(output=False) }}
     </script>

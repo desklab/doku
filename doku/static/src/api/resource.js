@@ -9,8 +9,8 @@ export default {
   createResource(resource) {
     return axios.post(RESOURCE_API, resource);
   },
-  removeResource(resourceId) {
-    return axios.delete(`${RESOURCE_API}${resourceId}/`);
+  removeResource(resourceUrl) {
+    return axios.delete(resourceUrl);
   },
   fetchResource(options) {
     return axios.get(RESOURCE_API, {params: options});

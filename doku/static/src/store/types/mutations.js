@@ -11,3 +11,4 @@ export const SET_STYLESHEET = 'setStylesheet';
 export const SET_STYLESHEETS = 'setStylesheets';
 export const SET_RESOURCE = 'setResource';
 export const SET_RESOURCES = 'setResources';
+export const REMOVE_RESOURCE = 'removeResource';
