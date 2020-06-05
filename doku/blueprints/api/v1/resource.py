@@ -11,27 +11,52 @@ bp = Blueprint("api.v1.resource", __name__)
 def login_check():
     pass
 
+@bp.route("/upload/<int:resource_id>", methods=["PUT"])
+def upload(resource_id: int):
+    resource: Resource = get_or_404(
+        db.session.query(Resource).filter_by(id=resource_id)
+    )
+    schema = ResourceSchema(
+        unknown=EXCLUDE, session=db.session, instance=resource, partial=True
+    )
 
-@bp.route("/", methods=["POST"])
+    data = dict(request.form.copy())
+    if request.json is not None:
+        data.update(request.json)
+
+    if request.files.get("source", None) is not None:
+        file: FileStorage = request.files.get("source")
+        data["source"] = file.read()
+        file.close()
+
+    try:
+        resource = schema.load(data)
+    except ValidationError as e:
+        return jsonify(e.messages), BadRequest.code
+
+    db.session.commit()
+
+    result = schema.dump(resource)
+    return jsonify(result)
+
+@bp.route("/", methods=["PUT"])
 def create():
     return ResourceSchema.create()
 
-
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["POST"])
 def update():
     return ResourceSchema.update()
-
 
 @bp.route("/", methods=["GET"])
 def get_all():
     return ResourceSchema.get_all()
 
 
-@bp.route("/<int:document_id>/", methods=["GET"]) #TODO: is document_id correct?
-def get(document_id: int):
-    return ResourceSchema.get(document_id)
+@bp.route("/<int:resource_id>/", methods=["GET"])
+def get(resource_id: int):
+    return ResourceSchema.get(resource_id)
 
 
-@bp.route("/<int:document_id>/", methods=["DELETE"]) #TODO: is document_id correct?
-def delete(document_id: int):
-    return ResourceSchema.delete(document_id)
+@bp.route("/<int:resource_id>/", methods=["DELETE"])
+def delete(resource_id: int):
+    return ResourceSchema.delete(resource_id)

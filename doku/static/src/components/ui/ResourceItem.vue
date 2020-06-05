@@ -19,7 +19,7 @@
   export default {
     methods: {
       remove(event) {
-        this.removeResource(this.resource.id)         //TODO: is this.resource.id defined?
+        this.removeResource(this.resource.id)   
           .then(() => {window.location.href = '/';})
           .catch((err) => {
             console.error(err);
