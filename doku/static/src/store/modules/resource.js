@@ -50,7 +50,17 @@ const actions = {
           resolve()
         }).catch(reject);
     });
-  }
+  },
+  updateResource({commit, state, dispatch}, data) {
+    return new Promise((resolve, reject) => {
+      resourceApi.updateResource(data)
+        .then(response => {
+          commit(mutationTypes.SET_RESOURCE, response.data);
+          resolve();
+        })
+        .catch(reject)
+    });
+  },
 }
 
 const mutations = {
@@ -59,6 +69,15 @@ const mutations = {
       if (state.resources[i].id == id){
         state.resources.splice(i, 1);
         break;
+      }
+    }
+  },
+  setResource(state, resource) {
+    const id = resource.id;
+    for (let i in state.resources) {
+      if (state.resources[i].id === id) {
+        Object.assign(state.resources[i], resource);
+        return;
       }
     }
   }

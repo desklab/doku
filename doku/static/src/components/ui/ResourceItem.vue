@@ -4,7 +4,10 @@
             <img :src="resource.url" alt="...">
         </div>
         <div class="resource-desc">
-            <span class="ml-2"><b>{{ resource.name }}</b></span>
+            <span class="ml-2">
+                <b>Name:</b>
+                <text-edit v-bind:text="resource.name" v-bind:save="saveName" v-bind:placeholder="'Name'"></text-edit>
+            </span>
             <span class="ml-2">
                 <b>Usage:</b> <code>![{{ resource.name }}](dokures:{{ resource.filename }})</code>
             </span>
@@ -17,17 +20,21 @@
 </template>
 
 <script>
+  import resourceApi from '../../api/resource';
   import * as actionTypes from '../../store/types/actions';
   import {mapState, mapActions} from 'vuex';
   import AnimatedNotice from "./AnimatedNotice";
+  import TextEdit from "./TextEdit";
 
   export default {
     components: {
+      TextEdit,
       AnimatedNotice
     },
     methods: {
       ...mapActions('resource', [
         actionTypes.REMOVE_RESOURCE,
+        actionTypes.UPDATE_RESOURCE
       ]),
       remove(event) {
         event.target.classList.add('loading');
@@ -40,6 +47,16 @@
             console.error(err);
             this.$refs.deleteNotice.trigger('Failed!', 'text-error');
             event.target.classList.remove('loading');
+          });
+      },
+      saveName(name) {
+        let data = {
+          id: this.resource.id,
+          name: name
+        };
+        this.updateResource(data)
+          .catch(err => {
+            console.error(err);
           });
       }
     },
