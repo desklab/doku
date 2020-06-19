@@ -18,12 +18,9 @@ from doku.utils.middlewares.hosts import host_middleware
 from doku.utils.session import RedisSessionInterface
 
 
-def create_app(name="doku",
-        config=None,
-        minimal=False,
-        test=False,
-        additional_config=None
-    ) -> Flask:
+def create_app(
+    name="doku", config=None, minimal=False, test=False, additional_config=None
+) -> Flask:
     """
     App Factory - create_app
 

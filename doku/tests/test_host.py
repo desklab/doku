@@ -9,7 +9,6 @@ from doku.utils.middlewares.hosts import host_middleware
 
 
 class HostTest(DokuTest):
-
     def setUp(self):
         pass
 
@@ -22,17 +21,13 @@ class HostTest(DokuTest):
             return jsonify({"success": True})
 
     def test_missing_hosts(self):
-        config = {
-            'ALLOWED_HOSTS': []  # No hosts allowed
-        }
+        config = {"ALLOWED_HOSTS": []}  # No hosts allowed
         self._setup_with_config(config)
         resp = self.client.get("/foo")
         self.assertEqual(resp.status_code, BadHost.code)
 
     def test_no_hosts(self):
-        config = {
-            'ALLOWED_HOSTS': None  # All hosts allowed
-        }
+        config = {"ALLOWED_HOSTS": None}  # All hosts allowed
         with self.assertLogs(logger="doku", level=logging.WARNING) as logs:
             self._setup_with_config(config)
         message = f"WARNING:doku:{host_middleware.LOG_MESSAGE}"
@@ -41,17 +36,13 @@ class HostTest(DokuTest):
         self.assertEqual(resp.status_code, 200)
 
     def test_localhost(self):
-        config = {
-            'ALLOWED_HOSTS': "localhost"
-        }
+        config = {"ALLOWED_HOSTS": "localhost"}
         self._setup_with_config(config)
         resp = self.client.get("/foo")
         self.assertEqual(resp.status_code, 200)
 
     def test_other_host(self):
-        config = {
-            'ALLOWED_HOSTS': "example.org"
-        }
+        config = {"ALLOWED_HOSTS": "example.org"}
         self._setup_with_config(config)
         resp = self.client.get("/foo")
         self.assertEqual(resp.status_code, BadHost.code)
