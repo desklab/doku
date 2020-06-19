@@ -38,6 +38,6 @@ USER doku
 EXPOSE 8000
 WORKDIR /app
 
-HEALTHCHECK --interval=60s --timeout=10s CMD ["./healthcheck.sh"]
+HEALTHCHECK CMD ./healthcheck.sh
 
 CMD ./docker-entrypoint.sh
