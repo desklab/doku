@@ -1,4 +1,5 @@
 import os
+import socket
 from logging.config import dictConfig
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -13,6 +14,9 @@ ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1"
 ]
+
+# Add the current host
+ALLOWED_HOSTS.append(socket.gethostname())
 
 if os.environ.get("DOKU_HOST", None) is not None:
     ALLOWED_HOSTS.append(os.environ["DOKU_HOST"])
