@@ -8,6 +8,13 @@ SECRET_KEY = b'dont_use_this_in_production'
 TEMPLATE_FOLDER = 'templates'
 STATIC_FOLDER = os.path.join('static', 'dist')
 
+ALLOWED_HOSTS = [
+    "localhost",
+]
+
+if os.environ.get("DOKU_HOST", None) is not None:
+    ALLOWED_HOSTS.append(os.environ["DOKU_HOST"])
+
 dictConfig({
     'version': 1,
     'formatters': {'default': {

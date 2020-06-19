@@ -1,0 +1,15 @@
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+
+# Other
+npm-debug.log
+/dist
+/node_modules

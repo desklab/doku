@@ -1,9 +1,7 @@
 from flask import Flask
 
 from doku.blueprints.api import v1
-from doku.blueprints.api.v1 import (
-    document, template, variable, stylesheet, resource
-)
+from doku.blueprints.api.v1 import document, template, variable, stylesheet, resource
 
 
 def init_api(app: Flask):

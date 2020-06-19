@@ -13,7 +13,7 @@ def url_fetcher(url: str, **kwargs):
         res_path = safe_join(current_app.config["UPLOAD_FOLDER"], resource)
         mime_type, __ = mimetypes.guess_type(res_path, strict=True)
         if mime_type is None:
-            mime_type = 'image/*'
+            mime_type = "image/*"
         if not os.path.isfile(res_path):
             raise URLFetchingError()
         return {"mime_type": mime_type, "file_obj": open(res_path, "rb")}
