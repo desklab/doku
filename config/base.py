@@ -10,6 +10,8 @@ STATIC_FOLDER = os.path.join('static', 'dist')
 
 ALLOWED_HOSTS = [
     "localhost",
+    "0.0.0.0",
+    "127.0.0.1"
 ]
 
 if os.environ.get("DOKU_HOST", None) is not None:
