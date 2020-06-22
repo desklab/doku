@@ -39,5 +39,24 @@ pipeline {
         sh 'docker push reg.desk-lab.de/doku:$GIT_COMMIT'
       }
     }
+    stage('Deploy') {
+      when {
+        beforeAgent true
+        anyOf {
+          branch 'master'
+        }
+      }
+      agent {
+        label 'deploy-agent'
+      }
+      environment {
+        REGISTRY = credentials('desklab-registry')
+      }
+      steps {
+        sh 'docker login https://reg.desk-lab.de --username $REGISTRY_USR --password $REGISTRY_PSW'
+        sh 'cd /home/jenkins/server && docker-compose pull doku dokustatic'
+        sh 'cd /home/jenkins/server && docker-compose up -d doku dokustatic'
+      }
+    }
   }
 }
