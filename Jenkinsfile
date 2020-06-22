@@ -49,6 +49,7 @@ pipeline {
       agent {
         label 'deploy-agent'
       }
+      options { skipDefaultCheckout() }
       environment {
         REGISTRY = credentials('desklab-registry')
       }
