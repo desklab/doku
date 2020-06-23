@@ -73,6 +73,7 @@ npm-debug.log*
 .cache/
 .pytest_cache
 coverage/
+TESTS.xml
 
 # doku related
 /resources

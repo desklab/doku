@@ -13,7 +13,8 @@ pipeline {
         REDIS_HOST = 'redis'
       }
       steps {
-        sh 'make test'
+        sh 'make test-junit'
+        junit 'TESTS.xml'
       }
     }
     stage('Build') {
