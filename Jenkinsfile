@@ -6,7 +6,7 @@ pipeline {
         dockerfile {
           filename 'Dockerfile'
           label 'service-agent'
-          args '--network internal'
+          args '--network internal -v /tmp:/tmp'
         }
       }
       environment {
@@ -14,7 +14,7 @@ pipeline {
       }
       steps {
         sh 'cd /app && make test-junit'
-        junit '/app/TESTS.xml'
+        junit '/tmp/TESTS.xml'
       }
     }
     stage('Build') {
