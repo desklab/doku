@@ -13,6 +13,7 @@ pipeline {
         REDIS_HOST = 'redis'
       }
       steps {
+        sh 'whoami'
         sh 'cd /app && make test-junit'
         junit '/tmp/TESTS.xml'
       }
