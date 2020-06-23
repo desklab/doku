@@ -7,8 +7,10 @@ pipeline {
           filename 'Dockerfile'
           label 'service-agent'
           args '--network internal'
+          customWorkspace '/app'
         }
       }
+      options { skipDefaultCheckout() }
       environment {
         REDIS_HOST = 'redis'
       }
