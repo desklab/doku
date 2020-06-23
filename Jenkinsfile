@@ -7,14 +7,13 @@ pipeline {
           filename 'Dockerfile'
           label 'service-agent'
           args '--network internal'
-          customWorkspace '/app'
         }
       }
-      options { skipDefaultCheckout() }
       environment {
         REDIS_HOST = 'redis'
       }
       steps {
+        sh 'cd /app'
         sh 'make test-junit'
         junit 'TESTS.xml'
       }
