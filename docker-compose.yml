@@ -5,11 +5,5 @@ services:
     image: redis
     container_name: redis
     restart: unless-stopped
-    networks:
-      - internal
     ports:
       - 6379:6379
-
-networks:
-  internal:
-    external: true

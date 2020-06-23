@@ -6,16 +6,14 @@ pipeline {
         dockerfile {
           filename 'Dockerfile'
           label 'service-agent'
-          args '--network internal -v /tmp:/tmp'
+          args '--network internal'
         }
       }
       environment {
         REDIS_HOST = 'redis'
       }
       steps {
-        sh 'whoami'
-        sh 'cd /app && make test-junit'
-        junit '/tmp/TESTS.xml'
+        sh 'cd /app && make test'
       }
     }
     stage('Build') {

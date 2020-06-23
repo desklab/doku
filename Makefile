@@ -1,10 +1,7 @@
 .PHONY: test run clean build npm-install pip-install lint black
 
-test-junit:
-	pytest doku/tests --junitxml=/tmp/TESTS.xml
-
 test:
-	pytest doku/tests
+	python -m unittest
 
 run:
 	export FLASK_ENV=development

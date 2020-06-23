@@ -15,4 +15,3 @@ alembic>=1.4.2
 click
 redis
 WeasyPrint>=51
-pytest
