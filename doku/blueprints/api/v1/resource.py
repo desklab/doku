@@ -39,11 +39,11 @@ def upload(resource_id: int):
     result = schema.dump(resource)
     return jsonify(result)
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["POST"])
 def create():
     return ResourceSchema.create()
 
-@bp.route("/", methods=["POST"])
+@bp.route("/", methods=["PUT"])
 def update():
     return ResourceSchema.update()
 
