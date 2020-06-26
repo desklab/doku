@@ -14,10 +14,13 @@ from doku.models import base
 from doku.blueprints import auth, base, document, template, resources
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
+from doku.utils.middlewares.hosts import host_middleware
 from doku.utils.session import RedisSessionInterface
 
 
-def create_app(name="doku", config=None, minimal=False, test=False) -> Flask:
+def create_app(
+    name="doku", config=None, minimal=False, test=False, additional_config=None
+) -> Flask:
     """
     App Factory - create_app
 
@@ -52,6 +55,9 @@ def create_app(name="doku", config=None, minimal=False, test=False) -> Flask:
     app.static_url_path = app.config.get("STATIC_FOLDER")
     app.static_folder = os.path.join(app.root_path, app.static_url_path)
 
+    if additional_config is not None:
+        app.config.update(additional_config)
+
     redis = Redis(**app.config["REDIS_CONFIG"])
     app.session_interface = RedisSessionInterface(
         app, redis, app.config.get("SESSION_PREFIX", "session_")
@@ -71,6 +77,7 @@ def create_app(name="doku", config=None, minimal=False, test=False) -> Flask:
     # WSGI middlewares
     if not minimal:
         csrf.init_app(app)
+        host_middleware(app)
 
     # Blueprints
     if not minimal:

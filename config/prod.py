@@ -1,20 +1,23 @@
 import os
 from .base import *
 
-SECRET_KEY = os.environ.get('DOKU_SECRET')
+SECRET_KEY = os.environ.get("DOKU_SECRET")
 DEBUG = False
 TESTING = False
-FLASK_ENV = 'production'
+FLASK_ENV = "production"
 
-PREFERRED_URL_SCHEME = 'https'
-SERVER_NAME = 'doku.desk-lab.de'
+PREFERRED_URL_SCHEME = "https"
+SERVER_NAME = None
 
-sql_password = os.environ.get('DOKU_DB_PASSWORD')
-sql_user = os.environ.get('DOKU_DB_USER')
-sql_host = os.environ.get('DOKU_DB_HOST')
-sql_db = os.environ.get('DOKU_DB_DATABASE')
+# Adjust for server name
+# ALLOWED_HOSTS = ['example.org']
+
+sql_password = os.environ.get("DOKU_DB_PASSWORD")
+sql_user = os.environ.get("DOKU_DB_USER")
+sql_host = os.environ.get("DOKU_DB_HOST")
+sql_db = os.environ.get("DOKU_DB_DATABASE")
 SQLALCHEMY_DATABASE_URI = \
-    f'postgresql://{sql_user}:{sql_password}@{sql_host}/{sql_db}'
+    f"postgresql://{sql_user}:{sql_password}@{sql_host}/{sql_db}"
 
 
 # CSRF Settings
@@ -23,4 +26,4 @@ CSRF_COOKIE_SECURE = True
 # Session Settings
 SESSION_COOKIE_SECURE = True
 
-UPLOAD_FOLDER = os.environ.get('DOKU_UPLOAD_FOLDER', '/app/resources')
+UPLOAD_FOLDER = os.environ.get("DOKU_UPLOAD_FOLDER", "/app/resources")

@@ -9,8 +9,6 @@ ENV DOKU_CONFIG config.prod
 ENV HEALTHCHECK_URL http://0.0.0.0:8000/api/v1/heartbeat
 ENV HEALTHCHECK_HOST 0.0.0.0:8000
 
-
-# Install Node.js
 RUN apt-get update
 RUN apt-get -y install curl build-essential python3-dev python3-pip python3-setuptools python3-wheel python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
 
@@ -40,6 +38,6 @@ USER doku
 EXPOSE 8000
 WORKDIR /app
 
-# HEALTHCHECK --interval=60s --timeout=10s CMD ["./healthcheck.sh"]
+HEALTHCHECK CMD ./healthcheck.sh
 
 CMD ./docker-entrypoint.sh
