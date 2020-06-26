@@ -42,8 +42,7 @@ def index():
 
     resource_schemas = ResourceSchema(session=db.session, many=True)
     return render_template(
-        "sites/resources.html",
-        resources_json=resource_schemas.dumps(resources),
+        "sites/resources.html", resources_json=resource_schemas.dumps(resources),
     )
 
 

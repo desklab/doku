@@ -16,9 +16,11 @@ def login_check():
 def create():
     return ResourceSchema.create()
 
+
 @bp.route("/", methods=["PUT"])
 def update():
     return ResourceSchema.update()
+
 
 @bp.route("/", methods=["GET"])
 def get_all():

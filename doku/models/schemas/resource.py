@@ -28,9 +28,9 @@ class ResourceSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
             db.session.query(cls.Meta.model).filter_by(id=instance_id)
         )
         filename = instance.filename
-        os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        os.remove(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
         db.session.delete(instance)
         if commit:
             db.session.commit()
-            
+
         return jsonify({"success": True})
