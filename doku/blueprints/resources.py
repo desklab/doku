@@ -24,7 +24,6 @@ bp = Blueprint("resources", __name__)
 @login_required
 def index():
     if request.method == "POST":
-        print(request.files)
         if "file" not in request.files:
             flash("No file provided")
         else:

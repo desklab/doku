@@ -11,33 +11,6 @@ bp = Blueprint("api.v1.resource", __name__)
 def login_check():
     pass
 
-@bp.route("/upload/<int:resource_id>", methods=["PUT"])
-def upload(resource_id: int):
-    resource: Resource = get_or_404(
-        db.session.query(Resource).filter_by(id=resource_id)
-    )
-    schema = ResourceSchema(
-        unknown=EXCLUDE, session=db.session, instance=resource, partial=True
-    )
-
-    data = dict(request.form.copy())
-    if request.json is not None:
-        data.update(request.json)
-
-    if request.files.get("source", None) is not None:
-        file: FileStorage = request.files.get("source")
-        data["source"] = file.read()
-        file.close()
-
-    try:
-        resource = schema.load(data)
-    except ValidationError as e:
-        return jsonify(e.messages), BadRequest.code
-
-    db.session.commit()
-
-    result = schema.dump(resource)
-    return jsonify(result)
 
 @bp.route("/", methods=["POST"])
 def create():
