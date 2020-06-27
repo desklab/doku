@@ -21,9 +21,6 @@
     align-items: flex-start;
     flex-direction: column;
     flex-grow: 1;
-    * {
-      margin-top: $unit-1;
-    }
     :first-child {
       margin-top: 0 !important;
     }
