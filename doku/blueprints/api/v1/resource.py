@@ -14,7 +14,7 @@ def login_check():
 
 @bp.route("/", methods=["POST"])
 def create():
-    return ResourceSchema.create()
+    raise NotImplementedError()
 
 
 @bp.route("/", methods=["PUT"])

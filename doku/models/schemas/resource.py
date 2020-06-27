@@ -1,5 +1,5 @@
 from marshmallow_sqlalchemy import auto_field
-from marshmallow import fields
+from marshmallow import fields, validate
 from flask import jsonify, current_app
 import os
 
@@ -18,7 +18,7 @@ class ResourceSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "resource"
 
     id = auto_field()
-    name = auto_field()
+    name = auto_field(validate=validate.Length(min=1))
     filename = auto_field()
     url = fields.String(dump_only=True)
 
