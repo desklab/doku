@@ -1,7 +1,7 @@
 <template>
   <div class="d-inline-block">
-    <span class="h-sm" v-if="mode === 'view'" @click="mode = 'edit'">
-      {{value}}
+    <span v-if="mode === 'view'" @click="mode = 'edit'">
+      {{this.text}}
     </span>
     <div v-else-if="mode === 'edit'" class="input-group input-inline">
       <input type="text" v-model="value" class="form-input input-sm" :placeholder="placeholder">
@@ -38,12 +38,16 @@
       return {
         // Possible modes: 'edit' and 'view'
         mode: 'view',
-        value: this.text
+        value:''
       }
+    },
+    mounted() {
+    this.value = this.text
     },
     methods: {
       onSave() {
         this.save(this.value);
+        this.text = this.value;
         this.mode = 'view';
       }
     }
