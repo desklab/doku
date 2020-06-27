@@ -5,7 +5,7 @@
     </span>
     <div v-else-if="mode === 'edit'" class="input-group input-inline">
       <input type="text" v-model="value" class="form-input input-sm" :placeholder="placeholder">
-      <button @click="onSave" class="btn btn-primary btn-sm input-group-btn">
+      <button @click="onSave" class="btn btn-primary btn-sm input-group-btn" :disabled="value.replaceAll(' ','').length < 1">
         <check-icon size="16"></check-icon>
       </button>
       <button @click="mode = 'view'" class="btn btn-sm input-group-btn">

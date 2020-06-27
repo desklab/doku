@@ -8,10 +8,10 @@
                 <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
                 <label class="form-label d-inline-block text-small p-0 m-0" for="inputName">Name</label>
                 <div class="form-inline mx-2">
-                    <input class="form-input input-sm" type="text" name="name" id="inputName" placeholder="Name" required>
+                    <input class="form-input input-sm" type="text" name="name" id="inputName" placeholder="Name" required pattern=".*\S+.*" onkeyup="check_input()">
                 </div>
-                <input ref="sourceFile" name="file" type="file" accept="image/*">
-                <button class="btn btn-sm btn-primary" @click="add">
+                <input ref="sourceFile" name="file" type="file" accept="image/*" id="sourceFile" onchange="check_input()" required>
+                <button class="btn btn-sm btn-primary" @click="add" id="addButton">
                     Upload
                 </button>
             </form>
@@ -25,6 +25,17 @@
         window.resources = {{ resources_json|tojson }};
         window.resourceApi = '{{ url_for('api.v1.resource.update') }}'
         {{ create_csrf_token(output=False) }}
+
+        document.getElementById('addButton').disabled = true;
+        function check_input() {
+        	  if(document.getElementById("inputName").value.trim()==="") {
+                document.getElementById('addButton').disabled = true;
+            } else if(document.getElementById("sourceFile").files.length===0) {
+                document.getElementById('addButton').disabled = true;
+            } else {
+                document.getElementById('addButton').disabled = false;
+            }
+    }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='resources.bundle.js') }}"></script>
 {% endblock %}
