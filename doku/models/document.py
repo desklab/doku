@@ -4,7 +4,7 @@ from typing import Optional, List
 from flask_babel import format_timedelta, format_datetime
 import markdown
 from sqlalchemy.orm import Session
-from sqlalchemy import event, asc
+from sqlalchemy import event, asc, update
 
 from doku.models import db, DateMixin
 from doku.utils.markdown.extensions import RootClassTreeprocessor, RootClassExtension
@@ -46,22 +46,6 @@ class Document(db.Model, DateMixin):
     def render(self):
         return self.template.render(self.variables)
 
-    @property
-    def last_updated_child(self):
-        if not hasattr(self, "_recent_child_updated"):
-            self._recent_child_updated = self.recent_variable.first().last_updated
-        return self._recent_child_updated
-
-    @property
-    def last_updated_timedelta(self):
-        now = datetime.now(tz=timezone.utc)
-        last_updated = self.last_updated_child.astimezone(tz=timezone.utc)
-        return format_timedelta(now - last_updated)
-
-    @property
-    def last_updated_format(self):
-        return format_datetime(self.last_updated_child)
-
 
 class Variable(db.Model, DateMixin):
     """Variable
@@ -71,6 +55,14 @@ class Variable(db.Model, DateMixin):
     As we work with Jinja2 templates for out :class:`Template` class,
     they are basically passed as a context.
     """
+
+    AUTO_UPDATE = [
+        "name",
+        "use_markdown",
+        "css_class",
+        "content",
+        "document_id",  # Used for empty children
+    ]
 
     __tablename__ = "doku_variable"
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -107,9 +99,10 @@ class Variable(db.Model, DateMixin):
         return [var.compiled_content for var in self.children]
 
 
-@event.listens_for(Variable, "before_update")
-@event.listens_for(Variable, "before_insert")
-def before_any_compiler(mapper, connection, target):
+@event.listens_for(Variable.content, "set")
+@event.listens_for(Variable.use_markdown, "set")
+@event.listens_for(Variable.css_class, "set")
+def before_any_compiler(target, value, old_value, initiator):
     content = target.content
     if content is None or content is "":
         target.content = ""
@@ -127,3 +120,14 @@ def before_any_compiler(mapper, connection, target):
             )
         else:
             target.compiled_content = content
+
+
+@event.listens_for(Variable, "before_update")
+@event.listens_for(Variable, "before_insert")
+@event.listens_for(Variable, "before_delete")
+def update_parent(mapper, connection, target):
+    connection.execute(
+        update(Document)
+        .where(Document.id == target.document_id)
+        .values(last_updated=datetime.now())
+    )

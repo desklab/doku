@@ -1,6 +1,7 @@
 # Database related
 *.db
 *.rdb
+db.log
 
 # Python byte-compiled / optimized
 __pycache__/
