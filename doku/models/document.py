@@ -105,7 +105,10 @@ class Variable(db.Model, DateMixin):
 def before_any_compiler(target, value, old_value, initiator):
     content = target.content
     if content is None or content is "":
-        target.content = ""
+        # In previous versions, the content was set to ""
+        # However, this will trigger a recursive function call and
+        # should thus be avoided
+        # target.content = ""
         target.compiled_content = ""
         return
     else:
