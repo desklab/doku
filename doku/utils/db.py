@@ -1,6 +1,10 @@
+from typing import Optional
+
 from sqlalchemy.orm import Query, Session
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.exceptions import NotFound
+
+from flask import request
 
 from doku import db
 
@@ -37,3 +41,13 @@ def get_or_create(model: db.Model, commit=False, **kwargs) -> db.Model:
         if commit:
             db.session.commit()
         return instance
+
+
+def get_pagination_page() -> Optional[int]:
+    page = request.args.get("page", None)
+    if page is not None:
+        try:
+            page = int(page)
+        except ValueError:
+            return None
+    return page
