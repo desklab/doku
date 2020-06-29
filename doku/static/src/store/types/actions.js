@@ -11,3 +11,7 @@ export const REMOVE_STYLESHEET_FROM_TEMPLATE = 'removeStylesheet';
 export const UPLOAD_STYLESHEET = 'uploadStylesheet';
 export const UPDATE_STYLESHEET = 'updateStylesheet';
 export const FETCH_STYLESHEETS = 'fetchStylesheets';
+export const CREATE_RESOURCE = 'createResource';
+export const REMOVE_RESOURCE = 'removeResource';
+export const FETCH_RESOURCE = 'fetchResource';
+export const UPDATE_RESOURCE = 'updateResource';

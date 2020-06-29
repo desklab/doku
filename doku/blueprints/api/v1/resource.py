@@ -14,7 +14,7 @@ def login_check():
 
 @bp.route("/", methods=["POST"])
 def create():
-    return ResourceSchema.create()
+    raise NotImplementedError()
 
 
 @bp.route("/", methods=["PUT"])
@@ -27,11 +27,11 @@ def get_all():
     return ResourceSchema.get_all()
 
 
-@bp.route("/<int:document_id>/", methods=["GET"])
-def get(document_id: int):
-    return ResourceSchema.get(document_id)
+@bp.route("/<int:resource_id>/", methods=["GET"])
+def get(resource_id: int):
+    return ResourceSchema.get(resource_id)
 
 
-@bp.route("/<int:document_id>/", methods=["DELETE"])
-def delete(document_id: int):
-    return ResourceSchema.delete(document_id)
+@bp.route("/<int:resource_id>/", methods=["DELETE"])
+def delete(resource_id: int):
+    return ResourceSchema.delete(resource_id)

@@ -11,6 +11,7 @@ module.exports = {
     main: './src/main.js',
     edit: './src/edit.js',
     edit_template: './src/edit_template.js',
+    resources: './src/resources.js',
   },
   output: {
     path: path.resolve(__dirname, './dist'),

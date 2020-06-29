@@ -6,6 +6,7 @@ import document from './modules/document';
 import template from './modules/template';
 import variable from './modules/variable';
 import stylesheet from './modules/stylesheet';
+import resource from './modules/resource';
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     document,
     template,
     variable,
-    stylesheet
+    stylesheet,
+    resource
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []
