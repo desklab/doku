@@ -22,6 +22,8 @@ body {
     overflow: hidden;
     transition: width .1s;
     border-right: solid $border-width $border-color;
+    display: flex;
+    flex-direction: column;
     .sidebar-item {
       height: $unit-12;
       display: flex;
@@ -41,6 +43,9 @@ body {
           border-right: transparent solid $border-radius;
           box-sizing: border-box;
         }
+      }
+      &.pos-bottom {
+        margin-top: auto;
       }
       .sidebar-icon {
         display: block;

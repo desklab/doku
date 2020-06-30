@@ -23,4 +23,12 @@
             Resources
         </div>
     </a>
+    <a href="{{ url_for('auth.logout') }}" class="sidebar-item pos-bottom">
+        <div class="sidebar-icon">
+            {% include "components/icons/logout.html" %}
+        </div>
+        <div class="sidebar-link">
+            Logout
+        </div>
+    </a>
 </div>
