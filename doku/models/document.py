@@ -4,7 +4,7 @@ from typing import Optional, List
 from flask_babel import format_timedelta, format_datetime
 import markdown
 from sqlalchemy.orm import Session
-from sqlalchemy import event, asc, update
+from sqlalchemy import event, text, update, func
 
 from doku.models import db, DateMixin
 from doku.utils.markdown.extensions import RootClassTreeprocessor, RootClassExtension
@@ -78,7 +78,8 @@ class Variable(db.Model, DateMixin):
     parent_id = db.Column(db.Integer, db.ForeignKey("doku_variable.id"), nullable=True)
 
     children = db.relationship(
-        "Variable", cascade="all,delete", backref=db.backref("parent", remote_side=[id])
+        "Variable", cascade="all,delete", backref=db.backref("parent", remote_side=[id]),
+        order_by=func.lower(name)
     )
     document = db.relationship("Document", back_populates="variables")
 
