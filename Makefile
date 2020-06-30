@@ -4,9 +4,7 @@ test:
 	python -m unittest
 
 run:
-	export FLASK_ENV=development
-	export FLASK_DEBUG=1
-	python manage.py run
+	FLASK_ENV=development; FLASK_DEBUG=1; python manage.py run
 
 clean:
 	find . -name '__pycache__' -type d -exec rm -rf {} +
