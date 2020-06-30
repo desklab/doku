@@ -77,7 +77,8 @@ body {
     overflow-y: auto;
     height: 100%;
     min-height: 100vh;
-    display: block;
+    display: flex;
+    flex-direction: column;
     flex-basis: 100%;
   }
 }
