@@ -1,4 +1,4 @@
-from sqlalchemy import text, desc, asc
+from sqlalchemy import text, desc, asc, func
 from werkzeug.exceptions import Unauthorized, Forbidden, NotFound
 from flask import Blueprint, session, redirect, url_for, request, render_template
 
@@ -23,7 +23,7 @@ def index():
     if order is not None and hasattr(Document, order):
         documents = (
             db.session.query(Document)
-            .order_by(direc(text(order)))
+            .order_by(direc(func.lower(text(order))))
             .paginate(page=page, per_page=10)
         )
     else:
