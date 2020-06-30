@@ -78,8 +78,10 @@ class Variable(db.Model, DateMixin):
     parent_id = db.Column(db.Integer, db.ForeignKey("doku_variable.id"), nullable=True)
 
     children = db.relationship(
-        "Variable", cascade="all,delete", backref=db.backref("parent", remote_side=[id]),
-        order_by=func.lower(name)
+        "Variable",
+        cascade="all,delete",
+        backref=db.backref("parent", remote_side=[id]),
+        order_by=func.lower(name),
     )
     document = db.relationship("Document", back_populates="variables")
 
