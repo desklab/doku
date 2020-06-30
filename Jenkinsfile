@@ -13,7 +13,8 @@ pipeline {
         REDIS_HOST = 'redis'
       }
       steps {
-        sh 'cd /app && make test'
+        sh 'cd /app && pytest doku/tests --junitxml=$WORKSPACE/TESTS.xml'
+        junit 'TESTS.xml'
       }
     }
     stage('Build') {
