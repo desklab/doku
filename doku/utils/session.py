@@ -87,7 +87,7 @@ class RedisSessionInterface(SessionInterface):
         self.permanent = permanent
 
     def open_session(self, app, request) -> SessionMixin:
-        sid_signed = request.cookies.get(app.session_cookie_name)
+        sid_signed = request.cookies.get(app.session_cookie_name, None)
         if sid_signed in self._empty:
             return self.empty_session()
         try:
@@ -96,7 +96,7 @@ class RedisSessionInterface(SessionInterface):
             sid = sid_bytes.decode()
         except BadSignature:
             app.logger.info(
-                "Session cookie has bad signature. " "A new session will be created"
+                "Session cookie has bad signature. A new session will be created"
             )
             return self.empty_session()
         # Get the raw session instance from redis
@@ -106,9 +106,10 @@ class RedisSessionInterface(SessionInterface):
                 session = self._serializer.loads(raw_session)
                 return self.session_class(initial=session, sid=sid)
             except (TypeError, JSONDecodeError) as e:
-                app.logger.info("Failed to load session: %s" % e)
+                app.logger.info(f"Failed to load session: {e}")
                 return self.empty_session()
         else:
+            app.logger.info("Session not found. A new session will be created")
             return self.empty_session()
 
     def empty_session(self) -> SessionMixin:

@@ -16,6 +16,8 @@ def login():
     if session.authenticated:
         return redirect(url_for("base.index"))
     error: Optional[str] = None
+    email = None
+    error_code = 200
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -23,20 +25,27 @@ def login():
             user: User = db.session.query(User).filter(User.email == email).one()
             if user.check_password(password):
                 session.authenticated = True
-                session["user"] = user.username
+                session.update({
+                    "user": user.username,
+                    "userid": user.id
+                })
                 return redirect(url_for("base.index"))
             else:
+                error_code = Unauthorized.code
                 error = "E-Mail and password do not match. Please try again"
         except NoResultFound:
+            error_code = Unauthorized.code
             error = "E-Mail and password do not match. Please try again"
-    return render_template("sites/auth/login.html", error=error)
+    return render_template("sites/auth/login.html", error=error, email=email), error_code
 
 
 @bp.route("/logout")
 @login_required
 def logout():
-    # remove the username from the session if it's there
     session.authenticated = False
+    session.update({
+        "userid": None
+    })
     return redirect(url_for("base.index"))
 
 
