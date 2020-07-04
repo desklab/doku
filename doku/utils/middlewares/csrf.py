@@ -10,12 +10,10 @@ from werkzeug.exceptions import NotFound, BadRequest
 
 
 class CSRFMiddleware:
-    DEFAULT_PROTECTED_METHODS: List[str] = ["POST", "PUT", "DELETE", "UPDATE"]
+    DEFAULT_EXCLUDED_METHODS: List[str] = ["GET", "HEAD", "OPTIONS", "TRACE"]
     CSRF_TOKEN_CHARS = string.ascii_letters + string.digits
 
-    def __init__(
-        self, app: Optional[Flask] = None,
-    ):
+    def __init__(self, app: Optional[Flask] = None):
         self._app = app
         self._exemptions = []
         self._config = {}
@@ -30,6 +28,7 @@ class CSRFMiddleware:
         an instance of :class:`CSRFMiddleware`!
         """
         self._exemptions.append(view)
+        print(self._exemptions)
         return view
 
     def init_app(self, app):
@@ -58,7 +57,7 @@ class CSRFMiddleware:
         def _csrf_protection():
             if g._is_csrf_exemption:
                 return
-            if request.method not in self._config["PROTECTED_METHODS"]:
+            if request.method in self._config["EXCLUDED_METHODS"]:
                 return
 
             # Retrieve CSRF token from header or request data
@@ -132,7 +131,7 @@ class CSRFMiddleware:
 
           - `CSRF_COOKIE_NAME`
           - `CSRF_COOKIE_SECURE`
-          - `CSRF_PROTECTED_METHODS`
+          - `CSRF_EXCLUDED_METHODS`
           - `CSRF_TOKEN_LENGTH`
 
         """
@@ -141,8 +140,8 @@ class CSRFMiddleware:
             "COOKIE_SECURE": app_config.get("CSRF_COOKIE_SECURE", False),
             "COOKIE_SAMESITE": app_config.get("CSRF_COOKIE_SAMESITE", "Lax"),
             "HEADER_NAME": app_config.get("CSRF_HEADER_NAME", "X-CSRF-TOKEN"),
-            "PROTECTED_METHODS": app_config.get(
-                "CSRF_PROTECTED_METHODS", CSRFMiddleware.DEFAULT_PROTECTED_METHODS
+            "EXCLUDED_METHODS": app_config.get(
+                "CSRF_EXCLUDED_METHODS", CSRFMiddleware.DEFAULT_EXCLUDED_METHODS
             ),
             "TOKEN_LENGTH": app_config.get("CSRF_TOKEN_LENGTH", 32),
         }
