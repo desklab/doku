@@ -58,10 +58,12 @@ def create_app(
     if additional_config is not None:
         app.config.update(additional_config)
 
+    # Prepare redis for session and tasks
     redis = Redis(**app.config["REDIS_CONFIG"])
     app.session_interface = RedisSessionInterface(
         app, redis, app.config.get("SESSION_PREFIX", "session_")
     )
+    app.redis = redis
 
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
         os.makedirs(app.config["UPLOAD_FOLDER"])

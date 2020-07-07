@@ -28,7 +28,6 @@ class CSRFMiddleware:
         an instance of :class:`CSRFMiddleware`!
         """
         self._exemptions.append(view)
-        print(self._exemptions)
         return view
 
     def init_app(self, app):
@@ -59,7 +58,9 @@ class CSRFMiddleware:
                 return
             if request.method in self._config["EXCLUDED_METHODS"]:
                 return
-
+            if request.headers.get("Authorization", None) is not None:
+                # Basic Auth or Token based Authentication
+                return
             # Retrieve CSRF token from header or request data
             csrf_token = request.headers.get(self._config["HEADER_NAME"])
             if csrf_token is None:
