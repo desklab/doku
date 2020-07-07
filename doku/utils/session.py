@@ -17,10 +17,15 @@ from typing import List
 
 from flask import Flask, Response
 from flask.helpers import total_seconds
+from werkzeug.exceptions import Unauthorized
 from flask.sessions import SessionInterface, SessionMixin
 from redis import Redis
 from werkzeug.datastructures import CallbackDict
 from itsdangerous import Signer, BadSignature, want_bytes
+
+
+from doku.utils import EMPTY
+from doku.models.user import User
 
 
 class Session(CallbackDict, SessionMixin):
@@ -49,6 +54,14 @@ class Session(CallbackDict, SessionMixin):
     def authenticated(self, set_value: bool):
         self["authenticated"] = set_value
 
+    @property
+    def nosave(self) -> bool:
+        return self.get("_nosave", False)
+
+    @nosave.setter
+    def nosave(self, set_value: bool):
+        self["_nosave"] = set_value
+
 
 class RedisSessionInterface(SessionInterface):
     """Redis Session Interface
@@ -63,7 +76,7 @@ class RedisSessionInterface(SessionInterface):
     :param permanent: Whether the session should be permanent
     """
 
-    _empty = ["", None, (), [], {}]
+    _empty = EMPTY
     _KEY_LENGTH = 32
     _serializer = json
 
@@ -120,6 +133,10 @@ class RedisSessionInterface(SessionInterface):
     def save_session(self, app: Flask, session: Session, response: Response):
         if session is None:
             # This should never be the case
+            return
+        if session.nosave:
+            # Prevent session from being saved
+            # E.g. when using token authentication
             return
         domain = self.get_cookie_domain(app)
         path = self.get_cookie_path(app)

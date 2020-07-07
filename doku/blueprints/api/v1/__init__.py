@@ -24,14 +24,12 @@ def login():
         raise Unauthorized("E-Mail and password do not match. Please try again")
     else:
         session.authenticated = True
-        session.update({
-            "user": user.username,
-            "id": user.id,
-            "name": user.name
-        })
-        return jsonify({
-            "success": True,
-            "token_type": "Bearer",
-            "access_token": user.token.get("token"),
-            "expires_in": user.token.get("expires_in")
-        })
+        session.update({"user": user.username, "id": user.id, "name": user.name})
+        return jsonify(
+            {
+                "success": True,
+                "token_type": "Bearer",
+                "access_token": user.token.get("token"),
+                "expires_in": user.token.get("expires_in"),
+            }
+        )

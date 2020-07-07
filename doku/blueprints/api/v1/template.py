@@ -11,12 +11,6 @@ from doku.utils.decorators import login_required
 bp = Blueprint("api.v1.template", __name__)
 
 
-@bp.before_request
-@login_required
-def login_check():
-    pass
-
-
 @bp.route("/", methods=["PUT"])
 def update():
     return TemplateSchema.update()

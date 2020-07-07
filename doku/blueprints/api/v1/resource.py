@@ -6,12 +6,6 @@ from doku.utils.decorators import login_required
 bp = Blueprint("api.v1.resource", __name__)
 
 
-@bp.before_request
-@login_required
-def login_check():
-    pass
-
-
 @bp.route("/", methods=["POST"])
 def create():
     raise NotImplementedError()
