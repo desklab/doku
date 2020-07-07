@@ -4,6 +4,7 @@ from typing import Optional
 import json
 import secrets
 from itsdangerous.encoding import base64_encode, base64_decode
+from itsdangerous.exc import BadData
 
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.security import generate_password_hash, check_password_hash, pbkdf2_hex
@@ -50,22 +51,10 @@ class User(db.Model):
         token = secrets.token_urlsafe(current_app.config.get("API_TOKEN_LENGTH", 32))
         prefix = current_app.config.get("API_TOKEN_STORAGE_PREFIX", "doku_api_token_")
         key = self._hash_token(token)
-        value = json.dumps({
-            "user": self.username,
-            "id": self.id,
-            "name": self.name
-        })
+        value = json.dumps({"user": self.username, "id": self.id, "name": self.name})
         expires_in = current_app.config.get("API_TOKEN_STORAGE_EXPIRATION", 3600)
-        r.setex(
-            name=f"{prefix}{key}",
-            time=expires_in,
-            value=value
-        )
-        return {
-            "token": base64_encode(token).decode("utf-8"),
-            "expires_in": expires_in
-        }
-
+        r.setex(name=f"{prefix}{key}", time=expires_in, value=value)
+        return {"token": base64_encode(token).decode("utf-8"), "expires_in": expires_in}
 
     @classmethod
     def authenticate(cls, email: str = "", password: str = "") -> Optional[User]:
@@ -78,12 +67,14 @@ class User(db.Model):
         else:
             return None
 
-
     @classmethod
     def token_auth(cls, token: str) -> Optional[dict]:
         if "Bearer" not in token:
             return None
-        token = base64_decode(token.lstrip("Bearer ")).decode("utf-8")
+        try:
+            token = base64_decode(token.lstrip("Bearer ")).decode("utf-8")
+        except BadData:
+            return None
         r = current_app.redis
         prefix = current_app.config.get("API_TOKEN_STORAGE_PREFIX", "doku_api_token_")
         key = cls._hash_token(token)
