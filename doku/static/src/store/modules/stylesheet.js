@@ -40,7 +40,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       stylesheetApi.fetchStylesheets(options)
         .then(response => {
-          commit(mutationTypes.SET_STYLESHEETS, response.data);
+          commit(mutationTypes.SET_STYLESHEETS, response.data.results);
           resolve();
         })
         .catch(reject)

@@ -4,7 +4,7 @@
     <div class="container">
         <div class="columns">
             <div class="column col-6 col-xs-12">
-                <form method="post" action="{{ url_for('auth.change_password') }}">
+                <form method="post" action="{{ url_for('account.change_password') }}">
                     <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}">
                     <div class="form-group input-inline{% if error_old %} has-error{% endif %}">
                         <label class="form-label" for="oldPasswordInput">Old Password</label>

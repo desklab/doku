@@ -43,7 +43,7 @@
       }
     },
     mounted() {
-      stylesheetApi.fetchStylesheets().then(res => this.allStylesheets = res.data);
+      stylesheetApi.fetchStylesheets().then(res => this.allStylesheets = res.data.result);
     },
     methods: {
       ...mapActions('template', [

@@ -1,0 +1,31 @@
+{% extends "components/list.html" %}
+{% block head %}
+<th>
+    <a class="text-dark" href="{{ url_for('base.index', order='name', dir='asc', page=documents.page) }}">NAME</a>
+</th>
+<th>TEMPLATE</th>
+<th>
+    <a class="text-dark" href="{{ url_for('base.index', order='last_updated', dir='desc', page=documents.page) }}">LAST UPDATED</a>
+</th>
+{% endblock head %}
+{% block body %}
+{% for item in items %}
+    <tr>
+        <td>
+            <a href="{{ url_for('document.index', document_id=item.id) }}">
+                {{ item.name }}
+            </a>
+        </td>
+        <td>
+            <a href="{{ url_for('template.index', template_id=item.template.id) }}">
+                {{ item.template.name }}
+            </a>
+        </td>
+        <td>
+            <span class="tooltip" data-tooltip="{{ item.last_updated_format }}">
+                {{ item.last_updated_timedelta }}
+            </span>
+        </td>
+    </tr>
+{% endfor %}
+{% endblock body %}
