@@ -7,7 +7,7 @@
             Doku
         </a>
     </div>
-    <a href="{{ url_for('base.index') }}" class="sidebar-item mt-4{% if request.endpoint == 'base.index' %} actvie{% endif %}">
+    <a href="{{ url_for('base.index') }}" class="sidebar-item mt-4{% if request.endpoint == 'base.index' %} active{% endif %}">
         <div class="sidebar-icon">
             {% include "components/icons/file-text.html" %}
         </div>
@@ -15,7 +15,7 @@
             Documents
         </div>
     </a>
-    <a href="{{ url_for('resources.index') }}" class="sidebar-item{% if request.endpoint == 'resources.index' %} actvie{% endif %}">
+    <a href="{{ url_for('resources.index') }}" class="sidebar-item{% if request.endpoint == 'resources.index' %} active{% endif %}">
         <div class="sidebar-icon">
             {% include "components/icons/image.html" %}
         </div>
@@ -23,7 +23,15 @@
             Resources
         </div>
     </a>
-    <a href="{{ url_for('auth.logout') }}" class="sidebar-item pos-bottom">
+    <a href="{{ url_for('account.index') }}" class="sidebar-item pos-bottom{% if 'account.' in request.endpoint %} active{% endif %}">
+        <div class="sidebar-icon">
+            {% include "components/icons/user.html" %}
+        </div>
+        <div class="sidebar-link">
+            Account
+        </div>
+    </a>
+    <a href="{{ url_for('auth.logout') }}" class="sidebar-item">
         <div class="sidebar-icon">
             {% include "components/icons/logout.html" %}
         </div>

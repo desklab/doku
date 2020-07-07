@@ -1,10 +1,17 @@
 <template>
   <div class="doku-document-toolbar">
     <h3 class="m-0">Documents</h3>
-    <button @click="openModal" class="btn btn-sm">
-      <plus-icon size="18"></plus-icon>
-      Create new document
-    </button>
+    <div>
+      <button @click="openModal" class="btn btn-sm">
+        <plus-icon size="18"></plus-icon>
+        Create new document
+      </button>
+      <button @click="openDownloadModal" class="btn btn-sm">
+        <download-icon size="18"></download-icon>
+        Bulk Download
+      </button>
+    </div>
+    <bulk-download ref="downloadModal"></bulk-download>
     <modal ref="modal" v-bind:title="'New Document'">
       <div class="modal-body">
         <div class="content">
@@ -40,16 +47,17 @@
 </template>
 
 <script>
-  import {PlusIcon} from 'vue-feather-icons';
+  import {PlusIcon, DownloadIcon} from 'vue-feather-icons';
 
   import templateApi from '../api/template';
   import documentApi from '../api/document';
   import Modal from '../components/ui/Modal.vue';
+  import BulkDownload from '../components/ui/BulkDownload.vue';
 
   export default {
     name: 'home',
     components: {
-      Modal, PlusIcon
+      Modal, PlusIcon, DownloadIcon, BulkDownload
     },
     data() {
       return {
@@ -59,13 +67,16 @@
     mounted() {
       templateApi.fetchTemplates()
         .then((response) =>{
-          this.templates = response.data;
+          this.templates = response.data.result;
         })
         .catch(console.error);
     },
     methods: {
       openModal() {
         this.$refs.modal.open();
+      },
+      openDownloadModal() {
+        this.$refs.downloadModal.open();
       },
       closeModal() {
         this.$refs.modal.close();

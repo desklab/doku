@@ -12,4 +12,8 @@ export default {
   removeDocument(documentId) {
     return axios.delete(`${DOCUMENT_API}${documentId}/`);
   },
+  fetchDocuments(options) {
+    options = options || {};
+    return axios.get(DOCUMENT_API, options);
+  },
 }

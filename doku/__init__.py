@@ -10,8 +10,9 @@ from redis import Redis
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from doku.models import db
+from doku.tasks import celery
 from doku.models import base
-from doku.blueprints import auth, base, document, template, resources
+from doku.blueprints import auth, base, document, template, resources, account
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.middlewares.hosts import host_middleware
@@ -43,8 +44,8 @@ def create_app(
     if test:
         # Overwrite the config parameter to use a testing environment
         config = "config.test"
+    # Import the configuration object
     config_module = import_module(config)
-
     # Only initialize sentry if in production and SENTRY_DSN is set
     _env = os.environ.get("FLASK_ENV", "development")
     if _env == "production" and config_module.SENTRY_DSN is not None:
@@ -54,27 +55,31 @@ def create_app(
     app.config.from_object(config_module)
     app.static_url_path = app.config.get("STATIC_FOLDER")
     app.static_folder = os.path.join(app.root_path, app.static_url_path)
-
+    # Additional config might be needed for tests
     if additional_config is not None:
         app.config.update(additional_config)
-
     # Prepare redis for session and tasks
     redis = Redis(**app.config["REDIS_CONFIG"])
     app.session_interface = RedisSessionInterface(
         app, redis, app.config.get("SESSION_PREFIX", "session_")
     )
     app.redis = redis
+    # Preapare celery for tasks
+    celery.conf.update(app.config)
 
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
         os.makedirs(app.config["UPLOAD_FOLDER"])
-
+    if not os.path.exists(app.config["SHARED_FOLDER"]):
+        os.makedirs(app.config["SHARED_FOLDER"])
     # Flask extensions
     babel = Babel(app)
     db.init_app(app)
 
-    @babel.localeselector
-    def get_locale():
-        return request.accept_languages.best_match(["de", "en"])
+    if not minimal:
+
+        @babel.localeselector
+        def get_locale():
+            return request.accept_languages.best_match(["de", "en"])
 
     # WSGI middlewares
     if not minimal:
@@ -85,6 +90,7 @@ def create_app(
     if not minimal:
         app.register_blueprint(base.bp)
         app.register_blueprint(auth.bp)
+        app.register_blueprint(account.bp, url_prefix="/account")
         app.register_blueprint(document.bp, url_prefix="/document")
         app.register_blueprint(template.bp, url_prefix="/template")
         app.register_blueprint(resources.bp, url_prefix="/resources")
