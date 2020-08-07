@@ -13,7 +13,7 @@
         <div>
           <div v-for="document in documents" :key="document.id" class="form-group">
             <label class="form-checkbox c-hand">
-              <input type="checkbox" @change="selectionChanged" v-model="document.checked" :disabled="loading">
+              <input type="checkbox" @change="select(document.id, $event)" :checked="selection.has(document.id)" :disabled="loading">
               <i class="form-icon"></i> {{ document.name }}
             </label>
           </div>
@@ -25,10 +25,11 @@
       <a href="/account/downloads" class="btn btn-link float-left">
         View Download Requests
       </a>
+      <animated-notice ref="downloadNotice"></animated-notice>
       <button @click="close" class="btn btn-link">
         Close
       </button>
-      <button class="btn btn-primary ml-2">
+      <button class="btn btn-primary ml-2" @click="download">
         Download
       </button>
     </div>
@@ -38,14 +39,17 @@
 <script>
   import documentApi from '../../api/document';
   import Modal from "./Modal";
+  import AnimatedNotice from "./AnimatedNotice";
   import Pagination from './Pagination.vue';
 
   export default {
     name: 'BulkDownload',
-    components: {Modal, Pagination},
+    components: {Modal, Pagination, AnimatedNotice},
     data() {
       return {
         documents: [],
+        selection: new Set(),
+        allIDs: [],
         pagination: {
           has_next: false,
           has_prev: false,
@@ -61,6 +65,9 @@
     },
     mounted() {
       this.update();
+      documentApi.fetchIDs()
+        .then(res => this.allIDs = res.data.result)
+        .catch(console.error);
     },
     methods: {
       toggle() {
@@ -87,13 +94,21 @@
         this.allSelected = false;
         this.noneSelected = false;
       },
+      select(ID, event) {
+        this.selectionChanged();
+        if (event.target.checked) {
+          this.selection.add(ID);
+        } else {
+          this.selection.delete(ID);
+        }
+      },
       fetch(page) {
         return new Promise((resolve, reject) => {
           if (this.loaded.hasOwnProperty(page)) {
             resolve();
             return;
           }
-          documentApi.fetchDocuments({ params: {page: page} })
+          documentApi.fetchDocuments({params: {page: page}})
             .then(res => {
               this.$set(this.loaded, page, {
                 documents: res.data.result,
@@ -115,50 +130,29 @@
         event.target.classList.add("loading");
         this.allSelected = true;
         this.noneSelected = false;
-        for (let i = 1; i <= this.pagination.page_count; i++) {
-          this.fetch(i)
-            .then(() => {
-              this.updateSelection(i);
-            });
-        }
+
+        this.selection = new Set(this.allIDs);
+
         event.target.classList.remove("loading");
       },
-      selectNone() {
+      selectNone(event) {
         event.target.classList.add("loading");
         this.allSelected = false;
         this.noneSelected = true;
-        for (let i = 1; i <= this.pagination.page_count; i++) {
-          this.fetch(i)
-            .then(() => {
-              this.updateSelection(i);
-            });
-        }
+
+        this.selection = new Set();
+
         event.target.classList.remove("loading");
       },
-      updateSelection(page) {
-        if (this.allSelected) {
-          if (this.page === page) {
-            for (let i in this.documents) {
-              this.$set(this.documents[i], "checked", true);
-            }
-          }
-          for (let i in this.loaded) {
-            for (let j in this.loaded[i].documents) {
-              this.$set(this.loaded[i].documents[j], "checked", true);
-            }
-          }
-        } else if (this.noneSelected) {
-          if (this.page === page) {
-            for (let i in this.documents) {
-              this.$set(this.documents[i], "checked", false);
-            }
-          }
-          for (let i in this.loaded) {
-            for (let j in this.loaded[i].documents) {
-              this.$set(this.loaded[i].documents[j], "checked", false);
-            }
-          }
-        }
+      download(event) {
+        event.target.classList.add("loading");
+        documentApi.bulkDownload(Array.from(this.selection), [], this.allSelected)
+          .then(() => window.location.href = "/account/downloads")
+          .catch(err => {
+            event.target.classList.remove("loading");
+            console.error(err);
+            this.$refs.downloadNotice.trigger('Failed!', 'text-error');
+          });
       }
     }
   }

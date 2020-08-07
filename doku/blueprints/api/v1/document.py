@@ -1,11 +1,15 @@
 import json
+from datetime import datetime
 
 from werkzeug.exceptions import BadRequest, TooManyRequests
 from flask import Blueprint, current_app, jsonify, request, session
 from celery.result import AsyncResult
 
+from doku.models import db
+from doku.models.document import Document
 from doku.models.schemas import DocumentSchema
 from doku.tasks import celery
+from doku.tasks.download import request_download
 from doku.utils import EMPTY
 
 bp = Blueprint("api.v1.document", __name__)
@@ -36,6 +40,12 @@ def delete(document_id: int):
     return DocumentSchema.delete(document_id)
 
 
+@bp.route("/ids", methods=["GET"])
+def get_ids():
+    ids = [__id[0] for __id in db.session.query(Document.id).distinct().all()]
+    return jsonify({"result": ids})
+
+
 @bp.route("/download/request", methods=["POST"])
 def download():
     """Bulk Download Request
@@ -54,16 +64,16 @@ def download():
     if len(downloads) >= limit:
         raise TooManyRequests(f"You have {len(downloads)} pending downloads.")
     r = current_app.redis
-    download_all = request.args.get("all", False, type=bool)
-    include = request.args.getlist("include", type=int)
-    exclude = request.args.getlist("exclude", type=int)
+    download_all = request.json.get("all", False)
+    include = request.json.get("include")
+    exclude = request.json.get("exclude")
     task = request_download.apply_async(args=(download_all, include, exclude))
     tasks = r.get(f"doku_downloads_user_{user_id:d}")
     if tasks in EMPTY:
-        tasks = []
+        tasks = {}
     else:
         tasks = json.loads(tasks)
-    tasks.append(task.id)
+    tasks[task.id] = datetime.now().isoformat()
     r.set(f"doku_downloads_user_{user_id:d}", json.dumps(tasks))
     return jsonify({"success": True, "id": task.id})
 
@@ -74,18 +84,20 @@ def get_downloads():
     if user_id is None:
         raise BadRequest()
     res = get_downloads_for_user(user_id)
-    return jsonify(res)
+    return jsonify({"result": res})
 
 
 def get_downloads_for_user(user_id: int) -> dict:
     r = current_app.redis
     tasks = r.get(f"doku_downloads_user_{user_id:d}")
-    print(tasks)
+    tasks = json.loads(tasks)
     if tasks in EMPTY:
         return {}
-    tasks = json.loads(tasks)
-    downlaods = {}
-    for task_id in tasks:
+    downloads = {}
+    for task_id, date in tasks.items():
         result = AsyncResult(task_id, app=celery)
-        downlaods[task_id] = result.status
-    return downlaods
+        downloads[task_id] = {
+            "status": result.status,
+            "date": datetime.fromisoformat(date)
+        }
+    return downloads

@@ -46,6 +46,9 @@ class Document(db.Model, DateMixin):
     def render(self):
         return self.template.render(self.variables)
 
+    def write_pdf(self, path):
+        return self.template.write_pdf(self.variables, path)
+
 
 class Variable(db.Model, DateMixin):
     """Variable

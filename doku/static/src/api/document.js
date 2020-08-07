@@ -16,4 +16,11 @@ export default {
     options = options || {};
     return axios.get(DOCUMENT_API, options);
   },
+  bulkDownload(include = [], exclude = [], all = false) {
+    let data = {include, exclude, all};
+    return axios.post(`${DOCUMENT_API}download/request`, data);
+  },
+  fetchIDs() {
+    return axios.get(`${DOCUMENT_API}ids`);
+  }
 }
