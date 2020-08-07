@@ -12,6 +12,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from doku.models import db
 from doku.tasks import celery
 from doku.models import base
+
 from doku.blueprints import auth, base, document, template, resources, account
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
