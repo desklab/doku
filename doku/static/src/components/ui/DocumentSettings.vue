@@ -47,13 +47,14 @@
               </div>
             </div>
             <div class="card-footer">
-              <button class="btn btn-error float-right" @click="remove">Remove</button>
+              <button class="btn btn-error float-right" @click="$refs.removeConfirmation.open()">Remove</button>
               <animated-notice class="float-right" ref="deleteNotice"></animated-notice>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <RemoveDocumentConfirmation ref="removeConfirmation" @remove-confirmed="remove"></RemoveDocumentConfirmation>
   </div>
 </template>
 
@@ -67,12 +68,14 @@
   import templateApi from '../../api/template';
   import * as ns from '../../store/namespace';
   import AnimatedNotice from "./AnimatedNotice";
+  import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation";
 
   export default {
     name: 'VariableEditor',
     components: {
       AnimatedNotice, InfoIcon,
-      Modal, AnimatedToggle
+      Modal, AnimatedToggle,
+      RemoveDcoumentConfirmation
     },
     computed: mapState({
       document: state => state.document.document
