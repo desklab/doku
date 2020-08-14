@@ -110,7 +110,7 @@ class Variable(db.Model, DateMixin):
 @event.listens_for(Variable.css_class, "set")
 def before_any_compiler(target, value, old_value, initiator):
     content = target.content
-    if content is None or content is "":
+    if content is None or content == "":
         # In previous versions, the content was set to ""
         # However, this will trigger a recursive function call and
         # should thus be avoided
