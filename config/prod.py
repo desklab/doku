@@ -26,3 +26,4 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 UPLOAD_FOLDER = os.environ.get("DOKU_UPLOAD_FOLDER", "/app/resources")
+SHARED_FOLDER = os.environ.get("DOKU_UPLOAD_FOLDER", "/app/shared")
