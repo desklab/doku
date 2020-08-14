@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <RemoveDocumentConfirmation ref="removeConfirmation" @remove-confirmed="remove"></RemoveDocumentConfirmation>
+    <remove-document-confirmation ref="removeConfirmation" @remove-confirmed="remove"></remove-document-confirmation>
   </div>
 </template>
 
@@ -68,14 +68,14 @@
   import templateApi from '../../api/template';
   import * as ns from '../../store/namespace';
   import AnimatedNotice from "./AnimatedNotice";
-  import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation";
+  import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation.vue";
 
   export default {
     name: 'VariableEditor',
     components: {
       AnimatedNotice, InfoIcon,
       Modal, AnimatedToggle,
-      RemoveDcoumentConfirmation
+      RemoveDocumentConfirmation
     },
     computed: mapState({
       document: state => state.document.document
