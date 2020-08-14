@@ -6,12 +6,6 @@ from doku.utils.decorators import login_required
 bp = Blueprint("api.v1.variable", __name__)
 
 
-@bp.before_request
-@login_required
-def login_check():
-    pass
-
-
 @bp.route("/", methods=["GET"])
 def get_all():
     return VariableSchema.get_all()

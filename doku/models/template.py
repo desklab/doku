@@ -1,4 +1,5 @@
 import functools
+from typing import List, Tuple
 
 from jinja2 import Environment, meta, Template as Jinja2Template
 from weasyprint import HTML, CSS
@@ -60,7 +61,11 @@ class Template(db.Model, DateMixin):
         content = env.parse(self.source)
         return meta.find_undeclared_variables(content)
 
-    def render(self, variables):
+    def render(self, variables) -> bytes:
+        html, stylesheets = self._render(variables)
+        return html.write_pdf(stylesheets=stylesheets)
+
+    def _render(self, variables) -> Tuple[HTML, List[CSS]]:
         stylesheets = [
             style.as_css for style in self.styles if style.source is not None
         ]
@@ -72,12 +77,16 @@ class Template(db.Model, DateMixin):
             for var in variables
             if not var.is_list or var.parent_id is not None
         }
-        context.update({var.name: var.as_list for var in variables if var.is_list})
+        context.update(
+            {var.name: var.as_list for var in variables if var.is_list})
         source = template.render(**context)
         if "codehilite" in source:
             stylesheets.append(CSS(string=HtmlFormatter().get_style_defs()))
-        html = HTML(string=source, base_url=".", url_fetcher=url_fetcher)
-        return html.write_pdf(stylesheets=stylesheets)
+        return HTML(string=source, base_url=".", url_fetcher=url_fetcher), stylesheets
+
+    def write_pdf(self, variables, path):
+        html, stylesheets = self._render(variables)
+        return html.write_pdf(target=path, stylesheets=stylesheets)
 
 
 class Stylesheet(db.Model, DateMixin):

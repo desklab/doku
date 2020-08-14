@@ -24,7 +24,7 @@
                                 <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}">
                                 <div id="emailGroup" class="form-group">
                                     <label class="form-label" for="login-email">E-Mail</label>
-                                    <input class="form-input" name="email" id="email" placeholder="E-Mail">
+                                    <input class="form-input" name="email" id="email" placeholder="E-Mail"{% if email %} value="{{ email }}"{% endif %}>
                                     {% if error %}
                                         <p id="email-error" class="form-input-hint is-error">{{ error }}</p>
                                     {% endif %}

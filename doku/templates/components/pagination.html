@@ -1,0 +1,23 @@
+<ul class="pagination mt-auto">
+    <li class="page-item{% if not pagination.has_prev %} disabled{% endif %}">
+        <a href="{{ url_for('base.index', page=pagination.prev_num, order=order, dir=direction) }}" tabindex="-1">
+            {% include "components/icons/arrow-left.html" %}
+        </a>
+    </li>
+    {%- for page in pagination.iter_pages() %}
+        {% if page %}
+            <li class="page-item{% if page == pagination.page %} active{% endif %}">
+                <a href="{{ url_for('base.index', page=page, order=order, dir=direction) }}">{{ page }}</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <span class=ellipsis>...</span>
+            </li>
+        {% endif %}
+    {%- endfor %}
+    <li class="page-item{% if not pagination.has_next %} disabled{% endif %}">
+        <a href="{{ url_for('base.index', page=pagination.next_num, order=order, dir=direction) }}">
+            {% include "components/icons/arrow-right.html" %}
+        </a>
+    </li>
+</ul>

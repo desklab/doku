@@ -37,7 +37,7 @@ body {
         text-decoration: none !important;
         color: $dark-color !important;
       }
-      &.actvie {
+      &.active {
         .sidebar-icon {
           border-left: $primary-color solid $border-radius;
           border-right: transparent solid $border-radius;
@@ -77,7 +77,8 @@ body {
     overflow-y: auto;
     height: 100%;
     min-height: 100vh;
-    display: block;
+    display: flex;
+    flex-direction: column;
     flex-basis: 100%;
   }
 }

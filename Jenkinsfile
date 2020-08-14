@@ -34,10 +34,10 @@ pipeline {
         sh 'docker build -t reg.desk-lab.de/doku -t reg.desk-lab.de/doku:$GIT_COMMIT .'
         sh 'cd doku/static && docker build -t reg.desk-lab.de/doku-static -t reg.desk-lab.de/doku-static:$GIT_COMMIT .'
         sh 'docker login https://reg.desk-lab.de --username $REGISTRY_USR --password $REGISTRY_PSW'
-        sh 'docker push reg.desk-lab.de/doku-static'
-        sh 'docker push reg.desk-lab.de/doku-static:$GIT_COMMIT'
-        sh 'docker push reg.desk-lab.de/doku'
-        sh 'docker push reg.desk-lab.de/doku:$GIT_COMMIT'
+        sh 'docker push reg.desk-lab.de/doku-static | cat'
+        sh 'docker push reg.desk-lab.de/doku-static:$GIT_COMMIT | cat'
+        sh 'docker push reg.desk-lab.de/doku | cat'
+        sh 'docker push reg.desk-lab.de/doku:$GIT_COMMIT | cat'
       }
     }
     stage('Deploy') {
@@ -56,8 +56,8 @@ pipeline {
       }
       steps {
         sh 'docker login https://reg.desk-lab.de --username $REGISTRY_USR --password $REGISTRY_PSW'
-        sh 'cd /home/jenkins/server && docker-compose pull doku dokustatic'
-        sh 'cd /home/jenkins/server && docker-compose up -d doku dokustatic'
+        sh 'cd /home/jenkins/server && docker-compose pull doku dokustatic | cat'
+        sh 'cd /home/jenkins/server && docker-compose up -d doku dokustatic | cat'
       }
     }
   }

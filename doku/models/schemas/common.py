@@ -90,16 +90,31 @@ class ApiSchemaMixin:
 
     @classmethod
     def get_all(cls):
-        data = request.args
-        page = request.args.get("page")
+        data = dict(request.args.copy())
+        page = data.pop("page", None)
+        if page is not None:
+            try:
+                page = int(page)
+            except ValueError:
+                page = None
         schemas = cls(many=True)
-        instances = (
-            cls.Meta.model.query.filter_by(**data)
-            .paginate(page=page, per_page=25)
-            .items
+        pagination = cls.Meta.model.query.filter_by(**data).paginate(
+            page=page, per_page=10
         )
-        result = schemas.dump(instances)
-        return jsonify(result)
+        result = schemas.dump(pagination.items)
+        response = {
+            "meta": {
+                "pages": [page for page in pagination.iter_pages()],
+                "has_next": pagination.has_next,
+                "has_prev": pagination.has_prev,
+                "next_num": pagination.next_num,
+                "prev_num": pagination.prev_num,
+                "page_count": pagination.pages,
+                "per_page": pagination.per_page,
+            },
+            "result": result,
+        }
+        return jsonify(response)
 
     @classmethod
     def update(cls, commit=True):

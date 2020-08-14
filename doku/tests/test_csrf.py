@@ -13,6 +13,11 @@ class CSRFTest(DokuTest):
         def test_route():
             return jsonify({"success": True})
 
+        @csrf.exempt
+        @self.app.route("/foo/bar/exemption", methods=["GET", "POST", "PUT", "DELETE"])
+        def test_route_exempt():
+            return jsonify({"success": True})
+
         @self.app.route("/foo/token")
         def gen_csrf():
             token = csrf.create_csrf_token()
@@ -50,3 +55,6 @@ class CSRFTest(DokuTest):
         self.assertEqual(resp_del_1.status_code, BadRequest.code)
         resp_del_2 = self.client.delete("/foo/bar", headers={header_name: token})
         self.assertEqual(resp_del_2.status_code, 200)
+
+        resp_post_2 = self.client.post("/foo/bar/exemption")
+        self.assertEqual(resp_post_2.status_code, 200)

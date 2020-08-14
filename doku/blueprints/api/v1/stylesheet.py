@@ -13,12 +13,6 @@ from doku.utils.decorators import login_required
 bp = Blueprint("api.v1.stylesheet", __name__)
 
 
-@bp.before_request
-@login_required
-def login_check():
-    pass
-
-
 @bp.route("/upload/<int:stylesheet_id>", methods=["PUT"])
 def upload(stylesheet_id: int):
     style: Stylesheet = get_or_404(

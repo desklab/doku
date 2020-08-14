@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="pt-4 px-4">
+        <h3>Account</h3>
+    </div>
+    <div class="container px-4">
+        <ul class="tab">
+            <li class="tab-item{% if request.endpoint == 'account.index' %} active{% endif %}">
+                <a href="{{ url_for('account.index') }}">User</a>
+            </li>
+            <li class="tab-item{% if request.endpoint.startswith('account.security') %} active{% endif %}">
+                <a href="{{ url_for('account.security') }}">Security</a>
+            </li>
+            <li class="tab-item{% if request.endpoint == 'account.downloads' %} active{% endif %}">
+                <a href="{{ url_for('account.downloads') }}">Downloads</a>
+            </li>
+        </ul>
+        <div class="pt-1 px-1">        
+            {% block account_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

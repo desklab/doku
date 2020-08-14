@@ -16,3 +16,4 @@ click
 redis
 WeasyPrint>=51
 pytest
+celery>=4.4.6

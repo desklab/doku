@@ -72,7 +72,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       variableApi.fetchVariables(options)
         .then(response => {
-          commit(mutationTypes.SET_VARIABLES, response.data);
+          commit(mutationTypes.SET_VARIABLES, response.data.result);
           resolve();
         })
         .catch(reject)

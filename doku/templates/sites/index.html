@@ -3,8 +3,13 @@
     {{ super() }}
     <div id="app"></div>
     <div class="mx-2">
-        {% include "components/project_table.html" %}
+        {% with items=documents.items %}
+            {% include "components/document_list.html" %}
+        {% endwith %}
     </div>
+    {% with pagination=documents %}
+        {% include "components/pagination.html" %}
+    {% endwith %}
 {% endblock %}
 {% block extra_js %}
     <script>
