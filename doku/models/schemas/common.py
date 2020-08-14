@@ -99,7 +99,7 @@ class ApiSchemaMixin:
                 page = None
         schemas = cls(many=True)
         pagination = cls.Meta.model.query.filter_by(**data).paginate(
-            page=page, per_page=2
+            page=page, per_page=10
         )
         result = schemas.dump(pagination.items)
         response = {
