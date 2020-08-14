@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button @click="close" class="btn btn-primary float-right">
+      <button @click="close" class="btn btn-link float-right">
         Abort 
       </button>
       <button @click="remove" class="btn btn-error float-right mr-1">
