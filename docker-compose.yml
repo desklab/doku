@@ -5,5 +5,50 @@ services:
     image: redis
     container_name: redis
     restart: unless-stopped
+    networks:
+      - internal
     ports:
       - 6379:6379
+  postgresdoku:
+    image: postgres:latest
+    container_name: postgresdoku
+    restart: unless-stopped
+    volumes:
+      - db-doku:/var/lib/postgresql/data
+    networks:
+      - internal
+    environment:
+      POSTGRES_PASSWORD: 'password_doku'
+      POSTGRES_USER: 'doku_user'
+      POSTGRES_DB: 'doku_db'
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "doku_db", "-U", "doku_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+  worker:
+    build: .
+    container_name: worker
+    networks:
+      - internal
+    depends_on:
+      - redis
+    volumes:
+      - ./shared:/app/shared
+    environment:
+      REDIS_HOST: 'redis'
+      DOKU_SECRET: 'very_secret'
+      DOKU_DB_HOST: 'postgresdoku'
+      DOKU_DB_USER: 'doku_user'
+      DOKU_DB_PASSWORD: 'password_doku'
+      DOKU_DB_DATABASE: 'doku_db'
+    entrypoint: /app/worker.sh
+
+volumes:
+  db-doku:
+
+networks:
+  internal:
+    external: true

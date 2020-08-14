@@ -30,6 +30,7 @@ RUN useradd doku
 CMD mkdir /app/resources
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/healthcheck.sh
+RUN chmod +x /app/worker.sh
 RUN chown -R doku /app
 
 USER doku
