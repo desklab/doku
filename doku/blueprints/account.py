@@ -79,8 +79,6 @@ def downloads_delete():
     if download_id not in res:
         return BadRequest(f"Unknown download ID {download_id}")
     result = AsyncResult(download_id, app=celery)
-    result.revoke()
-    result.forget()
     try:
         shared_folder = current_app.config.get("SHARED_FOLDER")
         shutil.rmtree(safe_join(shared_folder, download_id))
@@ -91,12 +89,13 @@ def downloads_delete():
         file = safe_join(current_app.config.get("SHARED_FOLDER"), filename)
         if os.path.exists(file):
             os.remove(file)
+    result.revoke()
+    result.forget()
     del res[download_id]
     r = current_app.redis
     new_tasks = {
         task_id: val["date"].isoformat() for task_id, val in res.items()
     }
-    print(new_tasks)
     r.set(f"doku_downloads_user_{user_id:d}", json.dumps(new_tasks))
     return redirect(url_for("account.downloads"))
 
