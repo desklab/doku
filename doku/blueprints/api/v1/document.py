@@ -73,6 +73,8 @@ def download():
         tasks = {}
     else:
         tasks = json.loads(tasks)
+    if tasks in EMPTY:
+        tasks = {}
     tasks[task.id] = datetime.now().isoformat()
     r.set(f"doku_downloads_user_{user_id:d}", json.dumps(tasks))
     return jsonify({"success": True, "id": task.id})
@@ -90,6 +92,8 @@ def get_downloads():
 def get_downloads_for_user(user_id: int) -> dict:
     r = current_app.redis
     tasks = r.get(f"doku_downloads_user_{user_id:d}")
+    if tasks in EMPTY:
+        return {}
     tasks = json.loads(tasks)
     if tasks in EMPTY:
         return {}
