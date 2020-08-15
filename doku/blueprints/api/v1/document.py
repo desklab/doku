@@ -4,6 +4,7 @@ from datetime import datetime
 from werkzeug.exceptions import BadRequest, TooManyRequests
 from flask import Blueprint, current_app, jsonify, request, session
 from celery.result import AsyncResult
+from flask_babel import format_timedelta, format_datetime
 
 from doku.models import db
 from doku.models.document import Document
@@ -100,8 +101,11 @@ def get_downloads_for_user(user_id: int) -> dict:
     downloads = {}
     for task_id, date in tasks.items():
         result = AsyncResult(task_id, app=celery)
+        _date = datetime.fromisoformat(date)
         downloads[task_id] = {
             "status": result.status,
-            "date": datetime.fromisoformat(date),
+            "date": _date,
+            "timedelta": format_timedelta(datetime.now() - _date),
+            "date_format": format_datetime(_date)
         }
     return downloads

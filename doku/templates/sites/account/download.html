@@ -5,7 +5,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Date</th>
+                    <th>Requested</th>
                     <th>Status</th>
                     <th></th>
                 </tr>
@@ -14,8 +14,12 @@
                 {% for id, val in downloads.items() %}
                     <tr>
                         <td>{{ id.split("-")[-1] }}</td>
-                        <td>{{ val.date }}</td>
-                        <td>{{ val.status }}</td>
+                        <td>
+                            <span class="tooltip" data-tooltip="{{ val.date_format }}">
+                                {{ val.timedelta }}
+                            </span>
+                        </td>
+                        <td {% if val.status == "SUCCESS" %} class="text-primary"{% endif %}>{{ val.status }}</td>
                         <td>
                             <form action="{{ url_for("account.downloads_delete") }}", method="post">
                                 <input type="hidden" value="{{ id }}" name="download_id">
