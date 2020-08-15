@@ -88,6 +88,26 @@ class Variable(db.Model, DateMixin):
     )
     document = db.relationship("Document", back_populates="variables")
 
+    @staticmethod
+    def compile(content, css_class, use_markdown):
+        if content is None or content == "":
+            # In previous versions, the content was set to ""
+            # However, this will trigger a recursive function call and
+            # should thus be avoided
+            return ""
+        else:
+            if use_markdown:
+                return markdown.markdown(
+                    content,
+                    extensions=[
+                        RootClassExtension(root_class=css_class),
+                        "codehilite",
+                        "fenced_code",
+                    ],
+                )
+            else:
+                return content
+
     @property
     def used(self) -> bool:
         if self.parent_id is not None:
@@ -105,30 +125,23 @@ class Variable(db.Model, DateMixin):
         return [var.compiled_content for var in self.children]
 
 
-@event.listens_for(Variable.content, "set")
 @event.listens_for(Variable.use_markdown, "set")
+def before_content_compiler(target, value, old_value, initiator):
+    target.compiled_content = Variable.compile(target.content, target.css_class, value)
+
+
 @event.listens_for(Variable.css_class, "set")
-def before_any_compiler(target, value, old_value, initiator):
-    content = target.content
-    if content is None or content == "":
-        # In previous versions, the content was set to ""
-        # However, this will trigger a recursive function call and
-        # should thus be avoided
-        # target.content = ""
-        target.compiled_content = ""
-        return
-    else:
-        if target.use_markdown:
-            target.compiled_content = markdown.markdown(
-                content,
-                extensions=[
-                    RootClassExtension(root_class=target.css_class),
-                    "codehilite",
-                    "fenced_code",
-                ],
-            )
-        else:
-            target.compiled_content = content
+def before_content_compiler(target, value, old_value, initiator):
+    target.compiled_content = Variable.compile(
+        target.content, value, target.use_markdown
+    )
+
+
+@event.listens_for(Variable.content, "set")
+def before_content_compiler(target, value, old_value, initiator):
+    target.compiled_content = Variable.compile(
+        value, target.css_class, target.use_markdown
+    )
 
 
 @event.listens_for(Variable, "before_update")
