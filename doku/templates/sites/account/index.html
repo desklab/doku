@@ -1,5 +1,13 @@
 {% extends "sites/account/base.html" %}
 {% block account_content %}
+<div class="empty border">
+    <div class="empty-icon">
+        <img style="max-height: 225px; max-width: 80%;" src="{{ url_for('static', filename='assets/build.svg') }}">
+    </div>
+    <p class="empty-title h5">Work in Progress</p>
+    <p class="empty-subtitle">This feature is not done yet. Check back later!</p>
+</div>
+
 {% endblock %}
 {% block extra_js %}
 {% endblock %}

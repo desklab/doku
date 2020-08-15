@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin'); 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
@@ -118,7 +119,12 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new VueLoaderPlugin(),
-    new webpack.IgnorePlugin({resourceRegExp: /..\/..\/lib\/codemirror/})
+    new webpack.IgnorePlugin({resourceRegExp: /..\/..\/lib\/codemirror/}),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'assets', to: 'assets' },
+      ]
+    }),
   ],
   resolve: {
     alias: {
