@@ -2,8 +2,11 @@
 {% block body_class %}doku-edit{% endblock %}
 {% block content %}
     {{ super() }}
+    <div class="pt-4 px-4">
+        <h3>Resources</h3>
+    </div>
     <div class="container">
-        <div class="border rounded p-4 m-3 bg-gray resource-form">
+        <div class="border rounded p-4 my-2 bg-gray resource-form">
             <form action="" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
                 <label class="form-label d-inline-block text-small p-0 m-0" for="inputName">Name</label>
