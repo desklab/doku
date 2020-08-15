@@ -102,6 +102,6 @@ def get_downloads_for_user(user_id: int) -> dict:
         result = AsyncResult(task_id, app=celery)
         downloads[task_id] = {
             "status": result.status,
-            "date": datetime.fromisoformat(date)
+            "date": datetime.fromisoformat(date),
         }
     return downloads

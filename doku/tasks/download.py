@@ -17,7 +17,7 @@ def request_download(
     self,
     download_all: bool = False,
     include: Optional[List[int]] = None,
-    exclude: Optional[List[int]] = None
+    exclude: Optional[List[int]] = None,
 ):
     """Request Download Task
 
@@ -28,9 +28,9 @@ def request_download(
     app = create_app(minimal=True)
     with app.app_context():
         if download_all or exclude not in EMPTY:
-            include = set([
-                _id[0] for _id in db.session.query(Document.id).distinct().all()
-            ])
+            include = set(
+                [_id[0] for _id in db.session.query(Document.id).distinct().all()]
+            )
         if exclude not in EMPTY:
             include -= set(exclude)
         if include in EMPTY:
@@ -46,7 +46,9 @@ def request_download(
             with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as archive:
                 for document_id in include:
                     try:
-                        document = db.session.query(Document).filter_by(id=document_id).one()
+                        document = (
+                            db.session.query(Document).filter_by(id=document_id).one()
+                        )
                     except NoResultFound:
                         app.logger.warning(f"No document found with ID {document_id}")
                         continue
@@ -57,4 +59,3 @@ def request_download(
             return zip_filename
         finally:
             shutil.rmtree(directory)
-

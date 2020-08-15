@@ -77,8 +77,7 @@ class Template(db.Model, DateMixin):
             for var in variables
             if not var.is_list or var.parent_id is not None
         }
-        context.update(
-            {var.name: var.as_list for var in variables if var.is_list})
+        context.update({var.name: var.as_list for var in variables if var.is_list})
         source = template.render(**context)
         if "codehilite" in source:
             stylesheets.append(CSS(string=HtmlFormatter().get_style_defs()))

@@ -8,8 +8,17 @@ from celery.states import SUCCESS
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.exceptions import Unauthorized, Forbidden, NotFound, BadRequest
 from werkzeug.security import safe_join
-from flask import Blueprint, session, redirect, url_for, request, \
-    render_template, flash, current_app, send_file
+from flask import (
+    Blueprint,
+    session,
+    redirect,
+    url_for,
+    request,
+    render_template,
+    flash,
+    current_app,
+    send_file,
+)
 
 from doku.models import db
 from doku.models.user import User
@@ -57,8 +66,9 @@ def download(download_id: str):
     filename = result.get()
     file = safe_join(current_app.config.get("SHARED_FOLDER"), filename)
     if not os.path.exists(file) and not os.path.isfile(file):
-        raise RuntimeError(f"Return value {filename} of task does not denote"
-                           f" to file ({file})")
+        raise RuntimeError(
+            f"Return value {filename} of task does not denote" f" to file ({file})"
+        )
     return send_file(
         file,
         as_attachment=True,
@@ -93,9 +103,7 @@ def downloads_delete():
     result.forget()
     del res[download_id]
     r = current_app.redis
-    new_tasks = {
-        task_id: val["date"].isoformat() for task_id, val in res.items()
-    }
+    new_tasks = {task_id: val["date"].isoformat() for task_id, val in res.items()}
     r.set(f"doku_downloads_user_{user_id:d}", json.dumps(new_tasks))
     return redirect(url_for("account.downloads"))
 
