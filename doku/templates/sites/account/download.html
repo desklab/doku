@@ -1,38 +1,48 @@
 {% extends "sites/account/base.html" %}
 {% block account_content %}
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for id, val in downloads.items() %}
+    {% if downloads.items() %}
+        <table class="table table-striped table-hover">
+            <thead>
                 <tr>
-                    <td>{{ id }}</td>
-                    <td>{{ val.date }}</td>
-                    <td>{{ val.status }}</td>
-                    <td>
-                        <form action="{{ url_for("account.downloads_delete") }}", method="post">
-                            <input type="hidden" value="{{ id }}" name="download_id">
-                            <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
-                            <button class="btn btn-sm btn-link text-dark" type="submit">
-                                {% include "components/icons/trash-2.html" %}
-                            </button>
-                        </form>
-                        {% if val.status == "SUCCESS" %}
-                            <a class="btn btn-sm btn-link text-dark" href="{{ url_for("account.download", download_id=id) }}">
-                                {% include "components/icons/download.html" %}
-                            </a>
-                        {% endif %}
-                    </td>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for id, val in downloads.items() %}
+                    <tr>
+                        <td>{{ id.split("-")[-1] }}</td>
+                        <td>{{ val.date }}</td>
+                        <td>{{ val.status }}</td>
+                        <td>
+                            <form action="{{ url_for("account.downloads_delete") }}", method="post">
+                                <input type="hidden" value="{{ id }}" name="download_id">
+                                <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
+                                <button class="btn btn-sm btn-link text-dark" type="submit">
+                                    {% include "components/icons/trash-2.html" %}
+                                </button>
+                                {% if val.status == "SUCCESS" %}
+                                    <a class="btn btn-sm btn-link text-dark" href="{{ url_for("account.download", download_id=id) }}">
+                                        {% include "components/icons/download.html" %}
+                                    </a>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty border">
+            <div class="empty-icon">
+                <img style="max-height: 225px; max-width: 80%;" src="{{ url_for('static', filename='assets/downloads.svg') }}">
+            </div>
+            <p class="empty-title h5">No Downloads Yet</p>
+            <p class="empty-subtitle">Download requests will appear here. Request a bulk download to get started.</p>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block extra_js %}
 {% endblock %}
