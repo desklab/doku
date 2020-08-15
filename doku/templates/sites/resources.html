@@ -21,7 +21,7 @@
         </div>
         <div id="resources"></div>
     </div>
-    {% with pagination=resources %}
+    {% with pagination=resources, page_url='resources.index' %}
         {% include "components/pagination.html" %}
     {% endwith %}
 {% endblock %}

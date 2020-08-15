@@ -7,7 +7,7 @@
             {% include "components/document_list.html" %}
         {% endwith %}
     </div>
-    {% with pagination=documents %}
+    {% with pagination=documents, page_url='base.index' %}
         {% include "components/pagination.html" %}
     {% endwith %}
 {% endblock %}
