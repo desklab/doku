@@ -21,6 +21,9 @@
         </div>
         <div id="resources"></div>
     </div>
+    {% with pagination=resources %}
+        {% include "components/pagination.html" %}
+    {% endwith %}
 {% endblock %}
 
 {% block extra_js %}
@@ -28,17 +31,16 @@
         window.resources = {{ resources_json|tojson }};
         window.resourceApi = '{{ url_for('api.v1.resource.update') }}'
         {{ create_csrf_token(output=False) }}
-
         document.getElementById('addButton').disabled = true;
         function check_input() {
-        	  if(document.getElementById("inputName").value.trim()==="") {
+    	    if (document.getElementById("inputName").value.trim()==="") {
                 document.getElementById('addButton').disabled = true;
-            } else if(document.getElementById("sourceFile").files.length===0) {
+            } else if (document.getElementById("sourceFile").files.length===0) {
                 document.getElementById('addButton').disabled = true;
             } else {
                 document.getElementById('addButton').disabled = false;
             }
-    }
+        }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='resources.bundle.js') }}"></script>
 {% endblock %}

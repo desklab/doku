@@ -15,7 +15,7 @@ from werkzeug.exceptions import BadRequest
 
 from doku import db
 from doku.models.resource import Resource, generate_filename
-from doku.utils.db import get_or_404
+from doku.utils.db import get_or_404, get_pagination_page
 from doku.utils.decorators import login_required
 from doku.models.schemas.resource import ResourceSchema
 
@@ -44,11 +44,14 @@ def index():
                 file.save(os.path.join(dest, filename))
                 db.session.add(resource)
                 db.session.commit()
-    resources = db.session.query(Resource).all()
+    page = get_pagination_page()
+    resources = db.session.query(Resource).paginate(page=page, per_page=10)
 
     resource_schemas = ResourceSchema(session=db.session, many=True)
     return render_template(
-        "sites/resources.html", resources_json=resource_schemas.dumps(resources),
+        "sites/resources.html",
+        resources_json=resource_schemas.dumps(resources.items),
+        resources=resources
     )
 
 
