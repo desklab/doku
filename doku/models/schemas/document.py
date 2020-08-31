@@ -107,8 +107,13 @@ class VariableSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     compiled_content = auto_field(dump_only=True)
     document_id = auto_field(load_only=True)
     parent_id = auto_field(load_only=True)
+    snippet_id = auto_field(load_only=True)
+
     parent = Nested("VariableSchema", allow_none=True, exclude=("children",))
     document = Nested("DocumentSchema", exclude=("variables",), dump_only=True)
-    children = Nested("VariableSchema", exclude=("document",), many=True, partial=True)
+    children = Nested("VariableSchema", exclude=("parent",), many=True, partial=True)
+    snippet = Nested("SnippetSchema", exclude=("used_by",), many=True, partial=True)
+
     used = fields.Boolean(dump_only=True)
     is_list = fields.Boolean(dump_only=True)
+    uses_snippet = fields.Boolean(dump_only=True)
