@@ -23,6 +23,14 @@
             Resources
         </div>
     </a>
+    <a href="{{ url_for('snippet.index') }}" class="sidebar-item{% if request.endpoint == 'snippet.index' %} active{% endif %}">
+        <div class="sidebar-icon">
+            {% include "components/icons/scissors.html" %}
+        </div>
+        <div class="sidebar-link">
+            Snippets
+        </div>
+    </a>
     <a href="{{ url_for('account.index') }}" class="sidebar-item pos-bottom{% if 'account.' in request.endpoint %} active{% endif %}">
         <div class="sidebar-icon">
             {% include "components/icons/user.html" %}

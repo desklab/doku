@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="doku-document-toolbar">
+        <h3>Snippets</h3>
+        <div>
+            <button class="btn btn-sm">
+                {% include "components/icons/plus.html" %}
+                Create new snippet
+            </button>
+        </div>
+    </div>
+    <div class="mx-2 columns">
+        {% for item in snippets.items %}
+            <div class="column col-6 col-md-12">
+                {% include "components/snippet_list_item.html" %}
+            </div>
+        {% endfor %}
+    </div>
+    {% with pagination=snippets, page_url='base.index' %}
+        {% include "components/pagination.html" %}
+    {% endwith %}
+{% endblock %}
+{% block extra_js %}
+    <script>
+        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
+    </script>
+    {{ create_csrf_token(output=False) }}
+    <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
+{% endblock %}
