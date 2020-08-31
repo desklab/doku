@@ -1,0 +1,17 @@
+.snippet-preview {
+  max-height: 128px;
+  position: relative;
+
+  &:after {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    content: "";
+    background: linear-gradient(to top,
+       rgba(255, 255, 255, 1) 20%,
+       rgba(255, 255, 255, 0) 80%
+    );
+    pointer-events: none; /* so the text is still selectable */
+  }
+}

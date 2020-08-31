@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <form method="post">
+        <div class="pt-4 px-4">
+            <h3>Edit Snippet</h3>
+            <input class="form-input input-lg" style="width: auto" type="text" id="input-snippet-name" placeholder="Snippet Name" required>
+        </div>
+        <div class="mx-2">
+
+        </div>
+    </form>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
+    </script>
+    {{ create_csrf_token(output=False) }}
+    <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
+{% endblock %}
