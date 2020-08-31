@@ -19,6 +19,7 @@ class Document(db.Model, DateMixin):
 
     name = db.Column(db.String(255), unique=False, nullable=False)
     public = db.Column(db.Boolean)
+    author = db.Column(db.Integer, db.ForeignKey("doku_user.id"), nullable=False)
     template_id = db.Column(
         db.Integer, db.ForeignKey("doku_template.id"), nullable=True
     )
