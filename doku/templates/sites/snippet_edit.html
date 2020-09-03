@@ -2,19 +2,20 @@
 {% block content %}
     {{ super() }}
     <form method="post">
-        <div class="pt-4 px-4">
+        <div class="doku-document-toolbar">
             <h3>Edit Snippet</h3>
-            <input class="form-input input-lg" style="width: auto" type="text" id="input-snippet-name" placeholder="Snippet Name" required>
+            <button class="btn btn-lg">Save</button>
         </div>
-        <div class="mx-2">
-
+        <div class="mx-4 mt-4">
+            <input class="form-input input-lg mb-4" style="width: auto" name="name" type="text" value="{{ snippet.name }}" id="input-snippet-name" placeholder="Snippet Name" required>
+            <div id="snippet"></div>
         </div>
     </form>
 {% endblock %}
 {% block extra_js %}
     <script>
-        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
+        window.snippetObj = {{ snippet_json|tojson }};
     </script>
     {{ create_csrf_token(output=False) }}
-    <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='snippet.bundle.js') }}"></script>
 {% endblock %}

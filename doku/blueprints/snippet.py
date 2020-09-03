@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 
 from doku import db
+from doku.models.schemas import SnippetSchema
 from doku.models.snippet import Snippet
 from doku.utils.db import get_pagination_page, get_ordering, get_or_404
 from doku.utils.decorators import login_required
@@ -22,4 +23,9 @@ def index():
 @login_required
 def get(snippet_id: int):
     snippet = get_or_404(db.session.query(Snippet).filter_by(id=snippet_id))
-    return render_template("sites/snippet_edit.html", snippet=snippet)
+    snippet_schema = SnippetSchema(session=db.session, instance=snippet)
+    return render_template(
+        "sites/snippet_edit.html",
+        snippet=snippet,
+        snippet_json=snippet_schema.dump(snippet)
+    )
