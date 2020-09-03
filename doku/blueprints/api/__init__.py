@@ -3,7 +3,8 @@ from marshmallow.exceptions import ValidationError
 from flask import Flask, request, session, Blueprint, jsonify
 
 from doku.blueprints.api import v1
-from doku.blueprints.api.v1 import document, template, variable, stylesheet, resource
+from doku.blueprints.api.v1 import document, template, variable, stylesheet, resource, \
+    snippet
 from doku.models.user import User
 
 
@@ -59,3 +60,4 @@ def init_api(app: Flask):
     register(app, variable.bp, auth=True, url_prefix="/api/v1/variable")
     register(app, stylesheet.bp, auth=True, url_prefix="/api/v1/stylesheet")
     register(app, resource.bp, auth=True, url_prefix="/api/v1/resource")
+    register(app, snippet.bp, auth=True, url_prefix="/api/v1/snippet")
