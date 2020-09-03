@@ -29,16 +29,12 @@
       </div>
     </div>
     <div v-show="showCode" class="doku-inline-var-code">
-      <div class="doku-inline-var-controls">
-        <animated-toggle v-if="!variable.is_list" ref="markdownToggle" v-bind:is-checked="variable.use_markdown">
-          <template v-slot:on>Markdown</template>
-          <template v-slot:off>Raw</template>
-        </animated-toggle>
+      <div v-if="variable.is_list" class="doku-inline-var-controls">
         <div class="form-inline">
           <input type="text" placeholder="CSS Class" class="form-input input-sm" ref="cssClassInput" :value="variable.css_class">
         </div>
       </div>
-      <Editor v-if="!variable.is_list" ref="editor" v-bind:mode="'text/x-markdown'" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
+      <variable-editor v-if="!variable.is_list" ref="editor" :variable="variable" :documentId="documentId"></variable-editor>
       <div class="m-2" v-else>
         <button @click="$refs.addModal.open()" class="btn btn-sm mb-2">
           <plus-icon size="18"></plus-icon>
@@ -90,11 +86,12 @@
   import {mapActions} from 'vuex';
   import {MoreVerticalIcon, CopyIcon, PlusIcon, TrashIcon} from 'vue-feather-icons';
 
-  import Editor from './Editor.vue';
-  import Modal from "./Modal";
-  import AnimatedNotice from "./AnimatedNotice";
+  import Editor from '../ui/Editor.vue';
+  import Modal from "../ui/Modal";
+  import AnimatedNotice from "../ui/AnimatedNotice";
   import * as actionTypes from '../../store/types/actions';
-  import AnimatedToggle from "./AnimatedToggle";
+  import AnimatedToggle from "../ui/AnimatedToggle";
+  import VariableEditor from "./VariableEditor";
 
   export default {
     name: 'InlineVariable',
@@ -108,6 +105,7 @@
       }
     },
     components: {
+      VariableEditor,
       AnimatedToggle,
       AnimatedNotice,
       Modal,
@@ -130,8 +128,7 @@
         if (newValue) {
           if (!this.variable.is_list) {
             this.$nextTick(() => {
-              this.$refs.editor.editor.refresh();
-              this.$refs.editor.editor.focus();
+              this.$refs.editor.refresh();
             });
           }
         }
@@ -185,7 +182,6 @@
         let _data = {
           id: this.variable.id,
           document_id: this.documentId,
-          css_class: this.$refs.cssClassInput.value,
         }
 
         if (this.variable.is_list) {
@@ -195,6 +191,7 @@
           // recursively.
           _data.children = [];
           _data.content = '';
+          _data.css_class = this.$refs.cssClassInput.value;
           if (this.$refs.children !== undefined ) {
             // Note: If only one children is present, the children ref is
             // not an array. This case must be
@@ -207,8 +204,9 @@
             }
           }
         } else {
-          _data.use_markdown = this.$refs.markdownToggle.checked
+          _data.use_markdown = this.$refs.editor.getUseMarkdown();
           _data.content = this.$refs.editor.getValue();
+          _data.css_class = this.$refs.editor.getCssClass();
         }
         return _data;
       },
@@ -245,7 +243,7 @@
       },
       updateEditor() {
         if (this.showCode) {
-          this.$refs.editor.editor.refresh();
+          this.$refs.editor.refresh();
         }
       },
     }
