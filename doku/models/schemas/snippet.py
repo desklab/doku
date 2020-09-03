@@ -6,7 +6,7 @@ from doku.models.schemas.common import DokuSchema, ApiSchemaMixin
 from doku.models.snippet import Snippet
 
 
-class VariableSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
+class SnippetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     class Meta:
         model = Snippet
         load_instance = True
