@@ -1,7 +1,7 @@
 <template>
   <div class="doku-animated-toggle">
     <label class="form-switch">
-      <input v-model="checked" name="public" id="documentPublicInput" type="checkbox">
+      <input v-model="checked" id="documentPublicInput" type="checkbox">
       <i class="form-icon"></i>
       <transition name="slide-down">
         <span v-if="checked">
