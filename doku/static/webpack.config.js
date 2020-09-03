@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin'); 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
@@ -13,6 +13,7 @@ module.exports = {
     edit: './src/edit.js',
     edit_template: './src/edit_template.js',
     resources: './src/resources.js',
+    snippet: './src/snippet.js',
   },
   output: {
     path: path.resolve(__dirname, './dist'),

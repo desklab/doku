@@ -30,37 +30,6 @@ html {
         height: 100px;
         flex: 1 0 auto;
         padding: $unit-3;
-
-        .doku-inline-var {
-          height: auto;
-          border: solid $border-width $border-color;
-          border-radius: $border-radius;
-          margin-bottom: $unit-2;
-
-          .doku-inline-var-code {
-            border-top: solid $border-width $border-color;
-            .doku-inline-var-controls {
-              display: flex;
-              justify-content: space-between;
-              padding: $unit-2;
-              background: $gray-100;
-              border-bottom: solid $border-width $border-color;
-            }
-          }
-
-          .doku-inline-head {
-            background: $bg-color;
-            padding: $unit-4;
-
-            .dropdown {
-              float: right;
-            }
-
-            &:hover {
-              background: $gray-50;
-            }
-          }
-        }
       }
     }
 
@@ -107,6 +76,37 @@ html {
     position: relative;
     top: 0;
     bottom: 0;
+  }
+}
+
+.doku-inline-var {
+  height: auto;
+  border: solid $border-width $border-color;
+  border-radius: $border-radius;
+  margin-bottom: $unit-2;
+
+  .doku-inline-var-code {
+    border-top: solid $border-width $border-color;
+    .doku-inline-var-controls {
+      display: flex;
+      justify-content: space-between;
+      padding: $unit-2;
+      background: $gray-100;
+      border-bottom: solid $border-width $border-color;
+    }
+  }
+
+  .doku-inline-head {
+    background: $bg-color;
+    padding: $unit-4;
+
+    .dropdown {
+      float: right;
+    }
+
+    &:hover {
+      background: $gray-50;
+    }
   }
 }
 
