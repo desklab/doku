@@ -9,7 +9,7 @@ from doku.models.base import Document, Variable
 class VariableTest(DokuTest):
     def test_variable_compile(self):
         with self.app.app_context():
-            doc = Document(name="Foo")
+            doc = Document(name="Foo", author=self.user)
             db.session.add(doc)
             db.session.commit()
             variable = Variable(name="body", document_id=doc.id)
@@ -26,7 +26,7 @@ class VariableTest(DokuTest):
 
     def test_variable_raw(self):
         with self.app.app_context():
-            doc = Document(name="Foo")
+            doc = Document(name="Foo", author=self.user)
             db.session.add(doc)
             db.session.commit()
             variable = Variable(name="body", document_id=doc.id)
@@ -42,7 +42,7 @@ class VariableTest(DokuTest):
 
     def test_update_document(self):
         with self.app.app_context():
-            doc = Document(name="Foo")
+            doc = Document(name="Foo", author=self.user)
             db.session.add(doc)
             db.session.commit()
 
