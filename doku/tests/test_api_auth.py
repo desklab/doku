@@ -1,3 +1,4 @@
+import time
 from base64 import b64encode, b64decode
 import binascii
 
@@ -35,9 +36,10 @@ class APIAuthTest(DokuTest):
         login = b64encode(f"{self.EMAIL}:{self.PASSWORD}".encode()).decode()
         headers = {"Authorization": f"Basic {login}"}
         res = self.client.post("/api/v1/login", headers=headers)
-        res_json = json.loads(res.data)
         token_type = res.json["token_type"]
         access_token = res.json["access_token"]
+
+        time.sleep(1)
 
         auth_headers = {"Authorization": f"{token_type} {access_token}"}
         res_get = self.client.get("/api/v1/document/", headers=auth_headers)
