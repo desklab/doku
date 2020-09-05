@@ -106,9 +106,15 @@ class Variable(db.Model, DateMixin):
     def as_list(self) -> List[str]:
         if not self.is_list:
             raise ValueError(f"{self.name} is not a list")
-        return [var.compiled_content for var in self.children]
+        return [var.get_compiled_content() for var in self.children]
 
-    def snippet_to_variable(self, commit=True):
+    def get_compiled_content(self) -> str:
+        if self.uses_snippet:
+            return self.snippet.compiled_content
+        else:
+            return self.compiled_content
+
+    def snippet_to_variable(self, commit: bool = True):
         if self.snippet_id is None:
             raise ValueError("Snippet is not provided")
         else:
@@ -117,6 +123,8 @@ class Variable(db.Model, DateMixin):
             self.use_markdown = self.snippet.use_markdown
             self.css_class = self.snippet.css_class
             self.snippet_id = None
+        if commit:
+            db.session.commit()
 
     def __str__(self):
         return f"{self.name} in {self.document.name}"
