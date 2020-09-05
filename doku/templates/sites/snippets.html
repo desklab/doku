@@ -4,10 +4,13 @@
     <div class="doku-document-toolbar">
         <h3>Snippets</h3>
         <div>
-            <button class="btn btn-sm">
-                {% include "components/icons/plus.html" %}
-                Create new snippet
-            </button>
+            <form action="{{ url_for("snippet.create_snippet") }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ create_csrf_token(output=True) }}">
+                <button class="btn btn-sm" type="submit">
+                    {% include "components/icons/plus.html" %}
+                    Create new snippet
+                </button>
+            </form>
         </div>
     </div>
     <div class="mx-2 columns">
@@ -20,11 +23,4 @@
     {% with pagination=snippets, page_url='base.index' %}
         {% include "components/pagination.html" %}
     {% endwith %}
-{% endblock %}
-{% block extra_js %}
-    <script>
-        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
-    </script>
-    {{ create_csrf_token(output=False) }}
-    <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>
 {% endblock %}

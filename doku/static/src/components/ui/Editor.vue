@@ -1,5 +1,7 @@
 <template>
-  <div class="editor"></div>
+  <div class="editor">
+    <textarea :name="inputName" ref="editorTextArea">{{value}}</textarea>
+  </div>
 </template>
 
 <script>
@@ -28,10 +30,14 @@
       mode: {
         default: 'text/html',
         type: String
+      },
+      inputName: {
+        default: 'content',
+        type: String,
       }
     },
     mounted() {
-      this.editor = CodeMirror(this.$el, {
+      this.editor = CodeMirror.fromTextArea(this.$refs.editorTextArea, {
         mode: this.mode,
         value: this.value,
         theme: 'base16-light',

@@ -1,15 +1,20 @@
 <template>
   <div class="doku-inline-var-code">
     <div class="doku-inline-var-controls">
-      <animated-toggle v-if="!variable.is_list" ref="markdownToggle" v-bind:is-checked="variable.use_markdown">
+      <animated-toggle inputName="use_markdown" v-if="!variable.is_list" ref="markdownToggle" v-bind:is-checked="variable.use_markdown">
         <template v-slot:on>Markdown</template>
         <template v-slot:off>Raw</template>
       </animated-toggle>
+      <!--
+        The slot is used to extend the editor by providing
+        additional buttons and actions
+      -->
+      <slot></slot>
       <div class="form-inline">
-        <input type="text" placeholder="CSS Class" class="form-input input-sm" ref="cssClassInput" :value="variable.css_class">
+        <input type="text" placeholder="CSS Class" class="form-input input-sm" name="css_class" ref="cssClassInput" :value="variable.css_class">
       </div>
     </div>
-    <Editor ref="editor" v-bind:mode="'text/x-markdown'" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
+    <Editor ref="editor" v-bind:mode="'text/x-markdown'" inputName="content" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
   </div>
 </template>
 
