@@ -2,7 +2,7 @@ from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 
 from doku.models import DateSchemaMixin
-from doku.models.schemas.common import DokuSchema, ApiSchemaMixin
+from doku.models.schemas.common import DokuSchema, ApiSchemaMixin, NotEmptyString
 from doku.models.snippet import Snippet
 
 
@@ -14,7 +14,7 @@ class SnippetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "snippet"
 
     id = auto_field()
-    name = auto_field()
+    name = NotEmptyString()
 
     use_markdown = auto_field()
     css_class = auto_field()

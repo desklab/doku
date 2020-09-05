@@ -8,7 +8,7 @@ from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
 from doku.models.document import Document, Variable
-from doku.models.schemas.common import ApiSchemaMixin, DokuSchema
+from doku.models.schemas.common import ApiSchemaMixin, DokuSchema, NotEmptyString
 from doku.models.template import Template, DEFAULT_TEMPLATE, Stylesheet
 from doku.utils.db import get_or_create
 
@@ -22,7 +22,7 @@ class DocumentSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "document"
 
     id = auto_field()
-    name = auto_field()
+    name = NotEmptyString()
     public = auto_field()
     template_id = auto_field(load_only=True)
     template = Nested("TemplateSchema", exclude=("documents",))
@@ -100,7 +100,7 @@ class VariableSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "variable"
 
     id = auto_field()
-    name = auto_field()
+    name = NotEmptyString()
     use_markdown = auto_field()
     css_class = auto_field()
     content = auto_field()
@@ -112,7 +112,7 @@ class VariableSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     parent = Nested("VariableSchema", allow_none=True, exclude=("children",))
     document = Nested("DocumentSchema", exclude=("variables",), dump_only=True)
     children = Nested("VariableSchema", exclude=("parent",), many=True, partial=True)
-    snippet = Nested("SnippetSchema", exclude=("used_by",), many=True, partial=True)
+    snippet = Nested("SnippetSchema", exclude=("used_by",), many=False, partial=True)
 
     used = fields.Boolean(dump_only=True)
     is_list = fields.Boolean(dump_only=True)
