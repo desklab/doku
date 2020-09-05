@@ -9,7 +9,7 @@ from werkzeug.security import safe_join
 
 def url_fetcher(url: str, **kwargs):
     if url.startswith("dokures:"):
-        resource = url.lstrip("dokures:")
+        resource = url[8:]
         res_path = safe_join(current_app.config["UPLOAD_FOLDER"], resource)
         mime_type, __ = mimetypes.guess_type(res_path, strict=True)
         if mime_type is None:
