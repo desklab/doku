@@ -8,7 +8,7 @@ from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
 from doku.models.document import Variable
-from doku.models.schemas.common import ApiSchemaMixin, DokuSchema
+from doku.models.schemas.common import ApiSchemaMixin, DokuSchema, NotEmptyString
 from doku.models.template import Template, Stylesheet
 from doku.utils.db import get_or_create
 
@@ -22,7 +22,7 @@ class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "template"
 
     id = auto_field()
-    name = auto_field()
+    name = NotEmptyString()
     source = auto_field()
     documents = Nested("DocumentSchema", many=True, exclude=("template",))
     base_style = Nested("StylesheetSchema", exclude=("base_templates",))
@@ -69,7 +69,7 @@ class StylesheetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "template"
 
     id = auto_field()
-    name = auto_field()
+    name = NotEmptyString()
     source = auto_field()
     base_templates = Nested("TemplateSchema", exclude=("base_style",), many=True)
     templates = Nested("TemplateSchema", exclude=("styles",), many=True)

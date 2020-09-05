@@ -5,7 +5,7 @@ import os
 
 from doku.models import DateSchemaMixin
 from doku.models.resource import Resource
-from doku.models.schemas.common import DokuSchema, ApiSchemaMixin
+from doku.models.schemas.common import DokuSchema, ApiSchemaMixin, NotEmptyString
 from doku.utils.db import get_or_404
 from doku import db
 
@@ -18,7 +18,7 @@ class ResourceSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     API_NAME = "resource"
 
     id = auto_field()
-    name = auto_field(validate=validate.Length(min=1))
+    name = NotEmptyString()
     filename = auto_field()
     url = fields.String(dump_only=True)
 
