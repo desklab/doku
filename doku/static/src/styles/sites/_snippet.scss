@@ -1,6 +1,7 @@
 .snippet-preview {
   max-height: 128px;
   position: relative;
+  overflow: hidden;
 
   &:after {
     position: absolute;

@@ -13,14 +13,11 @@
 </template>
 
 <script>
-  import {mapState, mapActions} from 'vuex';
+  import {mapState} from 'vuex';
 
   import Preview from '../components/pdf/preview.vue';
-  import modal from '../components/ui/Modal.vue';
-  import StylesModal from '../components/ui/StylesheetModal.vue';
   import Tabs from '../components/ui/Tabs.vue';
 
-  import InlineVariable from '../components/variable/InlineVariable';
   import MultiVariableEditor from '../components/variable/MultiVariableEditor';
   import DocumentSettings from '../components/ui/DocumentSettings';
   import TemplateEditor from '../components/ui/TemplateEditor';
