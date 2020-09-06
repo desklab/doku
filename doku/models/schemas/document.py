@@ -2,12 +2,13 @@ from typing import Optional
 
 from flask import jsonify, url_for
 from marshmallow import fields, RAISE, ValidationError, EXCLUDE
-from marshmallow_sqlalchemy import auto_field, SQLAlchemySchema
+from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
-from doku.models.document import Document, Variable
+from doku.models.document import Document
+from doku.models.variable import Variable
 from doku.models.schemas.common import ApiSchemaMixin, DokuSchema, NotEmptyString
 from doku.models.template import Template, DEFAULT_TEMPLATE, Stylesheet
 from doku.utils.db import get_or_create
