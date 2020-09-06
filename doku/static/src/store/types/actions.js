@@ -10,6 +10,7 @@ export const ADD_STYLESHEET_TO_TEMPLATE = 'addStylesheet';
 export const REMOVE_STYLESHEET_FROM_TEMPLATE = 'removeStylesheet';
 export const UPLOAD_STYLESHEET = 'uploadStylesheet';
 export const UPDATE_STYLESHEET = 'updateStylesheet';
+export const DELETE_STYLESHEET = 'deleteStylesheet';
 export const FETCH_STYLESHEETS = 'fetchStylesheets';
 export const CREATE_RESOURCE = 'createResource';
 export const REMOVE_RESOURCE = 'removeResource';

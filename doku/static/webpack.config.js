@@ -13,6 +13,7 @@ module.exports = {
     edit: './src/edit.js',
     edit_template: './src/edit_template.js',
     resources: './src/resources.js',
+    stylesheets: './src/stylesheets.js',
   },
   output: {
     path: path.resolve(__dirname, './dist'),

@@ -46,6 +46,21 @@ const actions = {
         .catch(reject)
     });
   },
+  deleteStylesheet({commit, dispatch, state}, data) {
+    return new Promise((resolve, reject) => {
+      if (!data.hasOwnProperty('url')) {
+        throw Error('Missing url');
+      }
+      if (!data.hasOwnProperty('id')) {
+        throw Error('Missing id');
+      }
+      stylesheetApi.deleteStylesheet(data.url)
+        .then(res => {
+          commit(mutationTypes.DELETE_STYLESHEET, data.id);
+          resolve()
+        }).catch(reject);
+    });
+  },
 }
 
 const mutations = {
