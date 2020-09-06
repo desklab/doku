@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="doku-document-toolbar">
+        <h3>Snippets</h3>
+        <div>
+            <form action="{{ url_for("snippet.create_snippet") }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ create_csrf_token(output=True) }}">
+                <button class="btn btn-sm" type="submit">
+                    {% include "components/icons/plus.html" %}
+                    Create new snippet
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="mx-2 columns">
+        {% for item in snippets.items %}
+            <div class="column col-6 col-md-12">
+                {% include "components/snippet_list_item.html" %}
+            </div>
+        {% endfor %}
+    </div>
+    {% with pagination=snippets, page_url='base.index' %}
+        {% include "components/pagination.html" %}
+    {% endwith %}
+{% endblock %}

@@ -34,12 +34,12 @@
 <script>
   import InlineVariable from "./InlineVariable";
   import {mapActions, mapState} from "vuex";
-  import Modal from "./Modal";
+  import Modal from "../ui/Modal";
   import * as actionTypes from '../../store/types/actions';
-  import AnimatedNotice from "./AnimatedNotice";
+  import AnimatedNotice from "../ui/AnimatedNotice";
 
   export default {
-    name: 'VariableEditor',
+    name: 'MultiVariableEditor',
     components: {
       AnimatedNotice,
       Modal,

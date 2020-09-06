@@ -29,17 +29,18 @@
       </div>
     </div>
     <div v-show="showCode" class="doku-inline-var-code">
-      <div class="doku-inline-var-controls">
-        <animated-toggle v-if="!variable.is_list" ref="markdownToggle" v-bind:is-checked="variable.use_markdown">
-          <template v-slot:on>Markdown</template>
-          <template v-slot:off>Raw</template>
-        </animated-toggle>
+      <div v-if="variable.is_list" class="doku-inline-var-controls">
         <div class="form-inline">
           <input type="text" placeholder="CSS Class" class="form-input input-sm" ref="cssClassInput" :value="variable.css_class">
         </div>
       </div>
-      <Editor v-if="!variable.is_list" ref="editor" v-bind:mode="'text/x-markdown'" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
-      <div class="m-2" v-else>
+      <variable-editor v-if="!variable.is_list && !variable.uses_snippet" ref="editor" :variable="variable" :documentId="documentId">
+        <button class="ml-auto mr-2 btn btn-sm" @click="$refs.snippetSelector.open()">
+          <scissors-icon size="18"></scissors-icon>
+          Snippet
+        </button>
+      </variable-editor>
+      <div class="m-2" v-else-if="variable.is_list && !variable.uses_snippet">
         <button @click="$refs.addModal.open()" class="btn btn-sm mb-2">
           <plus-icon size="18"></plus-icon>
           Add
@@ -65,6 +66,20 @@
           </div>
         </Modal>
       </div>
+      <div v-else-if="!variable.is_list && variable.uses_snippet">
+        <div class="doku-inline-var-code">
+          <div class="doku-inline-var-controls">
+            <span>
+              <b>Snippet: </b>
+              <a class="text-dark" :href="'/snippet/' + String(variable.snippet.id)">{{variable.snippet.name}}</a>
+            </span>
+            <button class="btn btn-sm" @click="$refs.snippetSelector.open()">
+              <scissors-icon size="18"></scissors-icon>
+              Snippet
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     <Modal class="modal-sm" ref="removeModal" v-bind:title="'Delete Variable'">
       <div class="modal-body">
@@ -82,19 +97,28 @@
         </button>
       </div>
     </Modal>
+    <select-snippet ref="snippetSelector" :callback="setSelectedSnippet"></select-snippet>
   </div>
 </template>
 
 <script>
   import ClipboardJS from 'clipboard';
   import {mapActions} from 'vuex';
-  import {MoreVerticalIcon, CopyIcon, PlusIcon, TrashIcon} from 'vue-feather-icons';
+  import {
+    MoreVerticalIcon,
+    CopyIcon,
+    PlusIcon,
+    TrashIcon,
+    ScissorsIcon
+  } from 'vue-feather-icons';
 
-  import Editor from './Editor.vue';
-  import Modal from "./Modal";
-  import AnimatedNotice from "./AnimatedNotice";
+  import Editor from '../ui/Editor.vue';
+  import Modal from "../ui/Modal";
+  import AnimatedNotice from "../ui/AnimatedNotice";
   import * as actionTypes from '../../store/types/actions';
-  import AnimatedToggle from "./AnimatedToggle";
+  import AnimatedToggle from "../ui/AnimatedToggle";
+  import VariableEditor from "./VariableEditor";
+  import SelectSnippet from "./SelectSnippet";
 
   export default {
     name: 'InlineVariable',
@@ -108,16 +132,19 @@
       }
     },
     components: {
+      VariableEditor,
       AnimatedToggle,
       AnimatedNotice,
+      SelectSnippet,
       Modal,
       Editor,
-      CopyIcon, MoreVerticalIcon, PlusIcon, TrashIcon
+      CopyIcon, MoreVerticalIcon, PlusIcon, TrashIcon, ScissorsIcon
     },
     data() {
       return {
         showCode: false,
-        _showDone: false
+        _showDone: false,
+        showSnippetSelector: false
       }
     },
     mounted() {
@@ -128,10 +155,9 @@
     watch: {
       showCode: function (newValue, oldValue) {
         if (newValue) {
-          if (!this.variable.is_list) {
+          if (!this.variable.is_list && !this.variable.uses_snippet) {
             this.$nextTick(() => {
-              this.$refs.editor.editor.refresh();
-              this.$refs.editor.editor.focus();
+              this.$refs.editor.refresh();
             });
           }
         }
@@ -185,7 +211,6 @@
         let _data = {
           id: this.variable.id,
           document_id: this.documentId,
-          css_class: this.$refs.cssClassInput.value,
         }
 
         if (this.variable.is_list) {
@@ -195,6 +220,7 @@
           // recursively.
           _data.children = [];
           _data.content = '';
+          _data.css_class = this.$refs.cssClassInput.value;
           if (this.$refs.children !== undefined ) {
             // Note: If only one children is present, the children ref is
             // not an array. This case must be
@@ -206,11 +232,26 @@
               _data.children.push(this.$refs.children.getData());
             }
           }
-        } else {
-          _data.use_markdown = this.$refs.markdownToggle.checked
+        } else if (!this.variable.uses_snippet) {
+          _data.use_markdown = this.$refs.editor.getUseMarkdown();
           _data.content = this.$refs.editor.getValue();
+          _data.css_class = this.$refs.editor.getCssClass();
         }
         return _data;
+      },
+      setSelectedSnippet(snippetID) {
+        let data = {
+          id: this.variable.id,
+          snippet_id: snippetID
+        };
+        this.updateVariable(data)
+          .then(() => {
+            this.$refs.saveNotice.trigger('Success!', 'text-dark');
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$refs.saveNotice.trigger('Failed!', 'text-error');
+          });
       },
       addChild(event) {
         let existingNames = this.variable.children.map(c => c.name);
@@ -245,7 +286,7 @@
       },
       updateEditor() {
         if (this.showCode) {
-          this.$refs.editor.editor.refresh();
+          this.$refs.editor.refresh();
         }
       },
     }

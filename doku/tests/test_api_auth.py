@@ -1,3 +1,4 @@
+import time
 from base64 import b64encode, b64decode
 import binascii
 
@@ -5,22 +6,10 @@ from flask import jsonify, json, url_for
 from werkzeug.exceptions import BadRequest, Unauthorized
 
 from doku.tests import DokuTest
-from doku.models.user import User
 from doku.models import db
 
 
 class APIAuthTest(DokuTest):
-
-    PASSWORD = "CorrectHorseBatteryStaple"
-    EMAIL = "test@doku.test"
-
-    def setUp(self):
-        super(APIAuthTest, self).setUp()
-        user = User(username="testuser", email=self.EMAIL, password=self.PASSWORD)
-        with self.app.app_context():
-            db.create_all()
-            db.session.add(user)
-            db.session.commit()
 
     def test_login(self):
         login = b64encode(f"{self.EMAIL}:{self.PASSWORD}".encode()).decode()
@@ -47,9 +36,10 @@ class APIAuthTest(DokuTest):
         login = b64encode(f"{self.EMAIL}:{self.PASSWORD}".encode()).decode()
         headers = {"Authorization": f"Basic {login}"}
         res = self.client.post("/api/v1/login", headers=headers)
-        res_json = json.loads(res.data)
         token_type = res.json["token_type"]
         access_token = res.json["access_token"]
+
+        time.sleep(1)
 
         auth_headers = {"Authorization": f"{token_type} {access_token}"}
         res_get = self.client.get("/api/v1/document/", headers=auth_headers)

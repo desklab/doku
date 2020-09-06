@@ -69,11 +69,11 @@ class Template(db.Model, DateMixin):
         stylesheets = [
             style.as_css for style in self.styles if style.source is not None
         ]
-        if self.base_style.source is not None:
+        if self.base_style is not None and self.base_style.source is not None:
             stylesheets = [self.base_style.as_css] + stylesheets
         template = Jinja2Template(self.source)
         context: dict = {
-            var.name: var.compiled_content
+            var.name: var.get_compiled_content()
             for var in variables
             if not var.is_list or var.parent_id is not None
         }

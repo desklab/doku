@@ -9,12 +9,13 @@
                 <text-edit v-bind:text="resource.name" v-bind:save="saveName" v-bind:placeholder="'Name'"></text-edit>
             </span>
             <span class="ml-2">
-                <b>Usage:</b> <code>![{{ resource.name }}](dokures:{{ resource.filename }})</code>
+                <b>Usage:</b> <code :id="'includeLink'+String(resource.id)">{{includeLink}}</code>
             </span>
         </div>
         <div class="resource-end">
             <animated-notice ref="deleteNotice"></animated-notice>
-            <button class="btn btn-error btn-sm" @click="remove" >Remove</button>
+            <button class="btn btn-sm" :data-clipboard-target="'#includeLink'+String(resource.id)" :id="'copy'+String(resource.id)">Copy Link</button>
+            <button class="btn btn-error btn-sm" @click="remove">Remove</button>
         </div>
     </div>
 </template>
@@ -25,11 +26,25 @@
   import {mapState, mapActions} from 'vuex';
   import AnimatedNotice from "./AnimatedNotice";
   import TextEdit from "./TextEdit";
+  import ClipboardJS from 'clipboard';
 
   export default {
     components: {
       TextEdit,
       AnimatedNotice
+    },
+    computed: {
+      includeLink: function() {
+        return '![' + this.resource.name + '](dokures:' + this.resource.filename + ')'
+      }
+    },
+    mounted() {
+      var copyLink = new ClipboardJS('#copy' + String(this.resource.id), {
+        text: () => '![' + this.resource.name + '](dokures:' + this.resource.filename + ')'
+      });
+      copyLink.on('success', function(event) {
+        event.clearSelection();
+      });
     },
     methods: {
       ...mapActions('resource', [

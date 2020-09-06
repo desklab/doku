@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ create_csrf_token(output=True) }}">
+        <div class="doku-document-toolbar">
+            <h3>Edit Snippet</h3>
+            <button class="btn btn-lg">Save</button>
+        </div>
+        <div class="mx-4 mt-4">
+            <div class="form-group{% if error_messages["name"] %} has-error{% endif %}">
+                <label class="form-label" for="input-snippet-name">Snippet Name</label>
+                <input class="form-input input-lg mb-4" style="width: auto" name="name" type="text" value="{{ snippet.name }}" id="input-snippet-name" placeholder="Snippet Name">
+                {% if error_messages["name"] %}
+                    {% for error in error_messages["name"] %}
+                        <p class="form-input-hint">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="snippet"></div>
+        </div>
+    </form>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        window.snippetObj = {{ snippet_json|tojson }};
+    </script>
+    {{ create_csrf_token(output=False) }}
+    <script type="text/javascript" src="{{ url_for('static', filename='snippet.bundle.js') }}"></script>
+{% endblock %}

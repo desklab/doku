@@ -2,7 +2,7 @@
   <div class="columns col-gapless doku-edit-cols">
     <div class="column doku-edit-left">
       <Tabs class="tab-block" v-bind:tabs="tabs"></Tabs>
-      <variable-editor ref="varEditor" v-show="tabs[0].active" class="tab-content tab-content-vars"></variable-editor>
+      <multi-variable-editor ref="varEditor" v-show="tabs[0].active" class="tab-content tab-content-vars"></multi-variable-editor>
       <template-editor v-show="tabs[1].active" class="tab-content tab-content-template" ref="templateEditor" v-bind:value="template.source"></template-editor>
       <document-settings v-show="tabs[2].active" class="tab-content tab-content-settings" ref="documentSettings"></document-settings>
     </div>
@@ -13,15 +13,12 @@
 </template>
 
 <script>
-  import {mapState, mapActions} from 'vuex';
+  import {mapState} from 'vuex';
 
   import Preview from '../components/pdf/preview.vue';
-  import modal from '../components/ui/Modal.vue';
-  import StylesModal from '../components/ui/StylesheetModal.vue';
   import Tabs from '../components/ui/Tabs.vue';
 
-  import InlineVariable from '../components/ui/InlineVariable';
-  import VariableEditor from '../components/ui/VariableEditor';
+  import MultiVariableEditor from '../components/variable/MultiVariableEditor';
   import DocumentSettings from '../components/ui/DocumentSettings';
   import TemplateEditor from '../components/ui/TemplateEditor';
 
@@ -44,7 +41,7 @@
     name: 'Edit',
     components: {
       TemplateEditor,
-      VariableEditor,
+      MultiVariableEditor,
       DocumentSettings,
       Preview,
       Tabs,

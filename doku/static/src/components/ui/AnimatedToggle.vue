@@ -1,7 +1,8 @@
 <template>
   <div class="doku-animated-toggle">
     <label class="form-switch">
-      <input v-model="checked" name="public" id="documentPublicInput" type="checkbox">
+      <input type="hidden" :name="inputName" :value="hiddenInputValue">
+      <input v-model="checked" id="documentPublicInput" type="checkbox">
       <i class="form-icon"></i>
       <transition name="slide-down">
         <span v-if="checked">
@@ -26,7 +27,8 @@
         type: Function,
         default: () => {
         }
-      }
+      },
+      inputName: String
     },
     data() {
       return {
@@ -40,6 +42,11 @@
     },
     watch: {
       checked: 'onCheck'
+    },
+    computed: {
+      hiddenInputValue() {
+        return (this.checked) ? 'on' : 'off';
+      }
     }
   }
 </script>

@@ -9,6 +9,17 @@ from doku import db
 from doku.utils.db import get_or_404
 
 
+class NotEmptyString(fields.String):
+
+    def __init__(self, *args, allow_none=False, **kwargs):
+        super(NotEmptyString, self).__init__(*args, allow_none=allow_none, **kwargs)
+
+    def _deserialize(self, value, *args, **kwargs):
+        if value == "":
+            value = None
+        return super(NotEmptyString, self)._deserialize(value, *args, **kwargs)
+
+
 class DokuSchema(SQLAlchemySchema):
     def __init__(self, *args, **kwargs):
         include = set(kwargs.pop("include", {}))
@@ -16,6 +27,10 @@ class DokuSchema(SQLAlchemySchema):
         if len(include) != 0:
             self.exclude: set = self.exclude - include
             self._init_fields()
+
+    # This is used to automatically ignore the csrf token that might be
+    # submitted when using forms.
+    _csrf_token = fields.String(required=False, load_only=True, data_key="csrf_token")
 
 
 class ApiSchemaMixin:

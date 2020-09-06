@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header">
+        <div class="card-title h5">{{ item.name }}</div>
+        <div class="card-subtitle text-gray">
+            <span class="tooltip tooltip-right" data-tooltip="{{ item.last_updated_format }}">
+                {{ item.last_updated_timedelta }}
+            </span>
+        </div>
+    </div>
+    <div class="card-body mt-3 snippet-preview">
+        {{ item.compiled_content|safe }}
+    </div>
+    <div class="card-footer">
+        {# <a class="btn btn-sm float-right ml-1">Duplicate</a> #}
+        <a class="btn btn-sm btn-primary float-right" href="{{ url_for("snippet.get", snippet_id=item.id) }}">
+            Edit
+        </a>
+    </div>
+</div>

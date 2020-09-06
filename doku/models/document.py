@@ -1,13 +1,10 @@
 from datetime import datetime, timezone
 from typing import Optional, List
 
-from flask_babel import format_timedelta, format_datetime
-import markdown
-from sqlalchemy.orm import Session
 from sqlalchemy import event, text, update, func
 
 from doku.models import db, DateMixin
-from doku.utils.markdown.extensions import RootClassTreeprocessor, RootClassExtension
+from doku.utils.markdown import compile_content
 
 
 class Document(db.Model, DateMixin):
@@ -19,11 +16,13 @@ class Document(db.Model, DateMixin):
 
     name = db.Column(db.String(255), unique=False, nullable=False)
     public = db.Column(db.Boolean)
+    author_id = db.Column(db.Integer, db.ForeignKey("doku_user.id"), nullable=False)
     template_id = db.Column(
         db.Integer, db.ForeignKey("doku_template.id"), nullable=True
     )
 
     template = db.relationship("Template", back_populates="documents")
+    author = db.relationship("User")
     variables = db.relationship(
         "Variable", cascade="all,delete", back_populates="document"
     )
@@ -79,6 +78,7 @@ class Variable(db.Model, DateMixin):
         db.Integer, db.ForeignKey("doku_document.id"), nullable=False
     )
     parent_id = db.Column(db.Integer, db.ForeignKey("doku_variable.id"), nullable=True)
+    snippet_id = db.Column(db.Integer, db.ForeignKey("doku_snippet.id"), nullable=True)
 
     children = db.relationship(
         "Variable",
@@ -87,26 +87,7 @@ class Variable(db.Model, DateMixin):
         order_by=func.lower(name),
     )
     document = db.relationship("Document", back_populates="variables")
-
-    @staticmethod
-    def compile(content, css_class, use_markdown):
-        if content is None or content == "":
-            # In previous versions, the content was set to ""
-            # However, this will trigger a recursive function call and
-            # should thus be avoided
-            return ""
-        else:
-            if use_markdown:
-                return markdown.markdown(
-                    content,
-                    extensions=[
-                        RootClassExtension(root_class=css_class),
-                        "codehilite",
-                        "fenced_code",
-                    ],
-                )
-            else:
-                return content
+    snippet = db.relationship("Snippet", back_populates="used_by")
 
     @property
     def used(self) -> bool:
@@ -119,27 +100,52 @@ class Variable(db.Model, DateMixin):
         return self.name.endswith("_list")
 
     @property
+    def uses_snippet(self) -> bool:
+        return self.snippet_id is not None
+
+    @property
     def as_list(self) -> List[str]:
         if not self.is_list:
             raise ValueError(f"{self.name} is not a list")
-        return [var.compiled_content for var in self.children]
+        return [var.get_compiled_content() for var in self.children]
+
+    def get_compiled_content(self) -> str:
+        if self.uses_snippet:
+            return self.snippet.compiled_content
+        else:
+            return self.compiled_content
+
+    def snippet_to_variable(self, commit: bool = True):
+        if self.snippet_id is None:
+            raise ValueError("Snippet is not provided")
+        else:
+            self.content = self.snippet.content
+            self.compiled_content = self.snippet.compiled_content
+            self.use_markdown = self.snippet.use_markdown
+            self.css_class = self.snippet.css_class
+            self.snippet_id = None
+        if commit:
+            db.session.commit()
+
+    def __str__(self):
+        return f"{self.name} in {self.document.name}"
 
 
 @event.listens_for(Variable.use_markdown, "set")
-def before_content_compiler(target, value, old_value, initiator):
-    target.compiled_content = Variable.compile(target.content, target.css_class, value)
+def before_content_compiler(target: Variable, value, old_value, initiator):
+    target.compiled_content = compile_content(target.content, target.css_class, value)
 
 
 @event.listens_for(Variable.css_class, "set")
 def before_content_compiler(target, value, old_value, initiator):
-    target.compiled_content = Variable.compile(
+    target.compiled_content = compile_content(
         target.content, value, target.use_markdown
     )
 
 
 @event.listens_for(Variable.content, "set")
 def before_content_compiler(target, value, old_value, initiator):
-    target.compiled_content = Variable.compile(
+    target.compiled_content = compile_content(
         value, target.css_class, target.use_markdown
     )
 

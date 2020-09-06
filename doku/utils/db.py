@@ -56,7 +56,11 @@ def get_pagination_page() -> Optional[int]:
     return page
 
 
-def get_ordering(model: DeclarativeMeta, default_order=None, default_dir=None) -> tuple:
+def get_ordering(
+    model: type(DeclarativeMeta),
+    default_order: str = None,
+    default_dir: str = None
+) -> Optional[tuple]:
     """Get Ordering
 
     Get ordering from request arguments
