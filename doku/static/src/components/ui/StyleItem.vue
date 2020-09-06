@@ -2,7 +2,7 @@
   <div class="border rounded p-4 bg-gray">
     <text-edit v-bind:text="stylesheet.name" v-bind:save="saveName" v-bind:placeholder="'Name'"></text-edit>
     <span v-if="isBase" class="chip bg-dark">
-        base of &nbsp <i>{{baseOfTemplate}}</i>
+        base of &nbsp; <i>{{baseOfTemplate}}</i>
     </span>
     <span v-if="isEmpty" class="chip bg-error">
         empty source
