@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block body_class %}doku-edit{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div class="pt-4 px-4">
+        <h3>Stylesheets</h3>
+    </div>
+    <div class="container">
+        <div class="border rounded p-4 my-2 bg-gray">
+            <form action="" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ create_csrf_token() }}"/>
+                <label class="form-label d-inline-block text-small p-0 m-0" for="inputName">Name</label>
+                <div class="form-inline mx-2">
+                    <input class="form-input input-sm" type="text" name="name" id="inputName" placeholder="Name" required pattern=".*\S+.*" onkeyup="check_input()">
+                </div>
+                <input ref="sourceFile" name="file" type="file" id="sourceFile" accept=".css" onchange="check_input()" required>
+                <button class="btn btn-sm btn-primary" @click="add" id="addButton">
+                    Upload
+                </button>
+            </form>
+        </div>
+        <div id="stylesheets"></div>
+    </div>
+    {% with pagination=stylesheets, page_url='stylesheets.index' %}
+        {% include "components/pagination.html" %}
+    {% endwith %}
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.stylesheets = {{ stylesheets_json|tojson }};
+        document.getElementById('addButton').disabled = true;
+        function check_input() {
+    	    if (document.getElementById("inputName").value.trim()==="") {
+                document.getElementById('addButton').disabled = true;
+            } else if (document.getElementById("sourceFile").files.length===0) {
+                document.getElementById('addButton').disabled = true;
+            } else {
+                document.getElementById('addButton').disabled = false;
+            }
+        }
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='stylesheets.bundle.js') }}"></script>
+{% endblock %}

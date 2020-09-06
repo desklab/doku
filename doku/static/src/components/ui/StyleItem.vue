@@ -1,16 +1,27 @@
 <template>
   <div class="border rounded p-4 bg-gray">
     <text-edit v-bind:text="stylesheet.name" v-bind:save="saveName" v-bind:placeholder="'Name'"></text-edit>
-    <span v-if="isBase" class="chip">
-        Base
+    <span v-if="isBase" class="chip bg-dark">
+        base of &nbsp <i>{{baseOfTemplate}}</i>
     </span>
-    <input ref="sourceFile" name="source" type="file" accept="text/css">
+    <span v-if="isEmpty" class="chip bg-error">
+        empty source
+    </span>
+    <span v-if="!isUsed" class="chip bg-warning">
+        unused
+    </span>
+    <span v-if="(isUsed)&&(!isBase)&&(numberOfUses>1)" class="chip text-success">
+        used in {{numberOfUses}} templates
+    </span>
+    <span v-if="(isUsed)&&(!isBase)&&(numberOfUses==1)" class="chip text-success">
+        used in {{numberOfUses}} template
+    </span>
     <div class="btn-group btn-sm float-right">
       <animated-notice ref="notice"></animated-notice>
-      <button @click="upload" class="btn btn-sm btn-primary float-right">Upload</button>
-      <button @click="remove" v-if="!isBase" class="btn btn-sm" tabindex="0">
-        <x-icon size="16"></x-icon>
-      </button>
+        <input ref="sourceFile" v-on:change="check_input" name="source" type="file" accept="text/css" class="mr-2">
+        <button class="btn btn-sm mr-2" ref="updateButton"  :disabled="true" @click="upload">Update</button>
+      <button class="btn btn-error btn-sm mr-2" :disabled="isEmpty" @click="clearStyleSource">Clear Source</button>
+      <button class="btn btn-error btn-sm" :disabled="isBase" @click="deleteStyle">Delete</button>
     </div>
   </div>
 </template>
@@ -27,27 +38,46 @@
     props: {
       stylesheet: {
         type: Object
-      },
-      isBase: {
-        type: Boolean,
-        default: false
-      },
-      isUsed: {
-        type: Boolean,
-        default: false
-      },
-      removeUrl: {
-        type: String
       }
     },
     components: {
       TextEdit,
       AnimatedNotice, MoreVerticalIcon, XIcon
     },
+    computed: {
+      baseOfTemplate: function(){
+        if (this.stylesheet.base_templates[0])
+          return this.stylesheet.base_templates[0].name
+        else
+          return null 
+      },
+      isBase: function() {
+        if (this.stylesheet.base_templates[0])
+          return true
+        else
+          return false 
+      },
+      isEmpty: function() {
+        return this.stylesheet.source == null
+      },
+      isUsed: function() {
+        if (this.stylesheet.templates.length > 0 || this.stylesheet.base_templates.length > 0)
+          return true
+        else
+          return false
+      },
+      numberOfUses: function() {
+        if (true)
+          return this.stylesheet.templates.length
+        else
+          return null
+      }
+    },
     methods: {
       ...mapActions('stylesheet', [
         actionTypes.UPLOAD_STYLESHEET,
-        actionTypes.UPDATE_STYLESHEET
+        actionTypes.UPDATE_STYLESHEET,
+        actionTypes.DELETE_STYLESHEET
       ]),
       ...mapActions('template', [
         actionTypes.REMOVE_STYLESHEET_FROM_TEMPLATE
@@ -70,16 +100,16 @@
           .finally(() => {
             event.target.classList.remove('loading');
           });
+        this.$refs.sourceFile.value = null;
+        this.$refs.updateButton.disabled = true;
       },
-      remove(event) {
+      deleteStyle(event) {
         event.target.classList.add('loading');
         let data = {
-          url: this.removeUrl,
-          data: {
-            id: this.stylesheet.id
-          }
+          url: this.stylesheet.delete_url,
+          id: this.stylesheet.id
         };
-        this.removeStylesheet(data)
+        this.deleteStylesheet(data)
           .then(() => {
             // This element should be removed anyway
           })
@@ -89,6 +119,20 @@
           })
           .finally(() => {
             event.target.classList.remove('loading');
+          });
+      },
+      clearStyleSource(event) {
+        let data = {
+          id: this.stylesheet.id,
+          source: null
+        };
+        this.updateStylesheet(data)
+          .then(() => {
+            this.$refs.notice.trigger('Success!', 'text-dark');
+          })
+          .catch(err => {
+            console.error(err);
+            this.$refs.notice.trigger('Failed!', 'text-error');
           });
       },
       saveName(name) {
@@ -104,6 +148,13 @@
             console.error(err);
             this.$refs.notice.trigger('Failed!', 'text-error');
           });
+      },
+      check_input() {
+        if (this.$refs.sourceFile.files.length===0) {
+          this.$refs.updateButton.disabled = true;
+        } else {
+          this.$refs.updateButton.disabled = false;
+        }
       }
     },
   }
