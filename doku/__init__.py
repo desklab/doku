@@ -13,7 +13,7 @@ from doku.models import db
 from doku.tasks import celery
 from doku.models import base
 
-from doku.blueprints import auth, base, document, template, resources, account
+from doku.blueprints import auth, base, document, template, resources, account, stylesheets
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.middlewares.hosts import host_middleware
@@ -95,6 +95,7 @@ def create_app(
         app.register_blueprint(document.bp, url_prefix="/document")
         app.register_blueprint(template.bp, url_prefix="/template")
         app.register_blueprint(resources.bp, url_prefix="/resources")
+        app.register_blueprint(stylesheets.bp, url_prefix="/stylesheets")
         api.init_api(app)
 
     return app

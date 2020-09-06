@@ -63,20 +63,36 @@ class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
 class StylesheetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     class Meta:
         model = Stylesheet
-        exclude = ("base_templates", "templates")
         load_instance = True
 
-    API_NAME = "template"
+    API_NAME = "stylesheet"
 
     id = auto_field()
     name = auto_field()
     source = auto_field()
-    base_templates = Nested("TemplateSchema", exclude=("base_style",), many=True)
+    base_templates = Nested("TemplateSchema", exclude=("base_style","styles"), many=True)
     templates = Nested("TemplateSchema", exclude=("styles",), many=True)
 
     upload_url = fields.Method("_upload_url", dump_only=True, allow_none=True)
+    delete_url = fields.Method("_delete_url", dump_only=True, allow_none=True)
 
     def _upload_url(self, stylesheet) -> Optional[str]:
         if stylesheet.id is None:
             return None
         return url_for("api.v1.stylesheet.upload", stylesheet_id=stylesheet.id)
+
+    def _delete_url(self, stylesheet) -> Optional[str]:
+        if stylesheet.id is None:
+            return None
+        return url_for("api.v1.stylesheet.delete", stylesheet_id=stylesheet.id)
+
+    @classmethod
+    def delete(cls, instance_id: int, commit=True):
+        instance = get_or_404(
+            db.session.query(cls.Meta.model).filter_by(id=instance_id)
+        )
+        db.session.delete(instance)
+        if commit:
+            db.session.commit()
+
+        return jsonify({"success": True})
