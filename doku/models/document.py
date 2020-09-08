@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from typing import Optional, List
 
 from sqlalchemy import event, text, update, func
+from flask import session
 
 from doku.models import db, DateMixin
 from doku.utils.markdown import compile_content
@@ -30,6 +31,14 @@ class Document(db.Model, DateMixin):
     recent_variable = db.relationship(
         "Variable", order_by="desc(Variable.last_updated)", lazy="dynamic"
     )
+
+    def __init__(self, *args, author_id=None, author=None, **kwargs):
+        if author_id is None and author is None:
+            author_id = session.get("id", None)
+            self.author_id = author_id
+            super(Document, self).__init__(*args, **kwargs)
+        else:
+            super(Document, self).__init__(*args, author_id=author_id, author=author, **kwargs)
 
     def __str__(self):
         return self.name
