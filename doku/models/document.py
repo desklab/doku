@@ -1,4 +1,5 @@
 from doku.models import db, DateMixin
+from flask import session
 
 
 class Document(db.Model, DateMixin):
@@ -17,9 +18,17 @@ class Document(db.Model, DateMixin):
 
     template = db.relationship("Template", back_populates="documents")
     author = db.relationship("User")
+
+    # All variables
     variables = db.relationship(
         "Variable", cascade="all,delete", back_populates="document")
     variable_groups = db.relationship("VariableGroup", back_populates="document")
+    # Root variables are variables that do not belong to any variable
+    # group
+    root_variables = db.relationship(
+        "Variable",
+        primaryjoin="and_(Variable.document_id == Document.id, Variable.group_id == null())"
+    )
 
     def __init__(self, *args, author_id=None, author=None, **kwargs):
         if author_id is None and author is None:
