@@ -71,7 +71,7 @@
   import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation.vue";
 
   export default {
-    name: 'VariableEditor',
+    name: 'DocumentSettings',
     components: {
       AnimatedNotice, InfoIcon,
       Modal, AnimatedToggle,
@@ -88,7 +88,7 @@
     mounted() {
       templateApi.fetchTemplates()
         .then((response) =>{
-          this.templates = response.data;
+          this.templates = response.data.result;
         })
         .catch(console.error);
     },
