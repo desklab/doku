@@ -26,100 +26,100 @@
 </template>
 
 <script>
-  import snippetApi from '../../api/snippet';
-  import Modal from "../ui/Modal";
-  import AnimatedNotice from "../ui/AnimatedNotice";
-  import Pagination from '../ui/Pagination.vue';
+import snippetApi from '../../api/snippet';
+import Modal from "../ui/Modal";
+import AnimatedNotice from "../ui/AnimatedNotice";
+import Pagination from '../ui/Pagination.vue';
 
-  export default {
-    name: 'SelectSnippet',
-    components: {Modal, Pagination, AnimatedNotice},
-    props: {
-      callback: Function
+export default {
+  name: 'SelectSnippet',
+  components: {Modal, Pagination, AnimatedNotice},
+  props: {
+    callback: Function
+  },
+  data() {
+    return {
+      snippets: [],
+      selectedSnippet: null,
+      pagination: {
+        has_next: false,
+        has_prev: false,
+        pages: []
+      },
+      page: 1,
+      loaded: {},
+      loading: false,
+      returnToOldPage: -1
+    }
+  },
+  mounted() {
+    this.update();
+  },
+  methods: {
+    toggle() {
+      this.$refs.modal.toggle();
     },
-    data() {
-      return {
-        snippets: [],
-        selectedSnippet: null,
-        pagination: {
-          has_next: false,
-          has_prev: false,
-          pages: []
-        },
-        page: 1,
-        loaded: {},
-        loading: false,
-        returnToOldPage: -1
-      }
+    open() {
+      this.$refs.modal.open();
     },
-    mounted() {
+    close() {
+      this.$refs.modal.close();
+    },
+    setPage(p) {
+      // Update the current page
+      this.$set(this.loaded, this.page, {
+        snippets: this.snippets,
+        pagination: this.pagination
+      });
+      // Change the page
+      this.page = p;
+      // Fetch or update snippets and pagination objects
       this.update();
     },
-    methods: {
-      toggle() {
-        this.$refs.modal.toggle();
-      },
-      open() {
-        this.$refs.modal.open();
-      },
-      close() {
-        this.$refs.modal.close();
-      },
-      setPage(p) {
-        // Update the current page
-        this.$set(this.loaded, this.page, {
-          snippets: this.snippets,
-          pagination: this.pagination
-        });
-        // Change the page
-        this.page = p;
-        // Fetch or update snippets and pagination objects
-        this.update();
-      },
-      selectionChanged() {
-        this.allSelected = false;
-        this.noneSelected = false;
-      },
-      select(ID, event) {
-        this.selectionChanged();
-        if (event.target.checked) {
-          this.selectedSnippet = ID;
-        }
-      },
-      fetch(page) {
-        return new Promise((resolve, reject) => {
-          if (this.loaded.hasOwnProperty(page)) {
-            resolve();
-            return;
-          }
-          snippetApi.fetchSnippets({params: {page: page}})
-            .then(res => {
-              this.$set(this.loaded, page, {
-                snippets: res.data.result,
-                pagination: res.data.meta
-              });
-              resolve();
-            })
-            .catch(reject);
-        });
-      },
-      update() {
-        this.fetch(this.page)
-          .then(() => {
-            this.snippets = this.loaded[this.page].snippets;
-            this.pagination = this.loaded[this.page].pagination;
-          });
-      },
-      save() {
-        this.close();
-        this.callback(this.selectedSnippet);
-      },
-      selectNone() {
-        this.selectedSnippet = null;
-        this.save();
+    selectionChanged() {
+      this.allSelected = false;
+      this.noneSelected = false;
+    },
+    select(ID, event) {
+      this.selectionChanged();
+      if (event.target.checked) {
+        this.selectedSnippet = ID;
       }
+    },
+    fetch(page) {
+      return new Promise((resolve, reject) => {
+        if (this.loaded.hasOwnProperty(page)) {
+          resolve();
+          return;
+        }
+        snippetApi.fetchSnippets({params: {page: page}})
+          .then(res => {
+            this.$set(this.loaded, page, {
+              snippets: res.data.result,
+              pagination: res.data.meta
+            });
+            resolve();
+          })
+          .catch(reject);
+      });
+    },
+    update() {
+      this.fetch(this.page)
+        .then(() => {
+          this.snippets = this.loaded[this.page].snippets;
+          this.pagination = this.loaded[this.page].pagination;
+        });
+    },
+    save() {
+      this.close();
+      this.callback(this.selectedSnippet);
+    },
+    selectNone() {
+      this.selectedSnippet = null;
+      this.save();
     }
   }
+}
 </script>
 
 <style scoped>
