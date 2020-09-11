@@ -94,19 +94,19 @@ class Variable(db.Model, DateMixin):
 
 
 @event.listens_for(Variable.use_markdown, "set")
-def before_content_compiler(target: Variable, value, old_value, initiator):  # noqa
+def before_content_compiler(target: Variable, value, old_value, initiator):  # noqa: F841
     target.compiled_content = compile_content(target.content, target.css_class, value)
 
 
 @event.listens_for(Variable.css_class, "set")
-def before_content_compiler(target, value, old_value, initiator):  # noqa
+def before_content_compiler(target, value, old_value, initiator):  # noqa: F841
     target.compiled_content = compile_content(
         target.content, value, target.use_markdown
     )
 
 
 @event.listens_for(Variable.content, "set")
-def before_content_compiler(target, value, old_value, initiator):  # noqa
+def before_content_compiler(target, value, old_value, initiator):  # noqa: F841
     target.compiled_content = compile_content(
         value, target.css_class, target.use_markdown
     )
@@ -115,7 +115,7 @@ def before_content_compiler(target, value, old_value, initiator):  # noqa
 @event.listens_for(Variable, "before_update")
 @event.listens_for(Variable, "before_insert")
 @event.listens_for(Variable, "before_delete")
-def update_parent(mapper, connection, target):  # noqa
+def update_parent(mapper, connection, target):  # noqa: F841
     connection.execute(
         update(Document)
         .where(Document.id == target.document_id)
