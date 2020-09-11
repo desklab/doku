@@ -21,7 +21,11 @@ def index(document_id: int):
     document: Document = get_or_404(
         db.session.query(Document).filter_by(id=document_id)
     )
-    doc_schema = DocumentSchema(session=db.session, instance=document)
+    doc_schema = DocumentSchema(
+        session=db.session,
+        instance=document,
+        include=("template",)
+    )
     var_schemas = VariableSchema(session=db.session, many=True)
     template_schema = TemplateSchema(session=db.session)
     stylesheet_schemas = StylesheetSchema(session=db.session, many=True)
