@@ -133,6 +133,9 @@ module.exports = {
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
+  watchOptions: {
+    ignored: /node_modules/
+  },
   devServer: {
     historyApiFallback: true,
     noInfo: true,
