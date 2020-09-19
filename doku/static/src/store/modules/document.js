@@ -17,7 +17,17 @@ const state = {
   documentUpdateStatus: null
 }
 
-const getters = {}
+const getters = {
+  documentVariables: state => {
+    return state.document.variables;
+  },
+  documentRootVariables: state => {
+    return state.document.root_variables;
+  },
+  documentGroups: state => {
+    return state.document.variable_groups;
+  }
+}
 
 const actions = {
   updateDocument({commit}, data) {

@@ -5,7 +5,6 @@ export const FETCH_CURRENT_DOCUMENT = 'fetchCurrentDocument';
 export const UPDATE_VARIABLES = 'updateVariables';
 export const REMOVE_VARIABLE = 'removeVariable';
 export const CREATE_VARIABLE = 'createVariable';
-export const FETCH_VARIABLES = 'fetchVariables';
 
 export const UPDATE_TEMPLATE = 'updateTemplate';
 export const ADD_STYLESHEET_TO_TEMPLATE = 'addStylesheet';
