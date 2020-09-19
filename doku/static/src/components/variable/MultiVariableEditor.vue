@@ -1,17 +1,21 @@
 <template>
   <div>
     <div class="doku-edit-vars">
-      <div class="folder-list mb-2">
-        <folder-row v-for="group in document.variable_groups" :name="group.name" :key="group.id">
-          <InlineVariable ref="vars" v-for="variable in group.variables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable" draggable="true" @dragstart='startDrag($event, variable)'></InlineVariable>
-        </folder-row>
-      </div>
-      <InlineVariable ref="vars" v-for="variable in document.root_variables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable" draggable="true" @dragstart='startDrag($event, variable)'></InlineVariable>
+      <folder-row :nested="true" name="Root" :always-open="true" :allow-add="true" :allow-remove="false" v-on:doku-dragend="onDrop($event, null)" v-on:doku-add-folder="addGroup">
+        <div class="folder-list mb-2">
+          <folder-row v-for="group in documentGroups" :name="group.name" :key="group.id" v-on:doku-dragend="onDrop($event, group.id)" :allow-add="false" :allow-remove="true" v-on:doku-remove-folder="removeGroup($event, group.id)">
+            <inline-variable ref="vars" v-for="variable in group.variables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable"></inline-variable>
+          </folder-row>
+        </div>
+        <inline-variable ref="vars" v-for="variable in documentRootVariables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable"></inline-variable>
+      </folder-row>
     </div>
     <div class="editor-toolbar">
-      <span></span>
+      <div class="ml-3">
+        <div class="loading" v-if="loading"></div>
+      </div>
+      <animated-notice ref="toolbarNotice"></animated-notice>
       <div>
-        <AnimatedNotice ref="toolbarNotice"></AnimatedNotice>
         <button ref="saveButton" @click="save" class="btn btn-primary">
           Save All
         </button>
@@ -24,7 +28,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <AnimatedNotice ref="modalNotice"></AnimatedNotice>
+        <animated-notice ref="modalNotice"></animated-notice>
         <button @click="save($event,true)" class="btn btn btn-primary">
           Save
         </button>
@@ -38,9 +42,10 @@
 
 <script>
   import InlineVariable from "./InlineVariable";
-  import {mapActions, mapState} from "vuex";
+  import {mapActions, mapState, mapGetters} from "vuex";
   import Modal from "../ui/Modal";
   import * as actionTypes from '../../store/types/actions';
+  import * as getterTypes from '../../store/types/getters';
   import AnimatedNotice from "../ui/AnimatedNotice";
   import FolderRow from "../ui/FolderRow";
 
@@ -56,16 +61,24 @@
       return {
         _showNotice: false,
         _noticeText: '',
-        _noticeClass: ''
+        _noticeClass: '',
+        loading: false
       }
     },
-    computed: mapState({
-      document: state => state.document.document,
-      variables: state => state.variable.variables,
-    }),
+    computed: {
+      ...mapGetters('document', {
+        documentGroups: getterTypes.DOCUMENT_GROUPS,
+        documentRootVariables: getterTypes.DOCUMENT_ROOT_VARIABLES,
+      }),
+      ...mapState({document: state => state.document.document})
+    },
     methods: {
       ...mapActions('variable', [
         actionTypes.UPDATE_VARIABLES,
+      ]),
+      ...mapActions('vargroup', [
+        actionTypes.REMOVE_VARIABLE_GROUP,
+        actionTypes.CREATE_VARIABLE_GROUP
       ]),
       closeConfirmModal() {
         this.$refs.confirmModal.close();
@@ -73,11 +86,41 @@
       openConfirmModal() {
         this.$refs.confirmModal.open();
       },
-      startDrag(event, variable) {
-
-      },
       onDrop(event, group) {
-
+        let variableId = event.dataTransfer.getData('variableId');
+        this.updateVariables({id: variableId, group_id: group})
+          .catch(console.error);
+      },
+      addGroup(event, name) {
+        this.loading = true;
+        this.createVariableGroup({
+          document_id: this.document.id,
+          name: name
+        })
+          .then(() => {
+            this.$refs.toolbarNotice.trigger('Success!', 'text-dark');
+          })
+          .catch(err => {
+            console.error(err);
+            this.$refs.toolbarNotice.trigger('Error!', 'text-error');
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      },
+      removeGroup(event, groupId) {
+        this.loading = true;
+        this.removeVariableGroup(groupId)
+          .then(() => {
+            this.$refs.toolbarNotice.trigger('Success!', 'text-dark');
+          })
+          .catch(err => {
+            console.error(err);
+            this.$refs.toolbarNotice.trigger('Error!', 'text-error');
+          })
+          .finally(() => {
+            this.loading = false;
+          });
       },
       save(event, sure) {
         if (!sure) {

@@ -30,7 +30,8 @@
 
 .folder-content {
   margin-left: $unit-7;
-  padding: $unit-3 $unit-3 $unit-1;
+  padding-top: $unit-3;
+  padding-bottom: $unit-1;
   border-radius: $unit-1;
   &.doku-dragover {
     background: $gray-50;

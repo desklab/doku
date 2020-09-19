@@ -1,5 +1,5 @@
 <template>
-  <div class="doku-inline-var">
+  <div class="doku-inline-var" draggable="true" @dragstart="startDrag">
     <div v-on:click.self="showCode =! showCode" class="doku-inline-head">
       <code>{{ variable.name }}</code>
       <span v-if="variable.is_list" class="chip">List</span>
@@ -166,13 +166,18 @@
     methods: {
       ...mapActions('variable', [
         actionTypes.REMOVE_VARIABLE,
-        actionTypes.UPDATE_VARIABLE,
+        actionTypes.UPDATE_VARIABLES,
         actionTypes.CREATE_VARIABLE
       ]),
+      startDrag(event) {
+        event.dataTransfer.dropEffect = 'move';
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('variableId', this.variable.id);
+      },
       save(event) {
         event.target.classList.add('loading');
         let data = this.getData();
-        this.updateVariable(data)
+        this.updateVariables(data)
           .then(() => {
             this.$refs.saveNotice.trigger('Success!', 'text-dark');
           })
@@ -244,7 +249,7 @@
           id: this.variable.id,
           snippet_id: snippetID
         };
-        this.updateVariable(data)
+        this.updateVariables(data)
           .then(() => {
             this.$refs.saveNotice.trigger('Success!', 'text-dark');
           })
