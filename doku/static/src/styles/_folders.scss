@@ -1,11 +1,11 @@
 .folder-list {
   > * {
     > .folder-row {
-      border-bottom: solid $border-width $border-color;
+      border-top: solid $border-width $border-color;
     }
-    &:last-child {
+    &:first-child {
       > .folder-row {
-        border-bottom: none;
+        border-top: none;
       }
     }
   }
