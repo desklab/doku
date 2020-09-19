@@ -24,7 +24,7 @@ const actions = {
               document_id: rootState.document.document.id
             }
             dispatch(
-              ns.variable(actionTypes.FETCH_VARIABLES),
+              ns.document(actionTypes.FETCH_CURRENT_DOCUMENT),
               options, {root: true}
             ).then(resolve).catch(reject);
           } else {

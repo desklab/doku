@@ -1,0 +1,39 @@
+.folder-list {
+  > * {
+    > .folder-row {
+      border-bottom: solid $border-width $border-color;
+    }
+    &:last-child {
+      > .folder-row {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.folder-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  user-select: none;
+  &:hover {
+    background: $gray-50;
+  }
+  &.doku-dragover {
+    background: $gray-50;
+  }
+  &.folder-open {
+    // none
+  }
+}
+
+.folder-content {
+  margin-left: $unit-7;
+  padding-top: $unit-3;
+  padding-bottom: $unit-1;
+  border-radius: $unit-1;
+  &.doku-dragover {
+    background: $gray-50;
+  }
+}

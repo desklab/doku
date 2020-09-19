@@ -2,21 +2,22 @@ from typing import Optional
 
 from flask import jsonify, url_for
 from marshmallow import fields, RAISE, ValidationError, EXCLUDE
-from marshmallow_sqlalchemy import auto_field, SQLAlchemySchema
+from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
-from doku.models.document import Document, Variable
-from doku.models.schemas.common import ApiSchemaMixin, DokuSchema, NotEmptyString
+from doku.models.document import Document
+from doku.models.schemas.common import ApiSchema, NotEmptyString
 from doku.models.template import Template, DEFAULT_TEMPLATE, Stylesheet
+from doku.models.variable import Variable
 from doku.utils.db import get_or_create
 
 
-class DocumentSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
+class DocumentSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Document
-        exclude = ("template", "variables")
+        exclude = ("template", "variables", "variable_groups", "root_variables")
         load_instance = True
 
     API_NAME = "document"
@@ -25,8 +26,12 @@ class DocumentSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
     name = NotEmptyString()
     public = auto_field()
     template_id = auto_field(load_only=True)
+
     template = Nested("TemplateSchema", exclude=("documents",))
     variables = Nested("VariableSchema", exclude=("document",), many=True, partial=True)
+    variable_groups = Nested("VariableGroupSchema", exclude=("document",), many=True)
+    root_variables = Nested("VariableSchema", exclude=("document",), many=True, partial=True)
+
     render_url = fields.Method("_render_url", dump_only=True, allow_none=True)
     public_url = fields.Method("_public_url", dump_only=True, allow_none=True)
 
@@ -90,30 +95,3 @@ class DocumentSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
             db.session.commit()
         result = schema.dump(document)
         return jsonify(result)
-
-
-class VariableSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
-    class Meta:
-        model = Variable
-        load_instance = True
-
-    API_NAME = "variable"
-
-    id = auto_field()
-    name = NotEmptyString()
-    use_markdown = auto_field()
-    css_class = auto_field()
-    content = auto_field()
-    compiled_content = auto_field(dump_only=True)
-    document_id = auto_field(load_only=True)
-    parent_id = auto_field(load_only=True)
-    snippet_id = auto_field(load_only=True)
-
-    parent = Nested("VariableSchema", allow_none=True, exclude=("children",))
-    document = Nested("DocumentSchema", exclude=("variables",), dump_only=True)
-    children = Nested("VariableSchema", exclude=("parent",), many=True, partial=True)
-    snippet = Nested("SnippetSchema", exclude=("used_by",), many=False, partial=True)
-
-    used = fields.Boolean(dump_only=True)
-    is_list = fields.Boolean(dump_only=True)
-    uses_snippet = fields.Boolean(dump_only=True)

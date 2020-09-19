@@ -17,7 +17,7 @@ from doku import db
 from doku.models.resource import Resource, generate_filename
 from doku.utils.db import get_or_404, get_pagination_page
 from doku.utils.decorators import login_required
-from doku.models.schemas.resource import ResourceSchema
+from doku.models.schemas import ResourceSchema
 
 
 bp = Blueprint("resources", __name__)

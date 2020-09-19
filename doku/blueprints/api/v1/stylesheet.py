@@ -4,11 +4,9 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest
 
 from doku.models import db
-from doku.models.document import Variable
-from doku.models.schemas import DocumentSchema, TemplateSchema, StylesheetSchema
-from doku.models.template import Template, Stylesheet
-from doku.utils.db import get_or_404, get_or_create
-from doku.utils.decorators import login_required
+from doku.models.schemas import StylesheetSchema
+from doku.models.template import Stylesheet
+from doku.utils.db import get_or_404
 
 bp = Blueprint("api.v1.stylesheet", __name__)
 

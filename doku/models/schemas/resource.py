@@ -5,12 +5,12 @@ import os
 
 from doku.models import DateSchemaMixin
 from doku.models.resource import Resource
-from doku.models.schemas.common import DokuSchema, ApiSchemaMixin, NotEmptyString
+from doku.models.schemas.common import DokuSchema, ApiSchema, NotEmptyString
 from doku.utils.db import get_or_404
 from doku import db
 
 
-class ResourceSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
+class ResourceSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Resource
         load_instance = True
