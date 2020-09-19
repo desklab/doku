@@ -21,7 +21,7 @@ def index(document_id: int):
     )
     doc_schema = DocumentSchema(
         session=db.session, instance=document,
-        include=("variables", "variable_groups", "root_variables")
+        include=("template", "variables", "variable_groups", "root_variables")
     )
     template_schema = TemplateSchema(session=db.session)
     stylesheet_schemas = StylesheetSchema(session=db.session, many=True)

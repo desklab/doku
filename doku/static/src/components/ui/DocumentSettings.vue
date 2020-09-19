@@ -20,10 +20,9 @@
                 </animated-toggle>
               </div>
               <div class="form-group mt-2 form-inline">
-                <label class="form-label" for="documentTemplateSelect"><b>Change Template</b></label>
-                <select id="documentTemplateSelect" name="template" class="form-select">
-                  <option v-for="template in templates" :value="template.id" :key="template.id">{{ template.name }}</option>
-                </select>
+                Current Template: <b>{{ document.template.name }}</b>
+                <button @click="$refs.selectModal.open()" class="btn btn-link ml-2">Change Template</button>
+                <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:dokuselect="saveSelection" :apiFetch="apiFetch"></select-modal>
               </div>
             </div>
             <div class="card-footer">
@@ -68,29 +67,28 @@
   import templateApi from '../../api/template';
   import * as ns from '../../store/namespace';
   import AnimatedNotice from "./AnimatedNotice";
+  import SelectModal from './SelectModal.vue';
   import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation.vue";
 
   export default {
-    name: 'VariableEditor',
+    name: 'DocumentSettings',
     components: {
       AnimatedNotice, InfoIcon,
       Modal, AnimatedToggle,
-      RemoveDocumentConfirmation
+      RemoveDocumentConfirmation,
+      SelectModal
     },
     computed: mapState({
       document: state => state.document.document
     }),
     data() {
       return {
-        templates: []
+        selectedTemplate: null,
+        apiFetch: templateApi.fetchTemplates
       }
     },
     mounted() {
-      templateApi.fetchTemplates()
-        .then((response) =>{
-          this.templates = response.data;
-        })
-        .catch(console.error);
+      this.selectedTemplate = this.document.template.id;
     },
     methods: {
       ...mapActions(ns.DOCUMENT, [
@@ -105,9 +103,8 @@
           id: this.document.id,
           name: documentNameInput.value,
           public: this.$refs.documentPublicInput.checked,
-          template_id: documentTemplateSelect.value
+          template_id: this.selectedTemplate
         };
-        console.log(data);
         this.updateDocument(data)
           .then(() => {
             this.$refs.saveNotice.trigger('Success!', 'text-dark');
@@ -128,6 +125,9 @@
             this.$refs.deleteNotice.trigger('Failed!', 'text-error');
             event.target.classList.remove('loading');
           });
+      },
+      saveSelection(id) {
+        this.selectedTemplate = id;
       }
     }
   }
