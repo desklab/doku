@@ -39,7 +39,7 @@ class Variable(db.Model, DateMixin):
     parent_id = db.Column(db.Integer, db.ForeignKey("doku_variable.id"), nullable=True)
     snippet_id = db.Column(db.Integer, db.ForeignKey("doku_snippet.id"), nullable=True)
     group_id = db.Column(
-        db.Integer, db.ForeignKey("doku_variable_group.id"), nullable=True, default=None)
+        db.Integer, db.ForeignKey("doku_variable_group.id", ondelete="SET NULL"), nullable=True, default=None)
 
     children = db.relationship(
         "Variable",
@@ -138,5 +138,5 @@ class VariableGroup(db.Model):
         db.Integer, db.ForeignKey("doku_document.id"), nullable=False)
 
     document = db.relationship(
-        Document, cascade="all,delete", back_populates="variable_groups")
+        Document, back_populates="variable_groups")
     variables = db.relationship(Variable, back_populates="group")
