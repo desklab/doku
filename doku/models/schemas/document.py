@@ -8,9 +8,9 @@ from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
 from doku.models.document import Document
-from doku.models.variable import Variable
-from doku.models.schemas.common import ApiSchema, DokuSchema, NotEmptyString
+from doku.models.schemas.common import ApiSchema, NotEmptyString
 from doku.models.template import Template, DEFAULT_TEMPLATE, Stylesheet
+from doku.models.variable import Variable
 from doku.utils.db import get_or_create
 
 
@@ -95,31 +95,3 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
             db.session.commit()
         result = schema.dump(document)
         return jsonify(result)
-
-
-class VariableSchema(ApiSchema, DateSchemaMixin):
-    class Meta:
-        model = Variable
-        load_instance = True
-
-    API_NAME = "variable"
-
-    id = auto_field()
-    name = NotEmptyString()
-    use_markdown = auto_field()
-    css_class = auto_field()
-    content = auto_field()
-    compiled_content = auto_field(dump_only=True)
-    document_id = auto_field(load_only=True)
-    parent_id = auto_field(load_only=True)
-    snippet_id = auto_field(load_only=True)
-
-    parent = Nested("VariableSchema", allow_none=True, exclude=("children",))
-    document = Nested("DocumentSchema", exclude=("variables",), dump_only=True)
-    children = Nested("VariableSchema", exclude=("parent",), many=True, partial=True)
-    snippet = Nested("SnippetSchema", exclude=("used_by",), many=False, partial=True)
-    group = Nested("VariableGroupSchema", exclude=("variables", "document"))
-
-    used = fields.Boolean(dump_only=True)
-    is_list = fields.Boolean(dump_only=True)
-    uses_snippet = fields.Boolean(dump_only=True)

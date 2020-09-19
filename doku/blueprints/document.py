@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, send_file
 from doku import db
 from doku.models.document import Document
 from doku.models.schemas import TemplateSchema, StylesheetSchema
-from doku.models.schemas.document import DocumentSchema
+from doku.models.schemas import DocumentSchema
 from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
 

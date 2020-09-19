@@ -1,17 +1,10 @@
-from io import BytesIO
-
-from flask import Blueprint, render_template, send_file
-from marshmallow import EXCLUDE
-from weasyprint import HTML
+from flask import Blueprint, render_template
 
 from doku import db
-from doku.models.document import Document
 from doku.models.schemas import TemplateSchema, StylesheetSchema
-from doku.models.schemas.document import DocumentSchema, VariableSchema
-from doku.models.template import Template, Stylesheet
+from doku.models.template import Template
 from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
-
 
 bp = Blueprint("template", __name__)
 
