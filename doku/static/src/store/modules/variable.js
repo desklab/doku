@@ -1,9 +1,9 @@
 import variableApi from '../../api/variable';
 import * as mutationTypes from '../types/mutations';
+import * as actionTypes from '../types/actions';
+import * as ns from '../namespace';
 
-const state = {
-  variables: (window.variables !== undefined) ? JSON.parse(window.variables) : [],
-}
+const state = {}
 
 const getters = {}
 
@@ -27,42 +27,94 @@ const removeVariable = function (variable, test) {
 }
 
 const actions = {
-  updateVariables({commit, state}, variables) {
+  /**
+   * Update Variables
+   *
+   * Instead of using mutations, the state is handled by the document
+   * store. It is updated by calling `fetchCurrentDocument`.
+   *
+   * @param dispatch - Supplied by Vuex (used to dispatch Document action)
+   * @param variables - (List of) objects that describe the updated variables
+   * @returns {Promise<void>}
+   */
+  updateVariables({dispatch}, variables) {
     return new Promise((resolve, reject) => {
       variableApi.updateVariables(variables)
         .then(response => {
-          commit(mutationTypes.SET_VARIABLES, response.data);
-          resolve();
+          dispatch(
+            ns.document(actionTypes.FETCH_CURRENT_DOCUMENT)
+          ).then(resolve).catch(reject);
         })
         .catch(reject);
     });
   },
-  updateVariable({commit, state}, variable) {
+
+  /**
+   * Update a single Variable
+   *
+   * Instead of using mutations, the state is handled by the document
+   * store. It is updated by calling `fetchCurrentDocument`.
+   *
+   * @param dispatch - Supplied by Vuex (used to dispatch Document action)
+   * @param variable - Objects that describe the updated variable
+   * @returns {Promise<void>}
+   */
+  updateVariable({dispatch}, variable) {
     return new Promise((resolve, reject) => {
       variableApi.createVariable(variable)
         .then(response => {
-          commit(mutationTypes.SET_VARIABLE, response.data);
-          resolve();
+          dispatch(
+            ns.document(actionTypes.FETCH_CURRENT_DOCUMENT)
+          ).then(resolve).catch(reject);
         })
         .catch(reject);
     });
   },
-  createVariable({commit, state}, variable) {
+
+  /**
+   * Create Variable
+   *
+   * Creates a new variable based on the supplied parameter.
+   *
+   * Instead of using mutations, the state is handled by the document
+   * store. It is updated by calling `fetchCurrentDocument`.
+   *
+   * @param dispatch - Supplied by Vuex (used to dispatch Document action)
+   * @param variable - Objects that describe the new variable
+   * @returns {Promise<void>}
+   */
+  createVariable({dispatch}, variable) {
     return new Promise((resolve, reject) => {
       variableApi.createVariable(variable)
         .then(response => {
-          commit(mutationTypes.ADD_VARIABLE, response.data);
-          resolve();
+          dispatch(
+            ns.document(actionTypes.FETCH_CURRENT_DOCUMENT)
+          ).then(resolve).catch(reject);
         })
         .catch(reject);
     });
   },
-  removeVariable({commit, state}, variableId) {
+
+  /**
+   * Remove Variable
+   *
+   * This will remove a variable (i.e. delete) from the document. It will
+   * no longer be accessible.
+   *
+   * Instead of using mutations, the state is handled by the document
+   * store. It is updated by calling `fetchCurrentDocument`.
+   *
+   * @param dispatch - Supplied by Vuex (used to dispatch Document action)
+   * @param variableId - ID for the variable to be deleted
+   * @returns {Promise<void>}
+   */
+  removeVariable({dispatch}, variableId) {
     return new Promise((resolve, reject) => {
       variableApi.removeVariable(variableId)
-        .then(() => {
-          commit(mutationTypes.REMOVE_VARIABLE, variableId);
-          resolve();
+        .then(response => {
+          dispatch(
+            ns.document(actionTypes.FETCH_CURRENT_DOCUMENT)
+          ).then(resolve).catch(reject);
         })
         .catch(reject);
     });
