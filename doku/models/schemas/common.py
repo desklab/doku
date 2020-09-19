@@ -21,9 +21,9 @@ class NotEmptyString(fields.String):
 
 
 class DokuSchema(SQLAlchemySchema):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, include_request=False, **kwargs):
         include = set(kwargs.pop("include", {}))
-        if has_request_context():
+        if has_request_context() and include_request:
             extra_includes = set(request.args.getlist("includes[]", type=str))
             extra_excludes = set(request.args.getlist("excludes[]", type=str))
         else:
@@ -107,7 +107,7 @@ class ApiSchema(DokuSchema):
         instance = get_or_404(
             db.session.query(cls.Meta.model).filter_by(id=instance_id)  # noqa
         )
-        schema = cls(many=False)
+        schema = cls(many=False, include_request=True)
         return jsonify(schema.dump(instance))
 
     @classmethod
@@ -119,7 +119,7 @@ class ApiSchema(DokuSchema):
                 page = int(page)
             except ValueError:
                 page = None
-        schemas = cls(many=True)
+        schemas = cls(many=True, include_request=True)
         pagination = cls.Meta.model.query.filter_by(**data).paginate(  # noqa
             page=page, per_page=10
         )
@@ -146,6 +146,7 @@ class ApiSchema(DokuSchema):
             partial=True,
             session=db.session,
             many=isinstance(data, list),
+            include_request=True
         )
         try:
             instance = schema.load(data)
@@ -160,7 +161,8 @@ class ApiSchema(DokuSchema):
     def create(cls, commit=True):
         data = cls.all_request_data()
         schema = cls(
-            unknown=RAISE, session=db.session, partial=True, many=isinstance(data, list)
+            unknown=RAISE, session=db.session, partial=True, many=isinstance(data, list),
+            include_request=True
         )
         try:
             instance = schema.load(data)

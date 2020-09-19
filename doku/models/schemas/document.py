@@ -49,7 +49,9 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
     def create(cls, commit=True):
         data = cls.all_request_data()
         schema = cls(
-            unknown=RAISE, session=db.session, partial=True, many=isinstance(data, list)
+            unknown=RAISE, session=db.session, partial=True,
+            many=isinstance(data, list),
+            include_request=True
         )
         try:
             document = schema.load(data)
@@ -84,6 +86,7 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
             partial=True,
             session=db.session,
             many=isinstance(data, list),
+            include_request=True
         )
         try:
             document = schema.load(data)
