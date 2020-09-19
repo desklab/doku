@@ -1,5 +1,5 @@
 <template>
-  <modal ref="modal" title="Bulk Download">
+  <modal ref="modal" title="Select Snippet">
     <div class="modal-body">
       <div class="content">
         <div v-for="snippet in snippets" :key="snippet.id" class="form-group">
