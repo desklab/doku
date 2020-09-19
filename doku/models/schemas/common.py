@@ -24,12 +24,12 @@ class DokuSchema(SQLAlchemySchema):
     def __init__(self, *args, **kwargs):
         include = set(kwargs.pop("include", {}))
         if has_request_context():
-            extra_includes = set(request.args.getlist("includes", type=str))
-            extra_excludes = set(request.args.getlist("excludes", type=str))
+            extra_includes = set(request.args.getlist("includes[]", type=str))
+            extra_excludes = set(request.args.getlist("excludes[]", type=str))
         else:
             extra_includes = extra_excludes = set()
         super(DokuSchema, self).__init__(*args, **kwargs)
-        if len(include) != 0:
+        if len(include) + len(extra_includes) + len(extra_excludes) != 0:
             self.exclude: set = self.exclude - include
             self.exclude: set = self.exclude - extra_includes
             self.exclude: set = self.exclude | extra_excludes
