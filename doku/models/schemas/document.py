@@ -17,7 +17,7 @@ from doku.utils.db import get_or_create
 class DocumentSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Document
-        exclude = tuple()
+        exclude = ("template", "variables", "variable_groups", "root_variables")
         load_instance = True
 
     API_NAME = "document"
