@@ -3,7 +3,7 @@
     <div ref="folderRow" @click.self="toggle" class="folder-row c-hand" v-on:drop="onDrop($event, 'root')" v-on:dragover.prevent="onDragOver" v-on:dragleave="onDragLeave" v-on:dragenter.prevent>
       <img v-if="!displayFolderOpen" class="m-3" :src="defaultImage" alt="Folder">
       <img v-else class="m-3" :src="hoverImage" alt="Folder">
-      <span>{{ name }}</span>
+      <text-edit :text="name" placeholder="Name" :save="rename"></text-edit>
       <div class="ml-auto">
         <div v-if="createMode && allowAdd" class="input-group input-inline">
           <input type="text" v-model="newName" class="form-input input-sm" placeholder="Name">
@@ -30,6 +30,7 @@
 
 <script>
 import { Trash2Icon, FolderPlusIcon, CheckIcon, XIcon } from 'vue-feather-icons';
+import TextEdit from './TextEdit';
 
 
 /**
@@ -37,6 +38,7 @@ import { Trash2Icon, FolderPlusIcon, CheckIcon, XIcon } from 'vue-feather-icons'
  *
  * @event doku-add-folder - Add button has been clicked
  * @event doku-remove-folder - Remove button has been clicked
+ * @event doku-rename-folder - Folder has been renamed
  * @event doku-dragend - Custom drag-end for both drop areas
  *
  * @param {String} name - Name of the folder
@@ -50,6 +52,7 @@ import { Trash2Icon, FolderPlusIcon, CheckIcon, XIcon } from 'vue-feather-icons'
 export default {
   name: 'FolderRow',
   components: {
+    TextEdit,
     Trash2Icon,
     FolderPlusIcon,
     CheckIcon,
@@ -87,7 +90,7 @@ export default {
       isOpen: this.alwaysOpen,
       displayFolderOpen: this.alwaysOpen,
       createMode: false,
-      newName: ''
+      newName: '',
     }
   },
   methods: {
@@ -134,6 +137,9 @@ export default {
       this.createMode = false;
       this.$emit('doku-add-folder', event, this.newName);
       this.newName = '';
+    },
+    rename(newName) {
+      this.$emit('doku-rename-folder', newName);
     }
   }
 }
