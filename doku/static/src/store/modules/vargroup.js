@@ -58,6 +58,30 @@ const actions = {
         .catch(reject);
     });
   },
+
+  /**
+   * Update Variable Group
+   *
+   * Instead of using mutations, the state is handled by the document
+   * store. It is updated by calling `fetchCurrentDocument`.
+   *
+   * @param dispatch- Supplied by Vuex (used to dispatch Document action)
+   * @param variableGroups - (List of) variable group object to update.
+   *   They must all include the id field.
+   * @returns {Promise<unknown>}
+   */
+  updateVariableGroups({dispatch}, variableGroups) {
+    return new Promise((resolve, reject) => {
+      vargroupApi.updateVariableGroups(variableGroups)
+        .then(response => {
+          dispatch(
+            ns.document(actionTypes.FETCH_CURRENT_DOCUMENT),
+            null, { root: true }
+          ).then(resolve).catch(reject);
+        })
+        .catch(reject);
+    })
+  }
 }
 
 const mutations = {}

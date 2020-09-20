@@ -21,3 +21,4 @@ export const UPDATE_RESOURCE = 'updateResource';
 
 export const CREATE_VARIABLE_GROUP = 'createVariableGroup';
 export const REMOVE_VARIABLE_GROUP = 'removeVariableGroup';
+export const UPDATE_VARIABLE_GROUPS = 'updateVariableGroups';
