@@ -1,10 +1,17 @@
+import string
+
 from marshmallow import fields
+from marshmallow.validate import ContainsOnly
 from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 
 from doku.models import DateSchemaMixin
 from doku.models.schemas.common import DokuSchema, ApiSchema, NotEmptyString
 from doku.models.variable import VariableGroup, Variable
+
+
+VALID_VARIABLE_CHARACTERS = f"{string.ascii_letters}{string.digits}_"
+VARIABLE_NAME_ERROR = "{input} is not a valid variable name."
 
 
 class VariableSchema(ApiSchema, DateSchemaMixin):
@@ -15,7 +22,9 @@ class VariableSchema(ApiSchema, DateSchemaMixin):
     API_NAME = "variable"
 
     id = auto_field()
-    name = NotEmptyString()
+    name = NotEmptyString(
+        validate=ContainsOnly(VALID_VARIABLE_CHARACTERS, error=VARIABLE_NAME_ERROR)
+    )
     use_markdown = auto_field()
     css_class = auto_field()
     content = auto_field()
