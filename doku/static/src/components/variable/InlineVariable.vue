@@ -97,7 +97,7 @@
         </button>
       </div>
     </Modal>
-    <select-snippet ref="snippetSelector" :callback="setSelectedSnippet"></select-snippet>
+    <select-modal ref="snippetSelector" title="Select Snippet" :api-fetch="snippetApiFetch" :defaultSelection="snippetId" :none="true" v-on:doku-selection-made="setSelectedSnippet"></select-modal>
   </div>
 </template>
 
@@ -118,7 +118,8 @@
   import * as actionTypes from '../../store/types/actions';
   import AnimatedToggle from "../ui/AnimatedToggle";
   import VariableEditor from "./VariableEditor";
-  import SelectSnippet from "./SelectSnippet";
+  import SelectModal from "../ui/SelectModal";
+  import snippetApi from '../../api/snippet';
 
   export default {
     name: 'InlineVariable',
@@ -132,10 +133,10 @@
       }
     },
     components: {
+      SelectModal,
       VariableEditor,
       AnimatedToggle,
       AnimatedNotice,
-      SelectSnippet,
       Modal,
       Editor,
       CopyIcon, MoreVerticalIcon, PlusIcon, TrashIcon, ScissorsIcon
@@ -144,7 +145,7 @@
       return {
         showCode: false,
         _showDone: false,
-        showSnippetSelector: false
+        snippetApiFetch: snippetApi.fetchSnippets
       }
     },
     mounted() {
@@ -160,6 +161,15 @@
               this.$refs.editor.refresh();
             });
           }
+        }
+      }
+    },
+    computed: {
+      snippetId: function () {
+        if (this.variable.snippet === undefined || this.variable.snippet === null) {
+          return null;
+        } else {
+          return this.variable.snippet.id;
         }
       }
     },
