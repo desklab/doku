@@ -11,6 +11,7 @@ from doku.models.variable import Variable
 from doku.models.schemas.common import ApiSchema, DokuSchema, NotEmptyString
 from doku.models.template import Template, Stylesheet
 from doku.utils.db import get_or_create
+from doku.utils.jinja import validate_template
 
 
 class TemplateSchema(ApiSchema, DateSchemaMixin):
@@ -23,7 +24,7 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
 
     id = auto_field()
     name = NotEmptyString()
-    source = auto_field()
+    source = auto_field(validate=validate_template)
     documents = Nested("DocumentSchema", many=True, exclude=("template",))
     base_style = Nested("StylesheetSchema", exclude=("base_templates",))
     styles = Nested("StylesheetSchema", many=True, exclude=("templates",))

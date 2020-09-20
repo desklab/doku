@@ -6,6 +6,7 @@ from marshmallow_sqlalchemy import SQLAlchemySchema
 from werkzeug.exceptions import BadRequest
 
 from doku import db
+from doku.utils import EMPTY
 from doku.utils.db import get_or_404
 
 
@@ -15,7 +16,7 @@ class NotEmptyString(fields.String):
         super(NotEmptyString, self).__init__(*args, allow_none=allow_none, **kwargs)
 
     def _deserialize(self, value, *args, **kwargs):
-        if value == "":
+        if value == "" or value in EMPTY:
             value = None
         return super(NotEmptyString, self)._deserialize(value, *args, **kwargs)
 

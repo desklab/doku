@@ -6,12 +6,12 @@ from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 
 from doku.models import DateSchemaMixin
-from doku.models.schemas.common import DokuSchema, ApiSchema, NotEmptyString
+from doku.models.schemas.common import ApiSchema, NotEmptyString
 from doku.models.variable import VariableGroup, Variable
 
 
 VALID_VARIABLE_CHARACTERS = f"{string.ascii_letters}{string.digits}_"
-VARIABLE_NAME_ERROR = "{input} is not a valid variable name."
+VARIABLE_NAME_ERROR = "The supplied name is not a valid variable name."
 
 
 class VariableSchema(ApiSchema, DateSchemaMixin):
