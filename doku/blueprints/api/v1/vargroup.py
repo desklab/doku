@@ -15,7 +15,7 @@ def get(vargroup_id: int):
     return VariableGroupSchema.get(vargroup_id)
 
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["PUT", "PATCH"])
 def update():
     return VariableGroupSchema.update()
 

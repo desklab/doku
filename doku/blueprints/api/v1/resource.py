@@ -11,7 +11,7 @@ def create():
     raise NotImplementedError()
 
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["PUT", "PATCH"])
 def update():
     return ResourceSchema.update()
 
