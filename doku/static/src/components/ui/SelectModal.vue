@@ -42,12 +42,12 @@ import AnimatedNotice from "./AnimatedNotice";
  *   to get all items (with pagination).
  * @param {String} title - Passed to the modal component.
  * @param {Number} defaultSelection - The default selection (current
- *   selection)
- * @param {Boolean} none - Add option for selecting no item
- *   (Select None)
+ *   selection).
+ * @param {Boolean} none - Add option for selecting no item using a
+ *   button (Select None).
  *
- * Events:
- *   - dokuselect: Passes the selected item when the modal is closed.
+ * @event doku-selection-made: Passes the selected item when the modal
+ *   is closed and a selection has been made.
  */
 export default {
   name: 'SelectModal',
@@ -130,7 +130,7 @@ export default {
     },
     saveSelection() {
       this.close();
-      this.$emit('dokuselect', this.selectedItem);
+      this.$emit('doku-selection-made', this.selectedItem);
     },
     selectNone() {
       this.selectedItem = null;

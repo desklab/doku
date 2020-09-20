@@ -22,7 +22,7 @@
               <div class="form-group mt-2 form-inline">
                 Current Template: <b>{{ document.template.name }}</b>
                 <button @click="$refs.selectModal.open()" class="btn btn-link ml-2">Change Template</button>
-                <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:dokuselect="saveSelection" :apiFetch="apiFetch"></select-modal>
+                <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:doku-selection-made="saveSelection" :apiFetch="apiFetch"></select-modal>
               </div>
             </div>
             <div class="card-footer">
