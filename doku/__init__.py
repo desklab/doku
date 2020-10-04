@@ -66,7 +66,7 @@ def create_app(
     )
     app.redis = redis
     # Prepare celery for tasks
-    celery.conf.update(app.config)
+    celery.conf.update(**config_module.CELERY_CONFIG)
 
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
         os.makedirs(app.config["UPLOAD_FOLDER"])
