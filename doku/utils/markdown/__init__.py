@@ -42,6 +42,7 @@ def compile_content(content: str, css_class: str, use_markdown: bool) -> str:
                     RootClassExtension(root_class=css_class),
                     "codehilite",
                     "fenced_code",
+                    "tables"
                 ],
             )
         else:
