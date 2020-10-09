@@ -1,5 +1,5 @@
 import os
-from importlib import import_modules
+from importlib import import_module
 
 from doku.tasks import celery
 from doku.tasks.base import *
