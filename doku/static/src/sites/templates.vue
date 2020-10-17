@@ -1,10 +1,30 @@
 <template>
   <div>
     <button @click="openModal" class="btn btn-sm">
-    <plus-icon size="18"></plus-icon>
-    Create new template
-  </button>
+      <plus-icon size="18"></plus-icon>
+      Create new template
+    </button>
     <template-item ref="template_item" v-for="template in templates" :key="template.id" :template="template"></template-item>
+  
+    <modal ref="modal" v-bind:title="'New Template'">
+      <div class="modal-body">
+        <div class="content">
+          <div class="form-group p-2">
+            <label class="form-label" for="templateNameInput">Name</label>
+            <input v-on:keyup="$event.target.classList.remove('is-error')" name="name" class="form-input" type="text" id="templateNameInput" placeholder="Name" pattern="^.{1,}$" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button @click="saveNewTemplate" class="btn btn btn-primary">
+          Save
+        </button>
+        <button @click="closeModal" class="btn btn-link">
+          Close
+        </button>
+      </div>
+    </modal>
+  
   </div>
 </template>
 
@@ -39,8 +59,32 @@
           actionTypes.CREATE_TEMPLATE,
         ]),
         openModal() {
-        // ToDo
+          this.$refs.modal.open();
         },
+        closeModal() {
+          this.$refs.modal.close();
+        },
+        saveNewTemplate(event) {
+          let TemplateNameInput = document.getElementById('templateNameInput');
+
+          if (!templateNameInput.checkValidity()) {
+            templateNameInput.classList.add('is-error');
+            return;
+          }
+          event.target.classList.add('loading');
+
+          let data = {
+            name: templateNameInput.value
+          }
+          templateApi.createTemplate(data)
+            .then((response) => {
+              window.location.href = response.data.public_url;
+            })
+            .catch(console.error)
+            .finally(() => {
+              event.target.classList.remove('loading');
+            });
+        }
       }
     }
 </script>

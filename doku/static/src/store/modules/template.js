@@ -34,6 +34,9 @@ const actions = {
         .catch(reject)
     });
   },
+  removeTemplate({commit, dispatch,state}, data){
+    // ToDo
+  },
   addStylesheet({commit, dispatch, state}, data) {
     return new Promise((resolve, reject) => {
       if (!data.hasOwnProperty('url')) {
