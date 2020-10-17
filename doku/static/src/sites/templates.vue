@@ -22,9 +22,18 @@
       components: {
         TemplateItem, Modal, PlusIcon
       },
-      computed: mapState({
-        templates: state => state.template.templates
-      }),
+      data() {
+        return {
+          templates: []
+        }
+      },
+      mounted() {
+        templateApi.fetchTemplates()
+          .then((response) =>{
+            this.templates = response.data.result;
+          })
+          .catch(console.error);
+      },
       methods: {
         ...mapActions('template', [
           actionTypes.CREATE_TEMPLATE,
