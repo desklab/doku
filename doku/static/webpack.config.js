@@ -13,6 +13,7 @@ module.exports = {
     edit: './src/edit.js',
     edit_template: './src/edit_template.js',
     resources: './src/resources.js',
+    templates: './src/templates.js',
     snippet: './src/snippet.js',
   },
   output: {

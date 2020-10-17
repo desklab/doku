@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body_class %}doku-edit{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div class="pt-4 px-4">
+        <h3>Templates</h3>
+    </div>
+    <div class="container">
+        <div id="templates"></div>
+    </div>
+    {% with pagination=templates, page_url='base.index' %}
+        {% include "components/pagination.html" %}
+    {% endwith %}
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.templates = {{ templates_json|tojson }};
+        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
+        {{ create_csrf_token(output=False) }}
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='templates.bundle.js') }}"></script>
+{% endblock %}
