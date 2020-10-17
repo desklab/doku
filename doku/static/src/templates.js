@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 import store from './store'
-import Resources from './sites/templates.vue';
+import Templates from './sites/templates.vue';
 import './styles/main.scss';
 
 new Vue({
