@@ -1,14 +1,14 @@
 <template>
   <div class="d-inline-block">
-    <span v-if="mode === 'view'" @click="mode = 'edit'">
-      {{this.text}}
+    <span v-if="mode === 'view'" @click="edit">
+      {{text}}
     </span>
-    <div v-else-if="mode === 'edit'" class="input-group input-inline">
+    <div v-else class="input-group input-inline">
       <input type="text" v-model="value" class="form-input input-sm" :placeholder="placeholder">
       <button @click="onSave" class="btn btn-primary btn-sm input-group-btn" :disabled="value.replaceAll(' ','').length < 1">
         <check-icon size="16"></check-icon>
       </button>
-      <button @click="mode = 'view'" class="btn btn-sm input-group-btn">
+      <button @click="abort" class="btn btn-sm input-group-btn">
         <x-icon size="16"></x-icon>
       </button>
     </div>
@@ -38,17 +38,29 @@
       return {
         // Possible modes: 'edit' and 'view'
         mode: 'view',
-        value:''
+        // As text is a property, we try to not mutate it as part of
+        // changing the value.
+        value: this.text,
       }
-    },
-    mounted() {
-    this.value = this.text
     },
     methods: {
       onSave() {
         this.save(this.value);
-        this.text = this.value;
+        // The variable text should be updated by the parent component
+        // that will update the supplied property using the callback.
         this.mode = 'view';
+      },
+      abort() {
+        this.mode = 'view';
+        this.$nextTick(() => {
+          // Change the value after updating the UI. This will avoid
+          // redrawing the input to change text before hiding it anyway.
+          this.value = this.text;
+        })
+      },
+      edit() {
+        this.value = this.text;
+        this.mode = 'edit';
       }
     }
   }

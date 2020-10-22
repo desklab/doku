@@ -7,13 +7,14 @@ from marshmallow_sqlalchemy.fields import Nested
 from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
-from doku.models.document import Variable
-from doku.models.schemas.common import ApiSchemaMixin, DokuSchema, NotEmptyString
+from doku.models.variable import Variable
+from doku.models.schemas.common import ApiSchema, DokuSchema, NotEmptyString
 from doku.models.template import Template, Stylesheet
 from doku.utils.db import get_or_create, get_or_404
+from doku.utils.jinja import validate_template
 
 
-class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
+class TemplateSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Template
         exclude = ("documents", "styles")
@@ -23,7 +24,7 @@ class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
 
     id = auto_field()
     name = NotEmptyString()
-    source = auto_field()
+    source = auto_field(validate=validate_template)
     documents = Nested("DocumentSchema", many=True, exclude=("template",))
     base_style = Nested("StylesheetSchema", exclude=("base_templates",))
     styles = Nested("StylesheetSchema", many=True, exclude=("templates",))
@@ -60,7 +61,7 @@ class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
         return jsonify(result)
 
 
-class StylesheetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
+class StylesheetSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Stylesheet
         load_instance = True

@@ -16,6 +16,9 @@ export default {
     options = options || {};
     return axios.get(DOCUMENT_API, options);
   },
+  fetchDocument(documentId, options) {
+    return axios.get(`${DOCUMENT_API}${documentId}/`, options);
+  },
   bulkDownload(include = [], exclude = [], all = false) {
     let data = {include, exclude, all};
     return axios.post(`${DOCUMENT_API}download/request`, data);

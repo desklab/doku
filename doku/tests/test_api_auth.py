@@ -39,8 +39,6 @@ class APIAuthTest(DokuTest):
         token_type = res.json["token_type"]
         access_token = res.json["access_token"]
 
-        time.sleep(1)
-
         auth_headers = {"Authorization": f"{token_type} {access_token}"}
         res_get = self.client.get("/api/v1/document/", headers=auth_headers)
         self.assertEqual(res_get.status_code, 200)

@@ -16,6 +16,9 @@ RUN apt-get -y install curl build-essential python3-dev python3-pip python3-setu
 RUN apt-get -y install fonts-comfortaa
 ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Regular.ttf /usr/local/share/fonts/
 ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /usr/local/share/fonts/
+ADD https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Bold.ttf /usr/local/share/fonts/
+ADD https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Italic.ttf /usr/local/share/fonts/
+ADD https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf /usr/local/share/fonts/
 
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app

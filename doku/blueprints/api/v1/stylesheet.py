@@ -4,16 +4,14 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest
 
 from doku.models import db
-from doku.models.document import Variable
-from doku.models.schemas import DocumentSchema, TemplateSchema, StylesheetSchema
-from doku.models.template import Template, Stylesheet
-from doku.utils.db import get_or_404, get_or_create
-from doku.utils.decorators import login_required
+from doku.models.schemas import StylesheetSchema
+from doku.models.template import Stylesheet
+from doku.utils.db import get_or_404
 
 bp = Blueprint("api.v1.stylesheet", __name__)
 
 
-@bp.route("/upload/<int:stylesheet_id>", methods=["PUT"])
+@bp.route("/upload/<int:stylesheet_id>", methods=["PUT", "PATCH"])
 def upload(stylesheet_id: int):
     style: Stylesheet = get_or_404(
         db.session.query(Stylesheet).filter_by(id=stylesheet_id)
@@ -42,7 +40,7 @@ def upload(stylesheet_id: int):
     return jsonify(result)
 
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["PUT", "PATCH"])
 def update():
     return StylesheetSchema.update()
 

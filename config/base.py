@@ -60,9 +60,11 @@ SENTRY_DSN = os.environ.get("SENTRY_DSN", None)
 
 # Celery Settings
 CELERY_BROKER_URL = f"redis://{REDIS_CONFIG['host']}:{REDIS_CONFIG['port']}/0"
-# Celery does not use the CELERY_ prefix for this config
-BROKER_URL = CELERY_BROKER_URL
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_CONFIG = {
+    "result_backend": CELERY_BROKER_URL,
+    "broker_url": CELERY_BROKER_URL,
+    "worker_redirect_stdouts_level": "INFO"
+}
 
 # Download Requests
 PENDING_DOWNLOAD_LIMIT = 5

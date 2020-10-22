@@ -1,5 +1,5 @@
 <template>
-  <div class="doku-inline-var">
+  <div class="doku-inline-var" draggable="true" @dragstart="startDrag">
     <div v-on:click.self="showCode =! showCode" class="doku-inline-head">
       <code>{{ variable.name }}</code>
       <span v-if="variable.is_list" class="chip">List</span>
@@ -97,7 +97,7 @@
         </button>
       </div>
     </Modal>
-    <select-snippet ref="snippetSelector" :callback="setSelectedSnippet"></select-snippet>
+    <select-modal ref="snippetSelector" title="Select Snippet" :api-fetch="snippetApiFetch" :defaultSelection="snippetId" :none="true" v-on:doku-selection-made="setSelectedSnippet"></select-modal>
   </div>
 </template>
 
@@ -118,7 +118,8 @@
   import * as actionTypes from '../../store/types/actions';
   import AnimatedToggle from "../ui/AnimatedToggle";
   import VariableEditor from "./VariableEditor";
-  import SelectSnippet from "./SelectSnippet";
+  import SelectModal from "../ui/SelectModal";
+  import snippetApi from '../../api/snippet';
 
   export default {
     name: 'InlineVariable',
@@ -132,10 +133,10 @@
       }
     },
     components: {
+      SelectModal,
       VariableEditor,
       AnimatedToggle,
       AnimatedNotice,
-      SelectSnippet,
       Modal,
       Editor,
       CopyIcon, MoreVerticalIcon, PlusIcon, TrashIcon, ScissorsIcon
@@ -144,7 +145,7 @@
       return {
         showCode: false,
         _showDone: false,
-        showSnippetSelector: false
+        snippetApiFetch: snippetApi.fetchSnippets
       }
     },
     mounted() {
@@ -163,16 +164,30 @@
         }
       }
     },
+    computed: {
+      snippetId: function () {
+        if (this.variable.snippet === undefined || this.variable.snippet === null) {
+          return null;
+        } else {
+          return this.variable.snippet.id;
+        }
+      }
+    },
     methods: {
       ...mapActions('variable', [
         actionTypes.REMOVE_VARIABLE,
-        actionTypes.UPDATE_VARIABLE,
+        actionTypes.UPDATE_VARIABLES,
         actionTypes.CREATE_VARIABLE
       ]),
+      startDrag(event) {
+        event.dataTransfer.dropEffect = 'move';
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('variableId', this.variable.id);
+      },
       save(event) {
         event.target.classList.add('loading');
         let data = this.getData();
-        this.updateVariable(data)
+        this.updateVariables(data)
           .then(() => {
             this.$refs.saveNotice.trigger('Success!', 'text-dark');
           })
@@ -244,7 +259,7 @@
           id: this.variable.id,
           snippet_id: snippetID
         };
-        this.updateVariable(data)
+        this.updateVariables(data)
           .then(() => {
             this.$refs.saveNotice.trigger('Success!', 'text-dark');
           })

@@ -49,7 +49,6 @@
     computed: mapState({
       document: state => state.document.document,
       template: state => state.template.template,
-      variables: state => state.variable.variables
     }),
     data() {
       return {
@@ -58,12 +57,12 @@
     },
     mounted() {
       if (this._keyListeners !== undefined) {
-        document.addEventListener('keydown', this._keyListeners);
+        window.document.addEventListener('keydown', this._keyListeners);
       }
     },
     beforeDestroy() {
       if (this._keyListeners !== undefined) {
-        document.removeEventListener('keydown', this._keyListeners);
+        window.document.removeEventListener('keydown', this._keyListeners);
       }
     },
     watch: {

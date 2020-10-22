@@ -16,7 +16,7 @@ def get(variable_id: int):
     return VariableSchema.get(variable_id)
 
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["PUT", "PATCH"])
 def update():
     return VariableSchema.update()
 

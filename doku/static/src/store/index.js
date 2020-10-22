@@ -5,6 +5,7 @@ import createLogger from "vuex/dist/logger";
 import document from './modules/document';
 import template from './modules/template';
 import variable from './modules/variable';
+import vargroup from "./modules/vargroup";
 import stylesheet from './modules/stylesheet';
 import resource from './modules/resource';
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     template,
     variable,
     stylesheet,
-    resource
+    resource,
+    vargroup
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

@@ -21,7 +21,7 @@ def create():
     return DocumentSchema.create(commit=True)
 
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["PUT", "PATCH"])
 def update():
     return DocumentSchema.update()
 

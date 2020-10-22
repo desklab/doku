@@ -1,11 +1,12 @@
 from typing import Optional, Union
 
-from flask import request, jsonify, url_for
+from flask import request, jsonify, url_for, has_request_context
 from marshmallow import EXCLUDE, RAISE, ValidationError, fields
 from marshmallow_sqlalchemy import SQLAlchemySchema
 from werkzeug.exceptions import BadRequest
 
 from doku import db
+from doku.utils import EMPTY
 from doku.utils.db import get_or_404
 
 
@@ -15,17 +16,24 @@ class NotEmptyString(fields.String):
         super(NotEmptyString, self).__init__(*args, allow_none=allow_none, **kwargs)
 
     def _deserialize(self, value, *args, **kwargs):
-        if value == "":
+        if value == "" or value in EMPTY:
             value = None
         return super(NotEmptyString, self)._deserialize(value, *args, **kwargs)
 
 
 class DokuSchema(SQLAlchemySchema):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, include_request=False, **kwargs):
         include = set(kwargs.pop("include", {}))
+        if has_request_context() and include_request:
+            extra_includes = set(request.args.getlist("includes[]", type=str))
+            extra_excludes = set(request.args.getlist("excludes[]", type=str))
+        else:
+            extra_includes = extra_excludes = set()
         super(DokuSchema, self).__init__(*args, **kwargs)
-        if len(include) != 0:
+        if len(include) + len(extra_includes) + len(extra_excludes) != 0:
             self.exclude: set = self.exclude - include
+            self.exclude: set = self.exclude - extra_includes
+            self.exclude: set = self.exclude | extra_excludes
             self._init_fields()
 
     # This is used to automatically ignore the csrf token that might be
@@ -33,7 +41,7 @@ class DokuSchema(SQLAlchemySchema):
     _csrf_token = fields.String(required=False, load_only=True, data_key="csrf_token")
 
 
-class ApiSchemaMixin:
+class ApiSchema(DokuSchema):
     API_PREFIX = "api.v1"
     GET_VIEW_SUFFIX = "get"
     GET_ALL_VIEW_SUFFIX = "get_all"
@@ -60,11 +68,11 @@ class ApiSchemaMixin:
             return None
         return url_for(view, **{f"{self.API_NAME}_id": instance.id})
 
-    def _get_all_url(self, instance) -> str:
+    def _get_all_url(self, instance) -> str:  # noqa
         view = f"{self.API_PREFIX}.{self.API_NAME}.{self.GET_ALL_VIEW_SUFFIX}"
         return url_for(view)
 
-    def _update_url(self, instance) -> str:
+    def _update_url(self, instance) -> str:  # noqa
         view = f"{self.API_PREFIX}.{self.API_NAME}.{self.UPDATE_VIEW_SUFFIX}"
         return url_for(view)
 
@@ -74,7 +82,7 @@ class ApiSchemaMixin:
             return None
         return url_for(view, **{f"{self.API_NAME}_id": instance.id})
 
-    def _create_url(self, instance) -> str:
+    def _create_url(self, instance) -> str:  # noqa
         view = f"{self.API_PREFIX}.{self.API_NAME}.{self.CREATE_VIEW_SUFFIX}"
         return url_for(view)
 
@@ -98,9 +106,9 @@ class ApiSchemaMixin:
     @classmethod
     def get(cls, instance_id: int):
         instance = get_or_404(
-            db.session.query(cls.Meta.model).filter_by(id=instance_id)
+            db.session.query(cls.Meta.model).filter_by(id=instance_id)  # noqa
         )
-        schema = cls(many=False)
+        schema = cls(many=False, include_request=True)
         return jsonify(schema.dump(instance))
 
     @classmethod
@@ -112,8 +120,8 @@ class ApiSchemaMixin:
                 page = int(page)
             except ValueError:
                 page = None
-        schemas = cls(many=True)
-        pagination = cls.Meta.model.query.filter_by(**data).paginate(
+        schemas = cls(many=True, include_request=True)
+        pagination = cls.Meta.model.query.filter_by(**data).paginate(  # noqa
             page=page, per_page=10
         )
         result = schemas.dump(pagination.items)
@@ -139,6 +147,7 @@ class ApiSchemaMixin:
             partial=True,
             session=db.session,
             many=isinstance(data, list),
+            include_request=True
         )
         try:
             instance = schema.load(data)
@@ -153,7 +162,8 @@ class ApiSchemaMixin:
     def create(cls, commit=True):
         data = cls.all_request_data()
         schema = cls(
-            unknown=RAISE, session=db.session, partial=True, many=isinstance(data, list)
+            unknown=RAISE, session=db.session, partial=True, many=isinstance(data, list),
+            include_request=True
         )
         try:
             instance = schema.load(data)
@@ -168,7 +178,7 @@ class ApiSchemaMixin:
     @classmethod
     def delete(cls, instance_id: int, commit=True):
         instance = get_or_404(
-            db.session.query(cls.Meta.model).filter_by(id=instance_id)
+            db.session.query(cls.Meta.model).filter_by(id=instance_id)  # noqa
         )
         db.session.delete(instance)
         if commit:

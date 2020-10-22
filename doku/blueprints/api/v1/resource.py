@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from doku.models.schemas.resource import ResourceSchema
+from doku.models.schemas import ResourceSchema
 from doku.utils.decorators import login_required
 
 bp = Blueprint("api.v1.resource", __name__)
@@ -11,7 +11,7 @@ def create():
     raise NotImplementedError()
 
 
-@bp.route("/", methods=["PUT"])
+@bp.route("/", methods=["PUT", "PATCH"])
 def update():
     return ResourceSchema.update()
 

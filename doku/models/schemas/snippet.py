@@ -2,11 +2,11 @@ from marshmallow_sqlalchemy import auto_field
 from marshmallow_sqlalchemy.fields import Nested
 
 from doku.models import DateSchemaMixin
-from doku.models.schemas.common import DokuSchema, ApiSchemaMixin, NotEmptyString
+from doku.models.schemas.common import DokuSchema, ApiSchema, NotEmptyString
 from doku.models.snippet import Snippet
 
 
-class SnippetSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):
+class SnippetSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Snippet
         load_instance = True

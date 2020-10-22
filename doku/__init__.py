@@ -65,8 +65,8 @@ def create_app(
         app, redis, app.config.get("SESSION_PREFIX", "session_")
     )
     app.redis = redis
-    # Preapare celery for tasks
-    celery.conf.update(app.config)
+    # Prepare celery for tasks
+    celery.conf.update(**config_module.CELERY_CONFIG)
 
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
         os.makedirs(app.config["UPLOAD_FOLDER"])

@@ -72,7 +72,7 @@ class User(db.Model):
         if "Bearer" not in token:
             return None
         try:
-            token = base64_decode(token.lstrip("Bearer ")).decode("utf-8")
+            token = base64_decode(token[7:]).decode("utf-8")
         except BadData:
             return None
         r = current_app.redis

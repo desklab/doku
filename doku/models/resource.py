@@ -30,7 +30,7 @@ def generate_filename(filename, k=8):
     existing filenames is executed at least once.
     
     :param filename: The original filename. Can be a path
-    :param k: Lenght of additional character
+    :param k: Length of additional character
     :returns: Original filename with additional random string of size k
     """
     filename = secure_filename(filename)  # Overwrite insecure filename
@@ -46,7 +46,7 @@ def _random_filename(filename, k=8):
     """Random Filename
 
     :param filename: The original filename. Can be a path
-    :param k: Lenght of additional character
+    :param k: Length of additional character
     :returns: Original filename with additional random string of size k
     """
     filename = filename.split(".", 1)
