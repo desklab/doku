@@ -35,12 +35,3 @@ def index():
         stylesheets_json=stylesheet_schemas.dumps(stylesheets.items),
         stylesheets=stylesheets
     )
-
-
-@bp.route("/view/<int:stylesheet_id>", methods=["GET"])
-@login_required
-def view(stylesheet_id: int):
-    stylesheet: Stylesheet = get_or_404(
-        db.session.query(Stylesheet).filter_by(id=stylesheet_id)
-    )
-    return send_from_directory(current_app.config["UPLOAD_FOLDER"], stylesheet.filename)
