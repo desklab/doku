@@ -26,6 +26,26 @@ bp = Blueprint("stylesheets", __name__)
 @bp.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    if request.method == "POST":
+        if request.values.get("name", None) is not None:
+            name = request.values.get("name")
+        else:
+            flash("No name provided")
+            raise BadRequest("No name provided")
+        
+        if request.files.get("file", None) is not None:
+            file: FileStorage = request.files.get("file")
+            source = file.read().decode(encoding = 'UTF-8', errors = 'strict')
+            file.close()
+        else:
+            flash("No file provided")
+            raise BadRequest("No file provided")
+
+        if name is not None and source is not None:
+            stylesheet = Stylesheet(name=name, source=source)
+            db.session.add(stylesheet)
+            db.session.commit()
+
     page = get_pagination_page()
     stylesheets = db.session.query(Stylesheet).paginate(page=page, per_page=10)
 
