@@ -75,7 +75,6 @@ class StylesheetSchema(ApiSchema, DateSchemaMixin):
     templates = Nested("TemplateSchema", exclude=("styles",), many=True)
 
     upload_url = fields.Method("_upload_url", dump_only=True, allow_none=True)
-    delete_url = fields.Method("_delete_url", dump_only=True, allow_none=True)
 
     def _upload_url(self, stylesheet) -> Optional[str]:
         if stylesheet.id is None:
