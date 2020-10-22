@@ -10,7 +10,7 @@ from doku.models import DateSchemaMixin, db
 from doku.models.document import Variable
 from doku.models.schemas.common import ApiSchemaMixin, DokuSchema, NotEmptyString
 from doku.models.template import Template, Stylesheet
-from doku.utils.db import get_or_create
+from doku.utils.db import get_or_create, get_or_404
 
 
 class TemplateSchema(DokuSchema, DateSchemaMixin, ApiSchemaMixin):

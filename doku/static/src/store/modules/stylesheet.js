@@ -75,6 +75,14 @@ const mutations = {
         return;
       }
     }
+  },
+  deleteStylesheet(state, id) {
+    for (var i = 0; i < state.stylesheets.length; i++) {
+      if (state.stylesheets[i].id == id){
+        state.stylesheets.splice(i, 1);
+        break;
+      }
+    }
   }
 }
 
