@@ -44,7 +44,11 @@
 
   export default {
     name: 'BulkDownload',
-    components: {Modal, Pagination, AnimatedNotice},
+    components: {
+      Modal, 
+      Pagination, 
+      AnimatedNotice
+    },
     data() {
       return {
         documents: [],

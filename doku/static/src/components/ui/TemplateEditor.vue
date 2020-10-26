@@ -2,7 +2,7 @@
   <div>
     <Editor :value="template.source" class="editor" ref="editor"></Editor>
     <div class="editor-toolbar">
-      <button @click="$refs.stylesModal.open()" class="btn btn-sm">Styles</button>
+      <button @click="$refs.stylesSelector.open()" class="btn btn-sm">Styles</button>
       <div>
         <AnimatedNotice ref="saveNotice"></AnimatedNotice>
         <button ref="saveButton" @click="save" class="btn btn-primary">
@@ -10,16 +10,17 @@
         </button>
       </div>
     </div>
-    <StylesheetModal ref="stylesModal"></StylesheetModal>
+    <multi-select-modal ref="stylesSelector" title="Select Stylesheets" :api-fetch="stylesheetApiFetch" :defaultSelection="selectedStylesheets" :none="false" :editLink="'../stylesheets'" v-on:doku-selection-made="setSelectedStylesheets"></multi-select-modal>
   </div>
 </template>
 
 <script>
-  import StylesheetModal from "./StylesheetModal";
+  import MultiSelectModal from "./MultiSelectModal";
   import {mapActions, mapState} from "vuex";
   import Editor from "./Editor";
   import * as actionTypes from '../../store/types/actions';
   import AnimatedNotice from "./AnimatedNotice";
+  import stylesheetApi from '../../api/stylesheet';
 
   export default {
     name: 'TemplateEditor',
@@ -28,15 +29,32 @@
     },
     components: {
       AnimatedNotice,
-      StylesheetModal, Editor
+      MultiSelectModal,
+      Editor
     },
-    computed: mapState({
-      template: state => state.template.template,
-      stylesheets: state => state.stylesheet.stylesheets
-    }),
+    data() {
+      return {
+        stylesheetApiFetch: stylesheetApi.fetchStylesheets
+      }
+    },
+    computed: {
+      ...mapState({
+        template: state => state.template.template
+      }),
+      selectedStylesheets: function () {
+        let stylesheetIDs = [];
+        for (let i in this.template.styles) {
+          stylesheetIDs.push(this.template.styles[i].id);
+        }
+        return stylesheetIDs;
+      }
+    },
     methods: {
       ...mapActions('template', [
         actionTypes.UPDATE_TEMPLATE,
+      ]),
+      ...mapActions('stylesheet', [
+        actionTypes.SET_STYLESHEETS_FOR_TEMPLATE,
       ]),
       save(event) {
         if (event !== undefined) {
@@ -58,6 +76,18 @@
               event.target.classList.remove('loading');
             }
           });
+      },
+      setSelectedStylesheets(selectedIDs) {
+        let selectedStylesheetObjects = [];
+        for (let i in selectedIDs) {
+          selectedStylesheetObjects.push({
+            id: selectedIDs[i]
+          });
+        }
+        this.updateTemplate({
+          id: this.template.id,
+          styles: selectedStylesheetObjects
+        })
       },
       updateEditor() {
         this.$refs.editor.editor.refresh();

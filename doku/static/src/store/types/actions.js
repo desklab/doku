@@ -9,9 +9,11 @@ export const CREATE_VARIABLE = 'createVariable';
 export const UPDATE_TEMPLATE = 'updateTemplate';
 export const ADD_STYLESHEET_TO_TEMPLATE = 'addStylesheet';
 export const REMOVE_STYLESHEET_FROM_TEMPLATE = 'removeStylesheet';
+export const SET_STYLESHEETS_FOR_TEMPLATE = 'setStylesheets';
 
 export const UPLOAD_STYLESHEET = 'uploadStylesheet';
 export const UPDATE_STYLESHEET = 'updateStylesheet';
+export const DELETE_STYLESHEET = 'deleteStylesheet';
 export const FETCH_STYLESHEETS = 'fetchStylesheets';
 
 export const CREATE_RESOURCE = 'createResource';
