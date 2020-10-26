@@ -10,7 +10,7 @@
         </button>
       </div>
     </div>
-    <multi-select-modal ref="stylesSelector" title="Select Stylesheets" :api-fetch="stylesheetApiFetch" :defaultSelection="stylesheets" :none="false" :editLink="'../stylesheets'" v-on:doku-selection-made="setSelectedStylesheets"></multi-select-modal>
+    <multi-select-modal ref="stylesSelector" title="Select Stylesheets" :api-fetch="stylesheetApiFetch" :defaultSelection="selectedStylesheets" :none="false" :editLink="'../stylesheets'" v-on:doku-selection-made="setSelectedStylesheets"></multi-select-modal>
   </div>
 </template>
 
@@ -29,7 +29,7 @@
     },
     components: {
       AnimatedNotice,
-      MultiSelectModal, 
+      MultiSelectModal,
       Editor
     },
     data() {
@@ -37,10 +37,18 @@
         stylesheetApiFetch: stylesheetApi.fetchStylesheets
       }
     },
-    computed: mapState({
-      template: state => state.template.template,
-      stylesheets: state => state.stylesheet.stylesheets
-    }),
+    computed: {
+      ...mapState({
+        template: state => state.template.template
+      }),
+      selectedStylesheets: function () {
+        let stylesheetIDs = [];
+        for (let i in this.template.styles) {
+          stylesheetIDs.push(this.template.styles[i].id);
+        }
+        return stylesheetIDs;
+      }
+    },
     methods: {
       ...mapActions('template', [
         actionTypes.UPDATE_TEMPLATE,
@@ -70,7 +78,16 @@
           });
       },
       setSelectedStylesheets(selectedIDs) {
-        this.setStylesheets(selectedIDs);
+        let selectedStylesheetObjects = [];
+        for (let i in selectedIDs) {
+          selectedStylesheetObjects.push({
+            id: selectedIDs[i]
+          });
+        }
+        this.updateTemplate({
+          id: this.template.id,
+          styles: selectedStylesheetObjects
+        })
       },
       updateEditor() {
         this.$refs.editor.editor.refresh();
