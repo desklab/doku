@@ -61,6 +61,15 @@ const actions = {
         }).catch(reject);
     });
   },
+  setStylesheets({commit, state}, data){
+    return new Promise((resolve, reject) => {
+      stylesheetApi.setStylesheets(data)
+      .then(res => {
+        commit(mutationTypes.SET_STYLESHEETS, data);
+        resolve()
+      }).catch(reject);
+    });
+  },
 }
 
 const mutations = {
