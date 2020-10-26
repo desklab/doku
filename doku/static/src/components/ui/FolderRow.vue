@@ -1,9 +1,9 @@
 <template>
   <div>
     <div ref="folderRow" @click.self="toggle" class="folder-row c-hand" v-on:drop="onDrop($event, 'root')" v-on:dragover.prevent="onDragOver" v-on:dragleave="onDragLeave" v-on:dragenter.prevent>
-      <img v-if="!displayFolderOpen" class="m-3" :src="defaultImage" alt="Folder">
-      <img v-else class="m-3" :src="hoverImage" alt="Folder">
-      <text-edit :text="name" placeholder="Name" :save="rename"></text-edit>
+      <img v-if="!displayFolderOpen && hasImage" class="m-3" :src="defaultImage" alt="Folder">
+      <img v-else-if="displayFolderOpen && hasImage" class="m-3" :src="hoverImage" alt="Folder">
+      <text-edit :class="hasImage ? '' : 'm-4'" :text="name" placeholder="Name" :save="rename"></text-edit>
       <div class="ml-auto">
         <div v-if="createMode && allowAdd" class="input-group input-inline">
           <input type="text" v-model="newName" class="form-input input-sm" placeholder="Name">
@@ -44,6 +44,7 @@ import TextEdit from './TextEdit';
  * @param {String} name - Name of the folder
  * @param {String} defaultImage - Path to the default image
  * @param {String} hoverImage - Path to the hover image
+ * @param {Boolean} hasImage - Show folder image
  * @param {Boolean} nested - Nested folder: Prevent dragover on list
  * @param {Boolean} alwaysOpen - Folder is not closeable
  * @param {Boolean} allowRemove - Show remove button + add event
@@ -67,6 +68,10 @@ export default {
     hoverImage: {
       type: String,
       default: '/static/assets/folder_open.svg'
+    },
+    hasImage: {
+      type: Boolean,
+      default: true
     },
     nested: {
       type: Boolean,
