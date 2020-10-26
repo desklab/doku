@@ -19,7 +19,7 @@
 
 <script>
     import stylesheetApi from '../api/stylesheet';
-    import StyleItem from '../components/ui/StyleItem';
+    import StyleItem from '../components/stylesheet/StyleItem';
 
     import {mapState, mapActions} from 'vuex';
     import * as actionTypes from '../store/types/actions';

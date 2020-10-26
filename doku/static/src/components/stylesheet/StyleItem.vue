@@ -30,8 +30,8 @@
   import {mapActions} from "vuex";
   import {MoreVerticalIcon, XIcon} from 'vue-feather-icons';
   import * as actionTypes from "../../store/types/actions";
-  import AnimatedNotice from "./AnimatedNotice";
-  import TextEdit from "./TextEdit";
+  import AnimatedNotice from "../ui/AnimatedNotice";
+  import TextEdit from "../ui/TextEdit";
 
   export default {
     name: 'StyleItem',
