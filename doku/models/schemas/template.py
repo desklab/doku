@@ -17,7 +17,7 @@ from doku.utils.jinja import validate_template
 class TemplateSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Template
-        exclude = ("documents", "styles")
+        exclude = ("documents",)
         load_instance = True
 
     API_NAME = "template"
@@ -26,8 +26,8 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
     name = NotEmptyString()
     source = auto_field(validate=validate_template)
     documents = Nested("DocumentSchema", many=True, exclude=("template",))
-    base_style = Nested("StylesheetSchema", exclude=("base_templates",))
-    styles = Nested("StylesheetSchema", many=True, exclude=("templates",))
+    base_style = Nested("StylesheetSchema", exclude=("base_templates", "templates"))
+    styles = Nested("StylesheetSchema", many=True, exclude=("templates", "base_templates"))
     available_fields = fields.List(fields.String, dump_only=True)
     add_styles_url = fields.Method("_add_styles_url", dump_only=True, allow_none=True)
     remove_styles_url = fields.Method(
@@ -71,7 +71,7 @@ class StylesheetSchema(ApiSchema, DateSchemaMixin):
     id = auto_field()
     name = NotEmptyString()
     source = auto_field()
-    base_templates = Nested("TemplateSchema", exclude=("base_style","styles"), many=True)
+    base_templates = Nested("TemplateSchema", exclude=("base_style", "styles"), many=True)
     templates = Nested("TemplateSchema", exclude=("styles",), many=True)
 
     upload_url = fields.Method("_upload_url", dump_only=True, allow_none=True)
