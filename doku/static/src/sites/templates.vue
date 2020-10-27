@@ -30,7 +30,7 @@
 
 <script>
     import templateApi from '../api/template';
-    import TemplateItem from '../components/ui/TemplateItem';
+    import TemplateItem from '../components/template/TemplateItem';
 
     import {PlusIcon} from 'vue-feather-icons';
     import Modal from '../components/ui/Modal.vue';

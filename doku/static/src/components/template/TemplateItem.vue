@@ -16,10 +16,9 @@
         <span class="float-right">
           <animated-notice ref="deleteNotice"></animated-notice>
           <a class="btn btn-sm ml-2" :href="template.id">Edit</a>
-          <button class="btn btn-sm ml-2" @click="$refs.stylesModal.open()">Styles</button>
+          <!-- <button class="btn btn-sm ml-2" @click="$refs.stylesModal.open()">Styles</button> -->
           <button class="btn btn-error btn-sm ml-2" @click="remove">Remove</button>
-        </span>
-        <StylesheetModal ref="stylesModal"></StylesheetModal>       
+        </span>      
     </div>
 </template>
 
@@ -29,15 +28,13 @@
   import * as actionTypes from '../../store/types/actions';
   import {mapState, mapActions} from 'vuex';
 
-  import StylesheetModal from "./StylesheetModal";
-  import AnimatedNotice from "./AnimatedNotice";
-  import TextEdit from "./TextEdit";
+  import AnimatedNotice from "../ui/AnimatedNotice";
+  import TextEdit from "../ui/TextEdit";
 
   export default {
     components: {
       TextEdit,
-      AnimatedNotice,
-      StylesheetModal
+      AnimatedNotice
     },
     computed: {
       effectiveStylesCount: function() {
