@@ -3,8 +3,7 @@
     <div class="column doku-edit-left">
       <Tabs class="tab-block" v-bind:tabs="tabs"></Tabs>
       <multi-variable-editor ref="varEditor" v-show="tabs[0].active" class="tab-content tab-content-vars"></multi-variable-editor>
-      <template-editor v-show="tabs[1].active" class="tab-content tab-content-template" ref="templateEditor" v-bind:value="template.source"></template-editor>
-      <document-settings v-show="tabs[2].active" class="tab-content tab-content-settings" ref="documentSettings"></document-settings>
+      <document-settings v-show="tabs[1].active" class="tab-content tab-content-settings" ref="documentSettings"></document-settings>
     </div>
     <div class="column doku-edit-right">
       <preview v-bind:url="document.render_url"></preview>
@@ -25,10 +24,6 @@
   const TABS = [
     {
       title: 'Document',
-      active: false,
-    },
-    {
-      title: 'Template',
       active: false,
     },
     {

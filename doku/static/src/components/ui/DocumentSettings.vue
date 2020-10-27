@@ -1,53 +1,51 @@
 <template>
   <div>
-    <div class="doku-edit-settings">
-      <div class="container grid-md">
+    <div class="doku-edit-settings mx-4 mt-4">
+      <div class="container grid-xl">
         <div class="columns">
-          <div class="card col-12">
-            <div class="card-header">
-              <h5 class="card-title h5">Document Settings</h5>
-              <div class="card-subtitle text-dark">Document <b>{{document.name}}</b></div>
-            </div>
-            <div class="card-body">
+          <div class="col-12">
+            <h5 class="border-bottom pb-2">Document Settings</h5>
+            <div class="d-block">
               <div class="form-group form-inline">
                 <label class="form-label" for="documentNameInput"><b>Name</b></label>
-                <input class="form-input" type="text" id="documentNameInput" name="name" :value="document.name" placeholder="Name">
+                <div class="input-group">
+                  <input class="form-input" type="text" id="documentNameInput" name="name" :value="document.name" placeholder="Name">
+                  <button class="btn input-group-btn" @click="save">Save</button>
+                </div>
               </div>
-              <div class="form-group mt-2">
-                <animated-toggle ref="documentPublicInput" v-bind:is-checked="document.public">
-                  <template v-slot:on>Public</template>
-                  <template v-slot:off>Private</template>
-                </animated-toggle>
-              </div>
-              <div class="form-group mt-2 form-inline">
+            </div>
+            <div class="border rounded-lg mt-2 p-4">
+              <span class="d-block mb-3">
                 Current Template: <b>{{ document.template.name }}</b>
-                <button @click="$refs.selectModal.open()" class="btn btn-link ml-2">Change Template</button>
-                <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:doku-selection-made="saveSelection" :apiFetch="apiFetch"></select-modal>
-              </div>
+              </span>
+              <button @click="$refs.selectModal.open()" class="btn btn-sm">Change Template</button>
+              <a :href="`/template/${document.template.id}`" class="btn btn-sm btn-link">Edit Template</a>
+              <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:doku-selection-made="saveSelection" :apiFetch="apiFetch"></select-modal>
             </div>
-            <div class="card-footer">
-              <button class="btn btn-primary float-right" @click="save">Save</button>
-              <animated-notice class="float-right" ref="saveNotice"></animated-notice>
+            <!-- Public/Private switch
+            <div class="form-group mt-2">
+              <animated-toggle ref="documentPublicInput" v-bind:is-checked="document.public">
+                <template v-slot:on>Public</template>
+                <template v-slot:off>Private</template>
+              </animated-toggle>
             </div>
+            -->
           </div>
-          <div class="card col-12 mt-3 border-error">
-            <div class="card-header">
-              <h5 class="card-title h5 text-dark">Remove</h5>
-              <div class="card-subtitle text-dark">Permanently delete <b>{{document.name}}</b></div>
-            </div>
-            <div class="card-body">
-              <div class="toast toast-warning bg-warning-light text-dark">
-                <info-icon size="1x" class="text"></info-icon>
-                <b>Notice</b><br>
-                Removing the document will permanently delete all variables
-                associated with it.
-                However, templates and stylesheets will continue
-                to be available for other documents.
+
+          <div class="col-12 mt-8">
+            <h5 class="border-bottom pb-2">Other Settings</h5>
+            <div class="tile p-4 border border-error rounded-lg">
+              <div class="tile-content">
+                <h5 class="tile-title mb-0">Remove</h5>
+                <small class="tile-subtitle mb-0">
+                  Permanently delete <b>{{document.name}}</b>.
+                  This will also delete all variables associated with it.
+                </small>
               </div>
-            </div>
-            <div class="card-footer">
-              <button class="btn btn-error float-right" @click="$refs.removeConfirmation.open()">Remove</button>
-              <animated-notice class="float-right" ref="deleteNotice"></animated-notice>
+              <div class="tile-action">
+                <animated-notice class="float-right" ref="deleteNotice"></animated-notice>
+                <button class="btn btn-error btn-sm" @click="$refs.removeConfirmation.open()">Remove</button>
+              </div>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@
 
 <script>
     import resourceApi from '../api/resource';
-    import ResourceItem from '../components/ui/ResourceItem';
+    import ResourceItem from '../components/resource/ResourceItem';
 
     import {mapState, mapActions} from 'vuex';
     import * as actionTypes from '../store/types/actions';

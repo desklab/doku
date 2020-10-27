@@ -3,6 +3,13 @@
 @include margin-variant(5, $unit-5);
 @include margin-variant(auto, auto);
 
+@include margin-variant(6, $unit-6);
+@include margin-variant(7, $unit-7);
+@include margin-variant(8, $unit-8);
+@include margin-variant(9, $unit-9);
+@include margin-variant(10, $unit-10);
+@include margin-variant(12, $unit-12);
+
 @include padding-variant(3, $unit-3);
 @include padding-variant(4, $unit-4);
 @include padding-variant(5, $unit-5);

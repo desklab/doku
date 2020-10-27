@@ -10,14 +10,14 @@ from doku.models import DateSchemaMixin, db
 from doku.models.variable import Variable
 from doku.models.schemas.common import ApiSchema, DokuSchema, NotEmptyString
 from doku.models.template import Template, Stylesheet
-from doku.utils.db import get_or_create
+from doku.utils.db import get_or_create, get_or_404
 from doku.utils.jinja import validate_template
 
 
 class TemplateSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Template
-        exclude = ("documents", "styles")
+        exclude = ("documents",)
         load_instance = True
 
     API_NAME = "template"
@@ -26,8 +26,8 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
     name = NotEmptyString()
     source = auto_field(validate=validate_template)
     documents = Nested("DocumentSchema", many=True, exclude=("template",))
-    base_style = Nested("StylesheetSchema", exclude=("base_templates",))
-    styles = Nested("StylesheetSchema", many=True, exclude=("templates",))
+    base_style = Nested("StylesheetSchema", exclude=("base_templates", "templates"))
+    styles = Nested("StylesheetSchema", many=True, exclude=("templates", "base_templates"))
     available_fields = fields.List(fields.String, dump_only=True)
     add_styles_url = fields.Method("_add_styles_url", dump_only=True, allow_none=True)
     remove_styles_url = fields.Method(
@@ -64,15 +64,14 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
 class StylesheetSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Stylesheet
-        exclude = ("base_templates", "templates")
         load_instance = True
 
-    API_NAME = "template"
+    API_NAME = "stylesheet"
 
     id = auto_field()
     name = NotEmptyString()
     source = auto_field()
-    base_templates = Nested("TemplateSchema", exclude=("base_style",), many=True)
+    base_templates = Nested("TemplateSchema", exclude=("base_style", "styles"), many=True)
     templates = Nested("TemplateSchema", exclude=("styles",), many=True)
 
     upload_url = fields.Method("_upload_url", dump_only=True, allow_none=True)
@@ -81,3 +80,19 @@ class StylesheetSchema(ApiSchema, DateSchemaMixin):
         if stylesheet.id is None:
             return None
         return url_for("api.v1.stylesheet.upload", stylesheet_id=stylesheet.id)
+
+    def _delete_url(self, stylesheet) -> Optional[str]:
+        if stylesheet.id is None:
+            return None
+        return url_for("api.v1.stylesheet.delete", stylesheet_id=stylesheet.id)
+
+    @classmethod
+    def delete(cls, instance_id: int, commit=True):
+        instance = get_or_404(
+            db.session.query(cls.Meta.model).filter_by(id=instance_id)
+        )
+        db.session.delete(instance)
+        if commit:
+            db.session.commit()
+
+        return jsonify({"success": True})

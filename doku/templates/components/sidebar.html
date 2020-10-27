@@ -31,6 +31,13 @@
             Templates
         </div>
     </a>
+    <a href="{{ url_for('stylesheets.index') }}" class="sidebar-item{% if request.endpoint == 'stylesheets.index' %} active{% endif %}">
+        <div class="sidebar-icon">
+            {% include "components/icons/feather.html" %}
+        </div>
+        <div class="sidebar-link">
+            Stylesheets
+        </div>
     <a href="{{ url_for('snippet.index') }}" class="sidebar-item{% if request.endpoint == 'snippet.index' %} active{% endif %}">
         <div class="sidebar-icon">
             {% include "components/icons/scissors.html" %}

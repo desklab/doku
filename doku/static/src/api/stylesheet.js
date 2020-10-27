@@ -18,5 +18,8 @@ export default {
   },
   createStylesheet(stylesheet) {
     return axios.post(STYLESHEET_API, stylesheet);
+  },
+  deleteStylesheet(stylesheetURL) {
+    return axios.delete(stylesheetURL);
   }
 }

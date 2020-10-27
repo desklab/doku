@@ -46,6 +46,30 @@ const actions = {
         .catch(reject)
     });
   },
+  deleteStylesheet({commit, dispatch, state}, data) {
+    return new Promise((resolve, reject) => {
+      if (!data.hasOwnProperty('url')) {
+        throw Error('Missing url');
+      }
+      if (!data.hasOwnProperty('id')) {
+        throw Error('Missing id');
+      }
+      stylesheetApi.deleteStylesheet(data.url)
+        .then(res => {
+          commit(mutationTypes.DELETE_STYLESHEET, data.id);
+          resolve()
+        }).catch(reject);
+    });
+  },
+  setStylesheets({commit, state}, data){
+    return new Promise((resolve, reject) => {
+      stylesheetApi.setStylesheets(data)
+      .then(res => {
+        commit(mutationTypes.SET_STYLESHEETS, data);
+        resolve()
+      }).catch(reject);
+    });
+  },
 }
 
 const mutations = {
@@ -58,6 +82,14 @@ const mutations = {
       if (state.stylesheets[i].id === id) {
         Object.assign(state.stylesheets[i], stylesheet);
         return;
+      }
+    }
+  },
+  deleteStylesheet(state, id) {
+    for (var i = 0; i < state.stylesheets.length; i++) {
+      if (state.stylesheets[i].id == id){
+        state.stylesheets.splice(i, 1);
+        break;
       }
     }
   }

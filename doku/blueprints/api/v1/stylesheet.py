@@ -55,11 +55,11 @@ def get_all():
     return StylesheetSchema.get_all()
 
 
-@bp.route("/<int:template_id>/", methods=["GET"])
-def get(template_id: int):
-    return StylesheetSchema.get(template_id)
+@bp.route("/<int:stylesheet_id>/", methods=["GET"])
+def get(stylesheet_id: int):
+    return StylesheetSchema.get(stylesheet_id)
 
 
-@bp.route("/<int:template_id>/", methods=["DELETE"])
-def delete(template_id: int):
-    return StylesheetSchema.delete(template_id)
+@bp.route("/<int:stylesheet_id>/", methods=["DELETE"])
+def delete(stylesheet_id: int):
+    return StylesheetSchema.delete(stylesheet_id)

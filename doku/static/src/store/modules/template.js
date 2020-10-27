@@ -19,7 +19,7 @@ const actions = {
           let hasMissing = response.data.available_fields.some(
             field => !oldVariables.includes(field)
           );
-          if (hasMissing) {
+          if (hasMissing && rootState.document.document.id !== undefined) {
             let options = {
               document_id: rootState.document.document.id
             }
