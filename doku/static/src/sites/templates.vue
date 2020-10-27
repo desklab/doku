@@ -1,9 +1,13 @@
 <template>
   <div>
-    <button @click="openModal" class="btn btn-sm">
-      <plus-icon size="18"></plus-icon>
-      Create new template
-    </button>
+    <div class="doku-document-toolbar">
+      <h3 class="m-0">Templates</h3>
+      <button @click="openModal" class="btn btn-sm">
+        <plus-icon size="18"></plus-icon>
+        Create new template
+      </button>
+    </div>
+
     <template-item ref="template_item" v-for="template in templates" :key="template.id" :template="template"></template-item>
   
     <modal ref="modal" v-bind:title="'New Template'">
