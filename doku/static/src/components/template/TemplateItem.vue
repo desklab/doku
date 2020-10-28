@@ -1,53 +1,60 @@
 <template>
     <div class="column col-12 border rounded p-4 mb-2 bg-gray"> 
         <text-edit v-bind:text="template.name" v-bind:save="saveName" v-bind:placeholder="'Name'"></text-edit>
-        <span v-if="(effectiveStylesCount>=1)" class="chip text-success">
-          {{effectiveStylesCount}} non-empty styles
+        <span v-if="(numberOfStyles>=1)" class="chip bg-dark">
+          {{numberOfStyles}} stylesheets
         </span>
-        <span v-if="(numberOfUses==0)" class="chip text-warning">
-          not in use
-       </span>
-        <span v-if="(numberOfUses==1)" class="chip text-success">
-          used in {{numberOfUses}} document
-       </span>
-        <span v-if="(numberOfUses>1)" class="chip text-success">
-          used in {{numberOfUses}} documents
-       </span>
         <span class="float-right">
-          <animated-notice ref="deleteNotice"></animated-notice>
-          <a class="btn btn-sm ml-2" :href="template.id">Edit</a>
-          <!-- <button class="btn btn-sm ml-2" @click="$refs.stylesModal.open()">Styles</button> -->
-          <button class="btn btn-error btn-sm ml-2" @click="remove">Remove</button>
-        </span>      
+            <animated-notice ref="deleteNotice"></animated-notice>
+            <a class="btn btn-sm ml-2" :href="template.id">Edit Source</a>
+            <button class="btn btn-sm ml-2" @click="$refs.stylesSelector.open()">Select Styles</button>
+            <button class="btn btn-error btn-sm ml-2" @click="remove">Remove</button>
+        </span>
+        <multi-select-modal ref="stylesSelector" title="Select Stylesheets" :api-fetch="stylesheetApiFetch" :defaultSelection="selectedStylesheets" :none="false" :editLink="'../stylesheets'" v-on:doku-selection-made="setSelectedStylesheets"></multi-select-modal>      
     </div>
 </template>
 
 <script>
   import templateApi from '../../api/resource';
+  import stylesheetApi from '../../api/stylesheet';
 
   import * as actionTypes from '../../store/types/actions';
   import {mapState, mapActions} from 'vuex';
 
   import AnimatedNotice from "../ui/AnimatedNotice";
   import TextEdit from "../ui/TextEdit";
+  import MultiSelectModal from "../ui/MultiSelectModal";
 
   export default {
     components: {
       TextEdit,
-      AnimatedNotice
+      AnimatedNotice,
+      MultiSelectModal
     },
     computed: {
-      effectiveStylesCount: function() {
-        return this.template.id // ToDo: return number of stylesheets with not-empty src applied on this template
-      },      
-      numberOfUses: function() {
-        return this.template.id // ToDo: return number of documents which use this template
+      numberOfStyles: function() {
+        return this.template.styles.length
+      },
+      selectedStylesheets: function () {
+        let stylesheetIDs = [];
+        for (let i in this.template.styles) {
+          stylesheetIDs.push(this.template.styles[i].id);
+        }
+        return stylesheetIDs;
+      }
+    },
+    data() {
+      return {
+        stylesheetApiFetch: stylesheetApi.fetchStylesheets
       }
     },
     methods: {
       ...mapActions('template', [
         actionTypes.REMOVE_TEMPLATE,
         actionTypes.UPDATE_TEMPLATE
+      ]),
+      ...mapActions('stylesheet', [
+        actionTypes.SET_STYLESHEETS_FOR_TEMPLATE,
       ]),
       remove(event) {
         event.target.classList.add('loading');
@@ -72,7 +79,19 @@
           .catch(err => {
             console.error(err);
           });
-      }
+      },
+      setSelectedStylesheets(selectedIDs) {
+        let selectedStylesheetObjects = [];
+        for (let i in selectedIDs) {
+          selectedStylesheetObjects.push({
+            id: selectedIDs[i]
+          });
+        }
+        this.updateTemplate({
+          id: this.template.id,
+          styles: selectedStylesheetObjects
+        })
+      },
     },
     props: ['template']
   }
