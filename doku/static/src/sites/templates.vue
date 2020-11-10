@@ -59,9 +59,6 @@
           .catch(console.error);
       },
       methods: {
-        ...mapActions('template', [
-          actionTypes.CREATE_TEMPLATE,
-        ]),
         openModal() {
           this.$refs.modal.open();
         },
@@ -82,7 +79,7 @@
           }
           templateApi.createTemplate(data)
             .then((response) => {
-              window.location.href = response.data.public_url;
+              window.location.href = response.data.id;
             })
             .catch(console.error)
             .finally(() => {

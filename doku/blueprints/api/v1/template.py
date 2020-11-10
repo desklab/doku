@@ -18,7 +18,7 @@ def update():
 
 @bp.route("/", methods=["POST"])
 def create():
-    return TemplateSchema.create()
+    return TemplateSchema.create(commit=True)
 
 
 @bp.route("/", methods=["GET"])
