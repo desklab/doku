@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import VariableEditor from "../components/variable/VariableEditor";
+import VariableEditor from "../components/document/VariableEditor";
 export default {
 name: "Snippet",
   components: {

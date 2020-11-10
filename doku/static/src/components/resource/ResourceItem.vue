@@ -25,7 +25,7 @@
   import * as actionTypes from '../../store/types/actions';
   import {mapState, mapActions} from 'vuex';
   import AnimatedNotice from "../ui/AnimatedNotice";
-  import TextEdit from "../ui/TextEdit";
+  import TextEdit from "../ui/form/TextEdit";
   import ClipboardJS from 'clipboard';
 
   export default {

@@ -6,14 +6,14 @@
           <b>Notice</b><br>
           Removing the document will permanently delete all variables associated with it.
           However, templates and stylesheets will continue to be available for other documents.
-        </div>  
+        </div>
         <br>
         Please confirm that you want to remove this document!
       </div>
     </div>
     <div class="modal-footer">
       <button @click="close" class="btn btn-link float-right">
-        Abort 
+        Abort
       </button>
       <button @click="remove" class="btn btn-error float-right mr-1">
         Remove Document
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import Modal from "./Modal";
+  import Modal from "../ui/modal/Modal";
   import {mapActions, mapState} from "vuex";
   import * as actionTypes from "../../store/types/actions";
   import * as ns from '../../store/namespace';

@@ -21,7 +21,7 @@
 <script>
   import Editor from '../ui/Editor.vue';
   import AnimatedNotice from "../ui/AnimatedNotice";
-  import AnimatedToggle from "../ui/AnimatedToggle";
+  import AnimatedToggle from "../ui/form/AnimatedToggle";
 
   export default {
     name: 'VariableEditor',

@@ -31,7 +31,7 @@
   import {MoreVerticalIcon, XIcon} from 'vue-feather-icons';
   import * as actionTypes from "../../store/types/actions";
   import AnimatedNotice from "../ui/AnimatedNotice";
-  import TextEdit from "../ui/TextEdit";
+  import TextEdit from "../ui/form/TextEdit";
 
   export default {
     name: 'StyleItem',
@@ -49,13 +49,13 @@
         if (this.stylesheet.base_templates[0])
           return this.stylesheet.base_templates[0].name
         else
-          return null 
+          return null
       },
       isBase: function() {
         if (this.stylesheet.base_templates[0])
           return true
         else
-          return false 
+          return false
       },
       isEmpty: function() {
         return this.stylesheet.source == null

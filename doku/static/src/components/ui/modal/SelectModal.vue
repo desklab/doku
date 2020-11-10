@@ -3,8 +3,8 @@
     <div class="modal-body">
       <div class="content">
         <div v-for="item in items" :key="item.id" class="form-group">
-          <label class="form-checkbox c-hand">
-            <input type="checkbox" name="item" :value="item.id" @change="select(item.id, $event)" :checked="selectedItems.includes(item.id)">
+          <label class="form-radio c-hand">
+            <input type="radio" name="item" :value="item.id" @change="select(item.id, $event)" :checked="selectedItem === item.id">
             <i class="form-icon"></i> {{ item.name }}
           </label>
         </div>
@@ -12,9 +12,6 @@
       </div>
     </div>
     <div class="modal-footer">
-      <a class="btn btn-link float-left" v-if="editLink !== null" :href="editLink" >
-        Edit Items
-      </a>
       <button v-if="none" class="btn btn-link float-left" @click="selectNone()">
         Select None
       </button>
@@ -30,13 +27,13 @@
 
 <script>
 import Modal from "./Modal";
-import Pagination from "./Pagination";
-import AnimatedNotice from "./AnimatedNotice";
+import Pagination from "../Pagination";
+import AnimatedNotice from "../AnimatedNotice";
 
 /**
- * Multi-Select Modal
+ * Select Modal
  *
- * Modal used to select multiple items (e.g. stylesheets). This is used to
+ * Modal used to select items (e.g. a template). This is used to
  * replace the simple `<select>` HTML element which does not support
  * pagination.
  * The items must be a list of objects containing an id.
@@ -48,31 +45,28 @@ import AnimatedNotice from "./AnimatedNotice";
  *   selection).
  * @param {Boolean} none - Add option for selecting no item using a
  *   button (Select None).
- * @param {String} editLink - Link to site where the collection of
- *   items can be edited (set to 'null' to disable button).
  *
- * @event doku-selection-made: Passes the selected items when the modal
+ * @event doku-selection-made: Passes the selected item when the modal
  *   is closed and a selection has been made.
  */
 
 export default {
-  name: 'MultiSelectModal',
+  name: 'SelectModal',
   components: {
-    Modal, 
-    Pagination, 
+    Modal,
+    Pagination,
     AnimatedNotice
   },
   props: {
     apiFetch: Function,
     title: String,
-    defaultSelection: Array,
-    none: Boolean,
-    editLink: String
+    defaultSelection: Number,
+    none: Boolean
   },
   data() {
     return {
       items: [],
-      selectedItems: [],
+      selectedItem: null,
       pagination: {
         has_next: false,
         has_prev: false,
@@ -82,12 +76,15 @@ export default {
       loaded: {}
     }
   },
+  mounted() {
+    this.selectedItem = this.defaultSelection;
+  },
   methods: {
     toggle() {
       this.$refs.modal.toggle();
     },
     open() {
-      this.selectedItems = this.defaultSelection;
+      this.selectedItem = this.defaultSelection;
       this.update();
       this.$refs.modal.open();
     },
@@ -107,9 +104,7 @@ export default {
     },
     select(id, event) {
       if (event.target.checked) {
-        this.selectedItems.push(id);
-      } else {
-        this.selectedItems.splice(this.selectedItems.indexOf(id),1);
+        this.selectedItem = id;
       }
     },
     fetch(page) {
@@ -138,10 +133,11 @@ export default {
     },
     saveSelection() {
       this.close();
-      this.$emit('doku-selection-made', this.selectedItems);
+      this.$emit('doku-selection-made', this.selectedItem);
     },
     selectNone() {
-      this.selectedItems = [];
+      this.selectedItem = null;
+      this.saveSelection();
     }
   }
 }

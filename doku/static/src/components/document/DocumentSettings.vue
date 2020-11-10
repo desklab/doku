@@ -59,13 +59,13 @@
   import {mapActions, mapState} from "vuex";
   import {InfoIcon} from 'vue-feather-icons';
 
-  import AnimatedToggle from './AnimatedToggle';
-  import Modal from "./Modal";
+  import AnimatedToggle from '../ui/form/AnimatedToggle';
+  import Modal from "../ui/modal/Modal";
   import * as actionTypes from '../../store/types/actions';
   import templateApi from '../../api/template';
   import * as ns from '../../store/namespace';
-  import AnimatedNotice from "./AnimatedNotice";
-  import SelectModal from './SelectModal.vue';
+  import AnimatedNotice from "../ui/AnimatedNotice";
+  import SelectModal from '../ui/modal/SelectModal.vue';
   import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation.vue";
 
   export default {

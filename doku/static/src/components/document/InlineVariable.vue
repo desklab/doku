@@ -113,12 +113,12 @@
   } from 'vue-feather-icons';
 
   import Editor from '../ui/Editor.vue';
-  import Modal from "../ui/Modal";
+  import Modal from "../ui/modal/Modal";
   import AnimatedNotice from "../ui/AnimatedNotice";
   import * as actionTypes from '../../store/types/actions';
-  import AnimatedToggle from "../ui/AnimatedToggle";
+  import AnimatedToggle from "../ui/form/AnimatedToggle";
   import VariableEditor from "./VariableEditor";
-  import SelectModal from "../ui/SelectModal";
+  import SelectModal from "../ui/modal/SelectModal";
   import snippetApi from '../../api/snippet';
 
   export default {
@@ -229,7 +229,7 @@
         }
 
         if (this.variable.is_list) {
-          // This variable is a list. Thus, the children property
+          // This document is a list. Thus, the children property
           // (which is a list) has to be populated. This is done by
           // iterating over all children and requesting their data
           // recursively.

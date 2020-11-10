@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="doku-edit-vars">
-      <folder-row :nested="true" name="Variables" :always-open="true" :has-image="false" :allow-add="true" :allow-remove="false" v-on:doku-dragend="onDrop($event, null)" v-on:doku-add-folder="addGroup">
+      <folder-row :nested="true" :name="document.name" :always-open="true" :has-image="false" :allow-add="true" :allow-remove="false" v-on:doku-dragend="onDrop($event, null)" v-on:doku-add-folder="addGroup">
         <div class="folder-list mb-2">
           <folder-row v-for="group in documentGroups" :name="group.name" :key="group.id" v-on:doku-dragend="onDrop($event, group.id)" :allow-add="false" :allow-remove="true" v-on:doku-remove-folder="removeGroup($event, group.id)" v-on:doku-rename-folder="renameGroup(group.id, $event)">
             <inline-variable ref="vars" v-for="variable in group.variables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable"></inline-variable>
@@ -43,7 +43,7 @@
 <script>
 import InlineVariable from "./InlineVariable";
 import {mapActions, mapState, mapGetters} from "vuex";
-import Modal from "../ui/Modal";
+import Modal from "../ui/modal/Modal";
 import * as actionTypes from '../../store/types/actions';
 import * as getterTypes from '../../store/types/getters';
 import AnimatedNotice from "../ui/AnimatedNotice";

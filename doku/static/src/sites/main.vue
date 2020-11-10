@@ -51,8 +51,8 @@
 
   import templateApi from '../api/template';
   import documentApi from '../api/document';
-  import Modal from '../components/ui/Modal.vue';
-  import BulkDownload from '../components/ui/BulkDownload.vue';
+  import Modal from '../components/ui/modal/Modal.vue';
+  import BulkDownload from '../components/ui/modal/BulkDownload.vue';
 
   export default {
     name: 'home',

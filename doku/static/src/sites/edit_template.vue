@@ -9,7 +9,7 @@
 <script>
   import {mapState} from 'vuex';
 
-  import TemplateEditor from "../components/ui/TemplateEditor";
+  import TemplateEditor from "../components/template/TemplateEditor";
 
   export default {
     name: 'EditTemplate',
