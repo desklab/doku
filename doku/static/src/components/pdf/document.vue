@@ -11,7 +11,10 @@
 <script>
   import PDFPage from './page.vue';
   import range from 'lodash/range';
-  import pdfjs from 'pdfjs-dist';
+  // Due to some change (what?), this does not work anymore
+  // import { pdfjs } from 'pdfjs-dist/build/pdf';
+  // Use require instead
+  let pdfjs = require('pdfjs-dist/build/pdf');
   import PdfjsWorker from 'pdfjs-dist/build/pdf.worker';
 
   pdfjs.GlobalWorkerOptions.workerPort = new PdfjsWorker();
