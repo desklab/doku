@@ -8,6 +8,7 @@
         <button ref="saveButton" @click="save" class="btn btn-primary">
           Save
         </button>
+        <a class="btn ml-2 tooltip tooltip-left" href="./../template" data-tooltip="Unsaved changes will be discarded!">Close</a>
       </div>
     </div>
     <multi-select-modal ref="stylesSelector" title="Select Stylesheets" :api-fetch="stylesheetApiFetch" :defaultSelection="selectedStylesheets" :none="false" :editLink="'../stylesheets'" v-on:doku-selection-made="setSelectedStylesheets"></multi-select-modal>
