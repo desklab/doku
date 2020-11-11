@@ -69,8 +69,6 @@
             this.$nextTick(() => {
               if (newValue[0].active) {
                 this.$refs.varEditor.updateEditors();
-              } else if (newValue[1].active) {
-                this.$refs.templateEditor.updateEditor();
               }
             }, 200);
           }
