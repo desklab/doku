@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import templateApi from '../../api/resource';
+  import templateApi from '../../api/template';
   import stylesheetApi from '../../api/stylesheet';
 
   import * as actionTypes from '../../store/types/actions';
@@ -31,6 +31,7 @@
       AnimatedNotice,
       MultiSelectModal
     },
+    props: ['template'],
     computed: {
       numberOfStyles: function() {
         return this.template.styles.length
@@ -41,6 +42,16 @@
           stylesheetIDs.push(this.template.styles[i].id);
         }
         return stylesheetIDs;
+      },
+      fetchOptions: function() {
+        let urlParams = new URLSearchParams(window.location.search);
+        return {
+          params: {
+            order: "name",
+            dir: "asc",
+            page: (urlParams.has("page")) ? urlParams.get("page") : 1
+          }
+        };
       }
     },
     data() {
@@ -50,25 +61,22 @@
     },
     methods: {
       ...mapActions('template', [
-        actionTypes.REMOVE_TEMPLATE,
-        actionTypes.UPDATE_TEMPLATE
+        actionTypes.FETCH_TEMPLATES
       ]),
       ...mapActions('stylesheet', [
         actionTypes.SET_STYLESHEETS_FOR_TEMPLATE,
       ]),
       remove(event) {
         event.target.classList.add('loading');
-        this.removeTemplate(this.template.delete_url, this.template.id)
+        templateApi.removeTemplate(this.template.delete_url, this.template.id)
           .then(() => {
-            // ToDo: fetch and update templates
+            this.fetchTemplates(this.fetchOptions)
           })
           .catch((err) => {
             console.error(err);
             this.$refs.deleteNotice.trigger('Failed!', 'text-error');
-          })
-          .finally(() => {
             event.target.classList.remove('loading');
-          });
+          })
       },
       saveName(name) {
         let data = {
@@ -76,13 +84,11 @@
           id: this.template.id,
           name: name
         };
-        this.updateTemplate(data)
+        templateApi.updateTemplate(data)
           .then(() => {
-            // ToDo: fetch and update templates
-          })            
-          .catch(err => {
-            console.error(err);
-          });
+            this.fetchTemplates(this.fetchOptions)
+              .catch(console.error)
+          }).catch(console.error)
       },
       setSelectedStylesheets(selectedIDs) {
         let selectedStylesheetObjects = [];
@@ -91,13 +97,15 @@
             id: selectedIDs[i]
           });
         }
-        this.updateTemplate({
+        templateApi.updateTemplate({
           id: this.template.id,
           styles: selectedStylesheetObjects
-        })
+        }).then(() => {
+            this.fetchTemplates(this.fetchOptions)
+              .catch(console.error);
+          }).catch(console.error)
       },
-    },
-    props: ['template']
+    }
   }
 </script>
 
