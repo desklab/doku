@@ -26,6 +26,11 @@ class DokuSchema(SQLAlchemySchema):
         if has_request_context() and include_request:
             extra_includes = set(request.args.getlist("includes[]", type=str))
             extra_excludes = set(request.args.getlist("excludes[]", type=str))
+            if request.json is not None:
+                if "includes" in request.json:
+                    extra_includes |= set(request.json.get("includes"))
+                if "excludes" in request.json:
+                    extra_excludes |= set(request.json.get("excludes"))
         else:
             extra_includes = extra_excludes = set()
         super(DokuSchema, self).__init__(*args, **kwargs)
