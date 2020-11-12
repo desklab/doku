@@ -57,9 +57,7 @@ def get_pagination_page() -> Optional[int]:
 
 
 def get_ordering(
-    model: type(DeclarativeMeta),
-    default_order: str = None,
-    default_dir: str = None
+    model: type(DeclarativeMeta), default_order: str = None, default_dir: str = None
 ) -> Optional[tuple]:
     """Get Ordering
 
@@ -75,13 +73,13 @@ def get_ordering(
         raise ValueError(f"Expected type DeclarativeMeta but got {type(model)}")
     order = request.args.get("order", default_order)
     if order is None:
-        return None
+        return None, None, None
     if order in inspect(model).column_attrs.keys():
         ordering = getattr(model, order)
         if isinstance(ordering.type, String):
             ordering = func.lower(ordering)
     else:
-        return None
+        return None, None, None
     dir_arg = request.args.get("dir", default_dir)
     if dir_arg not in ["asc", "desc"]:
         dir_arg = default_dir
