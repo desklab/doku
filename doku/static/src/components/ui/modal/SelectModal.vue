@@ -4,7 +4,7 @@
       <div class="content">
         <div v-for="item in items" :key="item.id" class="form-group">
           <label class="form-radio c-hand">
-            <input type="radio" name="item" :value="item.id" @change="select(item.id, item.name, $event)" :checked="selectedItemId === item.id">
+            <input type="radio" name="item" :value="item.id" @change="select(item, $event)" :checked="selectedItemId === item.id">
             <i class="form-icon"></i> {{ item.name }}
           </label>
         </div>
@@ -103,10 +103,10 @@ export default {
       // Fetch or update items and pagination objects
       this.update();
     },
-    select(id, name, event) {
+    select(item, event) {
       if (event.target.checked) {
-        this.selectedItemId = id;
-        this.selectedItemName = name;
+        this.selectedItemId = item.id;
+        this.selectedItemName = item.name;
       }
     },
     fetch(page) {
