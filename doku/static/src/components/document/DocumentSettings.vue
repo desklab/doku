@@ -99,13 +99,11 @@
       save(event) {
         event.target.classList.add('loading');
         let documentNameInput = document.getElementById('documentNameInput');
-        let documentTemplateSelect = document.getElementById('documentTemplateSelect');
         let data = {
           id: this.document.id,
           name: documentNameInput.value,
           // Temporarily disabled
           // public: this.$refs.documentPublicInput.checked,
-          template_id: this.selectedTemplate
         };
         this.updateDocument(data)
           .then(() => {
@@ -130,6 +128,15 @@
       },
       saveSelection(id, name) {
         this.selectedTemplate = id;
+
+        let data = {
+          id: this.document.id,
+          template_id: this.selectedTemplate
+        };
+        this.updateDocument(data)
+          .catch((err) => {
+            console.error(err);
+          })
       }
     }
   }
