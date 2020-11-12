@@ -16,7 +16,7 @@
         {% endif %}
     {%- endfor %}
     <li class="page-item{% if not pagination.has_next %} disabled{% endif %}">
-        <a href="{{ url_for('base.index', page=pagination.next_num, order=order, dir=direction) }}">
+        <a href="{{ url_for(page_url, page=pagination.next_num, order=order, dir=direction) }}">
             {% include "components/icons/arrow-right.html" %}
         </a>
     </li>
