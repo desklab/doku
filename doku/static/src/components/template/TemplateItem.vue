@@ -58,24 +58,28 @@
       ]),
       remove(event) {
         event.target.classList.add('loading');
-        let data = {
-          	url: this.template.delete_url,
-            id: this.template.id
-        }
-        this.removeTemplate(data)
+        this.removeTemplate(this.template.delete_url, this.template.id)
+          .then(() => {
+            // ToDo: fetch and update templates
+          })
           .catch((err) => {
             console.error(err);
             this.$refs.deleteNotice.trigger('Failed!', 'text-error');
+          })
+          .finally(() => {
             event.target.classList.remove('loading');
           });
       },
       saveName(name) {
         let data = {
-          url: this.template.update_url,
+          url: this.template.url,
           id: this.template.id,
           name: name
         };
         this.updateTemplate(data)
+          .then(() => {
+            // ToDo: fetch and update templates
+          })            
           .catch(err => {
             console.error(err);
           });

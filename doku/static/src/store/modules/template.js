@@ -34,8 +34,14 @@ const actions = {
         .catch(reject)
     });
   },
-  removeTemplate({commit, dispatch,state}, data){
-    // ToDo
+  removeTemplate({commit}, data){
+    return new Promise((resolve, reject) => {
+      templateApi.removeTemplate(data)
+        .then(res => {
+          commit(mutationTypes.REMOVE_TEMPLATE, res.data);
+          resolve()
+        }).catch(reject);
+    });
   },
   addStylesheet({commit, dispatch, state}, data) {
     return new Promise((resolve, reject) => {
@@ -83,6 +89,9 @@ const mutations = {
   setTemplate(state, template) {
     Object.assign(state.template, template);
   },
+  removeTemplate(state, template) {
+    
+  }
 }
 
 export default {

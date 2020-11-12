@@ -60,6 +60,17 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
         result = schema.dump(template)
         return jsonify(result)
 
+    @classmethod
+    def delete(cls,instance_id: int, commit=True):
+        instance = get_or_404(
+            db.session.query(cls.Meta.model).filter_by(id=instance_id)
+        )
+        db.session.delete(instance)
+        if commit:
+            db.session.commit()
+
+        return jsonify({"success": True})
+        
 
 class StylesheetSchema(ApiSchema, DateSchemaMixin):
     class Meta:

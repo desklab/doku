@@ -20,5 +20,8 @@ export default {
   },
   createTemplate(template){
     return axios.post(TEMPLATE_API, template);
+  },
+  removeTemplate(url, template){
+    return axios.delete(url, {data: template});
   }
 }
