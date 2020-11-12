@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import TextModal from "./TextModal";
+  import TextModal from "../ui/modal/TextModal";
   import MultiSelectModal from "../ui/modal/MultiSelectModal";
   import {mapActions, mapState} from "vuex";
   import Editor from "../ui/Editor";

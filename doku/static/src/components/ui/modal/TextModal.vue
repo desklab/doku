@@ -18,7 +18,7 @@
 
 <script>
 import Modal from "./Modal";
-import AnimatedNotice from "./AnimatedNotice";
+import AnimatedNotice from "../AnimatedNotice";
 
 /**
  * Text Modal

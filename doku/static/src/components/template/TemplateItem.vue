@@ -22,8 +22,8 @@
   import {mapState, mapActions} from 'vuex';
 
   import AnimatedNotice from "../ui/AnimatedNotice";
-  import TextEdit from "../ui/TextEdit";
-  import MultiSelectModal from "../ui/MultiSelectModal";
+  import TextEdit from "../ui/form/TextEdit";
+  import MultiSelectModal from "../ui/modal/MultiSelectModal";
 
   export default {
     components: {

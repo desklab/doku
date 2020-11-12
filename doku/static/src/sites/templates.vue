@@ -37,7 +37,7 @@
     import TemplateItem from '../components/template/TemplateItem';
 
     import {PlusIcon} from 'vue-feather-icons';
-    import Modal from '../components/ui/Modal.vue';
+    import Modal from '../components/ui/modal/Modal.vue';
     import {mapState, mapActions} from 'vuex';
     import * as actionTypes from '../store/types/actions';
 
