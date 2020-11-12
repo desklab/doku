@@ -8,13 +8,14 @@ from pygments.formatters.html import HtmlFormatter
 from doku.models import db, DateMixin
 from doku.utils.weasyfetch import url_fetcher
 
-DEFAULT_TEMPLATE = """<html>
+DEFAULT_TEMPLATE = """<!doctype html>
+<html lang="de">
 <head>
-  <title>{{ title }}</title>
+  <title>{{ Document_Title }}</title>
   <meta charset="utf-8">
 </head>
 <body>
-  {{ body }}
+
 </body>
 </html>"""
 
