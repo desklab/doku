@@ -13,7 +13,7 @@ class Document(db.Model, DateMixin):
     public = db.Column(db.Boolean)
     author_id = db.Column(db.Integer, db.ForeignKey("doku_user.id"), nullable=False)
     template_id = db.Column(
-        db.Integer, db.ForeignKey("doku_template.id"), nullable=True
+        db.Integer, db.ForeignKey("doku_template.id"), nullable=False
     )
 
     template = db.relationship("Template", back_populates="documents")
