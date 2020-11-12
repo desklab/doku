@@ -6,6 +6,7 @@ export const UPDATE_VARIABLES = 'updateVariables';
 export const REMOVE_VARIABLE = 'removeVariable';
 export const CREATE_VARIABLE = 'createVariable';
 
+export const FETCH_TEMPLATES = 'fetchTemplates';
 export const UPDATE_TEMPLATE = 'updateTemplate';
 export const REMOVE_TEMPLATE = 'removeTemplate';
 export const ADD_STYLESHEET_TO_TEMPLATE = 'addStylesheet';

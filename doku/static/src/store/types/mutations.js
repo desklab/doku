@@ -7,6 +7,7 @@ export const REMOVE_VARIABLE = 'removeVariable';
 // actions might be executed from within a document context, thus
 // modifying the document state itself.
 export const SET_TEMPLATE = 'setTemplate';
+export const SET_TEMPLATES = 'setTemplates';
 export const REMOVE_TEMPLATE = 'removeTemplate';
 export const SET_STYLESHEET = 'setStylesheet';
 export const DELETE_STYLESHEET = 'deleteStylesheet';
