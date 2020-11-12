@@ -5,7 +5,7 @@
     <div class="container">
         <div id="templates"></div>
     </div>
-    {% with pagination=templates, page_url='base.index' %}
+    {% with pagination=templates, page_url='template.index_all' %}
         {% include "components/pagination.html" %}
     {% endwith %}
 {% endblock %}
