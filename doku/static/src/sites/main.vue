@@ -28,11 +28,19 @@
           </div>
           -->
           <div class="form-group p-2">
-            <label class="form-label" for="documentTemplateSelect">Template</label>
-            <select id="documentTemplateSelect" name="template" class="form-select">
-              <option value="">Create new</option>
-              <option v-for="template in templates" :value="template.id" :key="template.id">{{ template.name }}</option>
-            </select>
+            <label class="form-label" for="documentTemplateSelect">Template</label>        
+            <div class="border rounded-lg mt-2 p-4">
+              <span class="d-block mb-3" v-if="selectedTemplateId!=null">
+                Template: <b>{{ selectedTemplateName }}</b>
+              </span>
+              <span class="d-block mb-3" v-if="selectedTemplateId==null">
+                Template: <b>None / Create New</b>
+              </span>
+              <button @click="$refs.selectModal.open()" class="btn btn-sm">Select Template</button>
+              <button @click="selectNone" class="btn btn-sm">Select None / Create New</button>
+              <select-modal :none="false" ref="selectModal" title="Select Template" v-on:doku-selection-made="saveTemplateSelection" :apiFetch="templateApiFetch"></select-modal>
+            </div>
+
           </div>
         </div>
       </div>
@@ -55,15 +63,19 @@
   import documentApi from '../api/document';
   import Modal from '../components/ui/modal/Modal.vue';
   import BulkDownload from '../components/ui/modal/BulkDownload.vue';
+  import selectModal from '../components/ui/modal/SelectModal';
 
   export default {
     name: 'home',
     components: {
-      Modal, PlusIcon, DownloadIcon, BulkDownload
+      Modal, PlusIcon, DownloadIcon, BulkDownload, selectModal
     },
     data() {
       return {
-        templates: []
+        selectedTemplateId: null,
+        selectedTemplateName: null,
+        templates: [],
+        templateApiFetch: templateApi.fetchTemplates
       }
     },
     mounted() {
@@ -86,14 +98,13 @@
       save(event) {
         let documentNameInput = document.getElementById('documentNameInput');
         //let documentPublicInput = document.getElementById('documentPublicInput');
-        let documentTemplateSelect = document.getElementById('documentTemplateSelect');
 
         if (!documentNameInput.checkValidity()) {
           documentNameInput.classList.add('is-error');
           return;
         }
         event.target.classList.add('loading');
-        let template_id = documentTemplateSelect.value;
+        let template_id = this.selectedTemplateId;
         let data = {
           name: documentNameInput.value,
           public: true, //documentPublicInput.checked,
@@ -107,6 +118,14 @@
           .finally(() => {
             event.target.classList.remove('loading');
           });
+      },
+      saveTemplateSelection(id, name) {
+        this.selectedTemplateId = id;
+        this.selectedTemplateName = name
+      },
+      selectNone() {
+        this.selectedTemplateId = null;
+        this.selectedTemplateName = null;
       }
     }
   }

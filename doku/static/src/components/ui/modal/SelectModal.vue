@@ -4,7 +4,7 @@
       <div class="content">
         <div v-for="item in items" :key="item.id" class="form-group">
           <label class="form-radio c-hand">
-            <input type="radio" name="item" :value="item.id" @change="select(item.id, $event)" :checked="selectedItem === item.id">
+            <input type="radio" name="item" :value="item.id" @change="select(item.id, item.name, $event)" :checked="selectedItemId === item.id">
             <i class="form-icon"></i> {{ item.name }}
           </label>
         </div>
@@ -66,7 +66,8 @@ export default {
   data() {
     return {
       items: [],
-      selectedItem: null,
+      selectedItemId: null,
+      selectedItemName: null,
       pagination: {
         has_next: false,
         has_prev: false,
@@ -77,14 +78,14 @@ export default {
     }
   },
   mounted() {
-    this.selectedItem = this.defaultSelection;
+    this.selectedItemId = this.defaultSelection;
   },
   methods: {
     toggle() {
       this.$refs.modal.toggle();
     },
     open() {
-      this.selectedItem = this.defaultSelection;
+      this.selectedItemId = this.defaultSelection;
       this.update();
       this.$refs.modal.open();
     },
@@ -102,9 +103,10 @@ export default {
       // Fetch or update items and pagination objects
       this.update();
     },
-    select(id, event) {
+    select(id, name, event) {
       if (event.target.checked) {
-        this.selectedItem = id;
+        this.selectedItemId = id;
+        this.selectedItemName = name;
       }
     },
     fetch(page) {
@@ -133,10 +135,11 @@ export default {
     },
     saveSelection() {
       this.close();
-      this.$emit('doku-selection-made', this.selectedItem);
+      this.$emit('doku-selection-made', this.selectedItemId, this.selectedItemName);
     },
     selectNone() {
-      this.selectedItem = null;
+      this.selectedItemId = null;
+      this.selectedItemName = null;
       this.saveSelection();
     }
   }

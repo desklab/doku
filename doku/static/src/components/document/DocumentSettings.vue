@@ -128,7 +128,7 @@
             event.target.classList.remove('loading');
           });
       },
-      saveSelection(id) {
+      saveSelection(id, name) {
         this.selectedTemplate = id;
       }
     }
