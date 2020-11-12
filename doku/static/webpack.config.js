@@ -4,7 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 module.exports = {
@@ -33,11 +33,7 @@ module.exports = {
     },
     minimize: process.env.NODE_ENV === 'production',
     minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: false
-      })
+      new TerserPlugin()
     ]
   },
   module: {
@@ -45,8 +41,22 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'vue-style-loader',
-          'css-loader'
+          {
+            loader: 'file-loader',
+            options: {outputPath: 'css/', name: '[name].min.css'}
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')
+                ]
+              }
+            }
+          },
+          // 'css-loader',
+          // 'vue-style-loader'
         ],
       },
       {
@@ -60,9 +70,11 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [
-                require('autoprefixer')
-              ]
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')
+                ]
+              }
             }
           },
           {
@@ -86,7 +98,7 @@ module.exports = {
         test: /\.worker\.js$/,
         loader: 'worker-loader',
         options: {
-          name: '[name].bundle.js'
+          filename: '[name].bundle.js'
         }
       },
       {

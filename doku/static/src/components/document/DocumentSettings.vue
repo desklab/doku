@@ -7,7 +7,10 @@
             <h5 class="border-bottom pb-2">Document Settings</h5>
             <div class="d-block">
               <div class="form-group form-inline">
-                <label class="form-label" for="documentNameInput"><b>Name</b></label>
+                <label class="form-label" for="documentNameInput">
+                  <b>Name</b>
+                  <small><animated-notice class="ml-1" ref="saveNotice"></animated-notice></small>
+                </label>
                 <div class="input-group">
                   <input class="form-input" type="text" id="documentNameInput" name="name" :value="document.name" placeholder="Name">
                   <button class="btn input-group-btn" @click="save">Save</button>
@@ -59,13 +62,13 @@
   import {mapActions, mapState} from "vuex";
   import {InfoIcon} from 'vue-feather-icons';
 
-  import AnimatedToggle from './AnimatedToggle';
-  import Modal from "./Modal";
+  import AnimatedToggle from '../ui/form/AnimatedToggle';
+  import Modal from "../ui/modal/Modal";
   import * as actionTypes from '../../store/types/actions';
   import templateApi from '../../api/template';
   import * as ns from '../../store/namespace';
-  import AnimatedNotice from "./AnimatedNotice";
-  import SelectModal from './SelectModal.vue';
+  import AnimatedNotice from "../ui/AnimatedNotice";
+  import SelectModal from '../ui/modal/SelectModal.vue';
   import RemoveDocumentConfirmation from "./RemoveDocumentConfirmation.vue";
 
   export default {
@@ -100,16 +103,17 @@
         let data = {
           id: this.document.id,
           name: documentNameInput.value,
-          public: this.$refs.documentPublicInput.checked,
+          // Temporarily disabled
+          // public: this.$refs.documentPublicInput.checked,
           template_id: this.selectedTemplate
         };
         this.updateDocument(data)
           .then(() => {
-            this.$refs.saveNotice.trigger('Success!', 'text-dark');
+            this.$refs.saveNotice.trigger('Success!', 'text-primary');
           })
           .catch((err) => {
             console.error(err);
-            this.$refs.saveNotice.trigger('Failed!', 'text-error');
+            this.$refs.saveNotice.trigger('Failed! ' + err.message, 'text-error');
           })
           .finally(() => {
             event.target.classList.remove('loading');
@@ -120,7 +124,7 @@
           .then(() => {window.location.href = '/';})
           .catch((err) => {
             console.error(err);
-            this.$refs.deleteNotice.trigger('Failed!', 'text-error');
+            this.$refs.deleteNotice.trigger('Failed! ' + err.message, 'text-error');
             event.target.classList.remove('loading');
           });
       },

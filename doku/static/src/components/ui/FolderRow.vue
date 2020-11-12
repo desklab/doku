@@ -30,7 +30,7 @@
 
 <script>
 import { Trash2Icon, FolderPlusIcon, CheckIcon, XIcon } from 'vue-feather-icons';
-import TextEdit from './TextEdit';
+import TextEdit from './form/TextEdit';
 
 
 /**

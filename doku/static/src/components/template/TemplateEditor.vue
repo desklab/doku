@@ -20,12 +20,12 @@
 </template>
 
 <script>
-  import MultiSelectModal from "./MultiSelectModal";
   import TextModal from "./TextModal";
+  import MultiSelectModal from "../ui/modal/MultiSelectModal";
   import {mapActions, mapState} from "vuex";
-  import Editor from "./Editor";
+  import Editor from "../ui/Editor";
   import * as actionTypes from '../../store/types/actions';
-  import AnimatedNotice from "./AnimatedNotice";
+  import AnimatedNotice from "../ui/AnimatedNotice";
   import stylesheetApi from '../../api/stylesheet';
   import templateApi from '../../api/template';
 

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import pdfjs from 'pdfjs-dist';
+  let pdfjs = require('pdfjs-dist/build/pdf');
 
 
   export default {

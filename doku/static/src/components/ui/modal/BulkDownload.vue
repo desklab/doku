@@ -37,16 +37,16 @@
 </template>
 
 <script>
-  import documentApi from '../../api/document';
+  import documentApi from '../../../api/document';
   import Modal from "./Modal";
-  import AnimatedNotice from "./AnimatedNotice";
-  import Pagination from './Pagination.vue';
+  import AnimatedNotice from "../AnimatedNotice";
+  import Pagination from '../Pagination.vue';
 
   export default {
     name: 'BulkDownload',
     components: {
-      Modal, 
-      Pagination, 
+      Modal,
+      Pagination,
       AnimatedNotice
     },
     data() {

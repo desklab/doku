@@ -17,9 +17,9 @@
   import Preview from '../components/pdf/preview.vue';
   import Tabs from '../components/ui/Tabs.vue';
 
-  import MultiVariableEditor from '../components/variable/MultiVariableEditor';
-  import DocumentSettings from '../components/ui/DocumentSettings';
-  import TemplateEditor from '../components/ui/TemplateEditor';
+  import MultiVariableEditor from '../components/document/MultiVariableEditor';
+  import DocumentSettings from '../components/document/DocumentSettings';
+  import TemplateEditor from '../components/template/TemplateEditor';
 
   const TABS = [
     {
@@ -69,8 +69,6 @@
             this.$nextTick(() => {
               if (newValue[0].active) {
                 this.$refs.varEditor.updateEditors();
-              } else if (newValue[1].active) {
-                this.$refs.templateEditor.updateEditor();
               }
             }, 200);
           }

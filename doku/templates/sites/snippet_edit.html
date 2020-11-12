@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base16-light.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/codemirror.min.css') }}">
+{% endblock %}
 {% block content %}
     {{ super() }}
     <form method="post">
