@@ -19,12 +19,14 @@
             <label class="form-label" for="documentNameInput">Name</label>
             <input v-on:keyup="$event.target.classList.remove('is-error')" name="name" class="form-input" type="text" id="documentNameInput" placeholder="Name" pattern="^.{1,}$" required>
           </div>
+          <!-- Public/Private switch
           <div class="form-group p-2">
             <label class="form-switch">
               <input checked name="public" id="documentPublicInput" type="checkbox">
               <i class="form-icon"></i> Make document public
             </label>
           </div>
+          -->
           <div class="form-group p-2">
             <label class="form-label" for="documentTemplateSelect">Template</label>
             <select id="documentTemplateSelect" name="template" class="form-select">
@@ -83,7 +85,7 @@
       },
       save(event) {
         let documentNameInput = document.getElementById('documentNameInput');
-        let documentPublicInput = document.getElementById('documentPublicInput');
+        //let documentPublicInput = document.getElementById('documentPublicInput');
         let documentTemplateSelect = document.getElementById('documentTemplateSelect');
 
         if (!documentNameInput.checkValidity()) {
@@ -94,7 +96,7 @@
         let template_id = documentTemplateSelect.value;
         let data = {
           name: documentNameInput.value,
-          public: documentPublicInput.checked,
+          public: true, //documentPublicInput.checked,
           template_id: (template_id === "") ? null : template_id
         }
         documentApi.createDocument(data)
