@@ -4,7 +4,7 @@
       <div class="content">
         <div v-for="item in items" :key="item.id" class="form-group">
           <label class="form-radio c-hand">
-            <input type="radio" name="item" :value="item.id" @change="select(item, $event)" :checked="selectedItemId === item.id">
+            <input type="radio" name="item" :value="item.id" @change="select(item, $event)" :checked="selectedItem !== undefined && selectedItem !== null && selectedItem.id === item.id">
             <i class="form-icon"></i> {{ item.name }}
           </label>
         </div>
@@ -41,7 +41,7 @@ import AnimatedNotice from "../AnimatedNotice";
  * @param {Function} apiFetch - An API function that can be called
  *   to get all items (with pagination).
  * @param {String} title - Passed to the modal component.
- * @param {Number} defaultSelection - The default selection (current
+ * @param {Object} defaultSelection - The default selection (current
  *   selection).
  * @param {Boolean} none - Add option for selecting no item using a
  *   button (Select None).
@@ -60,14 +60,13 @@ export default {
   props: {
     apiFetch: Function,
     title: String,
-    defaultSelection: Number,
+    defaultSelection: Object,
     none: Boolean
   },
   data() {
     return {
       items: [],
-      selectedItemId: null,
-      selectedItemName: null,
+      selectedItem: null,
       pagination: {
         has_next: false,
         has_prev: false,
@@ -78,14 +77,14 @@ export default {
     }
   },
   mounted() {
-    this.selectedItemId = this.defaultSelection;
+    this.selectedItem = this.defaultSelection;
   },
   methods: {
     toggle() {
       this.$refs.modal.toggle();
     },
     open() {
-      this.selectedItemId = this.defaultSelection;
+      this.selectedItem = this.defaultSelection;
       this.update();
       this.$refs.modal.open();
     },
@@ -105,8 +104,7 @@ export default {
     },
     select(item, event) {
       if (event.target.checked) {
-        this.selectedItemId = item.id;
-        this.selectedItemName = item.name;
+        this.selectedItem = item;
       }
     },
     fetch(page) {
@@ -135,11 +133,10 @@ export default {
     },
     saveSelection() {
       this.close();
-      this.$emit('doku-selection-made', this.selectedItemId, this.selectedItemName);
+      this.$emit('doku-selection-made', this.selectedItem);
     },
     selectNone() {
-      this.selectedItemId = null;
-      this.selectedItemName = null;
+      this.selectedItem = null;
       this.saveSelection();
     }
   }

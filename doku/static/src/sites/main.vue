@@ -30,10 +30,10 @@
           <div class="form-group p-2">
             <label class="form-label" for="documentTemplateSelect">Template</label>        
             <div class="border rounded-lg mt-2 p-4">
-              <span class="d-block mb-3" v-if="selectedTemplateId!=null">
-                Template: <b>{{ selectedTemplateName }}</b>
+              <span class="d-block mb-3" v-if="selectedTemplate !== null && selectedTemplate !== undefined">
+                Template: <b>{{ selectedTemplate.name }}</b>
               </span>
-              <span class="d-block mb-3" v-if="selectedTemplateId==null">
+              <span class="d-block mb-3" v-if="selectedTemplate === null || selectedTemplate === undefined">
                 Template: <b>None / Create New</b>
               </span>
               <button @click="$refs.selectModal.open()" class="btn btn-sm">Select Template</button>
@@ -72,8 +72,7 @@
     },
     data() {
       return {
-        selectedTemplateId: null,
-        selectedTemplateName: null,
+        selectedTemplate: null,
         templates: [],
         templateApiFetch: templateApi.fetchTemplates
       }
@@ -119,13 +118,11 @@
             event.target.classList.remove('loading');
           });
       },
-      saveTemplateSelection(id, name) {
-        this.selectedTemplateId = id;
-        this.selectedTemplateName = name
+      saveTemplateSelection(template) {
+        this.selectedTemplate = template;
       },
       selectNone() {
-        this.selectedTemplateId = null;
-        this.selectedTemplateName = null;
+        this.selectedTemplate = null;
       }
     }
   }

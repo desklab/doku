@@ -97,7 +97,7 @@
         </button>
       </div>
     </Modal>
-    <select-modal ref="snippetSelector" title="Select Snippet" :api-fetch="snippetApiFetch" :defaultSelection="snippetId" :none="true" v-on:doku-selection-made="setSelectedSnippet"></select-modal>
+    <select-modal ref="snippetSelector" title="Select Snippet" :api-fetch="snippetApiFetch" :defaultSelection="variable.snippet" :none="true" v-on:doku-selection-made="setSelectedSnippet"></select-modal>
   </div>
 </template>
 
@@ -161,15 +161,6 @@
               this.$refs.editor.refresh();
             });
           }
-        }
-      }
-    },
-    computed: {
-      snippetId: function () {
-        if (this.variable.snippet === undefined || this.variable.snippet === null) {
-          return null;
-        } else {
-          return this.variable.snippet.id;
         }
       }
     },
@@ -254,10 +245,10 @@
         }
         return _data;
       },
-      setSelectedSnippet(snippetID) {
+      setSelectedSnippet(snippet) {
         let data = {
           id: this.variable.id,
-          snippet_id: snippetID
+          snippet_id: snippet.id
         };
         this.updateVariables(data)
           .then(() => {

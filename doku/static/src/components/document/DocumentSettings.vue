@@ -89,7 +89,7 @@
       }
     },
     mounted() {
-      this.selectedTemplate = this.document.template.id;
+      this.selectedTemplate = this.document.template;
     },
     methods: {
       ...mapActions(ns.DOCUMENT, [
@@ -126,12 +126,13 @@
             event.target.classList.remove('loading');
           });
       },
-      saveSelection(id, name) {
-        this.selectedTemplate = id;
+      saveSelection(selection, name) {
+        this.selectedTemplate = selection;
 
         let data = {
           id: this.document.id,
-          template_id: this.selectedTemplate
+          template_id: this.selectedTemplate.id,
+          includes: ['template']
         };
         this.updateDocument(data)
           .catch((err) => {
