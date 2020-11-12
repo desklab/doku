@@ -19,7 +19,7 @@
                 Current Template: <b>{{ document.template.name }}</b>
               </span>
               <button @click="$refs.selectModal.open()" class="btn btn-sm">Change Template</button>
-              <a :href="`/template/${document.template.id}`" class="btn btn-sm btn-link">Edit Template</a>
+              <a :href="`/template/`" class="btn btn-sm btn-link">Manage Templates</a>
               <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:doku-selection-made="saveSelection" :apiFetch="apiFetch"></select-modal>
             </div>
             <!-- Public/Private switch
