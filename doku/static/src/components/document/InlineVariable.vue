@@ -248,7 +248,7 @@
       setSelectedSnippet(snippet) {
         let data = {
           id: this.variable.id,
-          snippet_id: snippet.id
+          snippet_id: (snippet === null || snippet === undefined) ? null : snippet.id
         };
         this.updateVariables(data)
           .then(() => {
