@@ -7,11 +7,10 @@ from werkzeug.exceptions import BadRequest
 
 from doku import db
 from doku.utils import EMPTY
-from doku.utils.db import get_or_404
+from doku.utils.db import get_or_404, get_pagination_page, get_ordering
 
 
 class NotEmptyString(fields.String):
-
     def __init__(self, *args, allow_none=False, **kwargs):
         super(NotEmptyString, self).__init__(*args, allow_none=allow_none, **kwargs)
 
@@ -113,16 +112,24 @@ class ApiSchema(DokuSchema):
 
     @classmethod
     def get_all(cls):
+        # Get page page and ordering. If no specific order and direction
+        # has been specified, None will be returned. ``order_by`` will
+        # not complain about None being passed, so no worries there.
+        page = get_pagination_page()
+        ordering, order, direction = get_ordering(
+            cls.Meta.model, default_order=None, default_dir=None
+        )
+        # Create a copy of request arguments and drop all entries that
+        # are pagination specific
         data = dict(request.args.copy())
-        page = data.pop("page", None)
-        if page is not None:
-            try:
-                page = int(page)
-            except ValueError:
-                page = None
+        data.pop("page", None)
+        data.pop("order", None)
+        data.pop("dir", None)
         schemas = cls(many=True, include_request=True)
-        pagination = cls.Meta.model.query.filter_by(**data).paginate(  # noqa
-            page=page, per_page=10
+        pagination = (
+            cls.Meta.model.query.filter_by(**data)
+            .order_by(ordering)
+            .paginate(page=page, per_page=10)  # noqa
         )
         result = schemas.dump(pagination.items)
         response = {
@@ -147,7 +154,7 @@ class ApiSchema(DokuSchema):
             partial=True,
             session=db.session,
             many=isinstance(data, list),
-            include_request=True
+            include_request=True,
         )
         try:
             instance = schema.load(data)
@@ -162,8 +169,11 @@ class ApiSchema(DokuSchema):
     def create(cls, commit=True):
         data = cls.all_request_data()
         schema = cls(
-            unknown=RAISE, session=db.session, partial=True, many=isinstance(data, list),
-            include_request=True
+            unknown=RAISE,
+            session=db.session,
+            partial=True,
+            many=isinstance(data, list),
+            include_request=True,
         )
         try:
             instance = schema.load(data)
