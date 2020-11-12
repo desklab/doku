@@ -3,13 +3,16 @@ from werkzeug.exceptions import BadRequest
 
 from doku.tests import DokuTest
 from doku.models import db
-from doku.models.base import Document, Variable
+from doku.models.base import Document, Variable, Template
 
 
 class VariableTest(DokuTest):
     def test_variable_compile(self):
         with self.app.app_context():
+            template = Template(name="Foo Test Template")
             doc = Document(name="Foo", author=self.user)
+            doc.template = template
+            db.session.add(template)
             db.session.add(doc)
             db.session.commit()
             variable = Variable(name="body", document_id=doc.id)
@@ -26,7 +29,10 @@ class VariableTest(DokuTest):
 
     def test_variable_raw(self):
         with self.app.app_context():
+            template = Template(name="Foo Test Template")
             doc = Document(name="Foo", author=self.user)
+            doc.template = template
+            db.session.add(template)
             db.session.add(doc)
             db.session.commit()
             variable = Variable(name="body", document_id=doc.id)
@@ -42,7 +48,10 @@ class VariableTest(DokuTest):
 
     def test_update_document(self):
         with self.app.app_context():
+            template = Template(name="Foo Test Template")
             doc = Document(name="Foo", author=self.user)
+            doc.template = template
+            db.session.add(template)
             db.session.add(doc)
             db.session.commit()
 
