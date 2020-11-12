@@ -13,7 +13,7 @@ class Document(db.Model, DateMixin):
     public = db.Column(db.Boolean)
     author_id = db.Column(db.Integer, db.ForeignKey("doku_user.id"), nullable=False)
     template_id = db.Column(
-        db.Integer, db.ForeignKey("doku_template.id"), nullable=True
+        db.Integer, db.ForeignKey("doku_template.id"), nullable=False
     )
 
     template = db.relationship("Template", back_populates="documents")
@@ -22,7 +22,7 @@ class Document(db.Model, DateMixin):
     # All variables
     variables = db.relationship(
         "Variable", cascade="all,delete", back_populates="document")
-    variable_groups = db.relationship("VariableGroup", back_populates="document")
+    variable_groups = db.relationship("VariableGroup", back_populates="document", cascade="all,delete")
     # Root variables are variables that do not belong to any variable
     # group
     root_variables = db.relationship(

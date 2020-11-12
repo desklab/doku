@@ -4,7 +4,7 @@
       <div class="content">
         <div v-for="item in items" :key="item.id" class="form-group">
           <label class="form-radio c-hand">
-            <input type="radio" name="item" :value="item.id" @change="select(item.id, $event)" :checked="selectedItem === item.id">
+            <input type="radio" name="item" :value="item.id" @change="select(item, $event)" :checked="selectedItem !== undefined && selectedItem !== null && selectedItem.id === item.id">
             <i class="form-icon"></i> {{ item.name }}
           </label>
         </div>
@@ -41,7 +41,7 @@ import AnimatedNotice from "../AnimatedNotice";
  * @param {Function} apiFetch - An API function that can be called
  *   to get all items (with pagination).
  * @param {String} title - Passed to the modal component.
- * @param {Number} defaultSelection - The default selection (current
+ * @param {Object} defaultSelection - The default selection (current
  *   selection).
  * @param {Boolean} none - Add option for selecting no item using a
  *   button (Select None).
@@ -60,7 +60,7 @@ export default {
   props: {
     apiFetch: Function,
     title: String,
-    defaultSelection: Number,
+    defaultSelection: Object,
     none: Boolean
   },
   data() {
@@ -102,9 +102,9 @@ export default {
       // Fetch or update items and pagination objects
       this.update();
     },
-    select(id, event) {
+    select(item, event) {
       if (event.target.checked) {
-        this.selectedItem = id;
+        this.selectedItem = item;
       }
     },
     fetch(page) {

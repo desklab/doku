@@ -22,7 +22,7 @@
                 Current Template: <b>{{ document.template.name }}</b>
               </span>
               <button @click="$refs.selectModal.open()" class="btn btn-sm">Change Template</button>
-              <a :href="`/template/${document.template.id}`" class="btn btn-sm btn-link">Edit Template</a>
+              <a :href="`/template/`" class="btn btn-sm btn-link">Manage Templates</a>
               <select-modal :none="false" ref="selectModal" title="Select Template" :defaultSelection="selectedTemplate" v-on:doku-selection-made="saveSelection" :apiFetch="apiFetch"></select-modal>
             </div>
             <!-- Public/Private switch
@@ -89,7 +89,7 @@
       }
     },
     mounted() {
-      this.selectedTemplate = this.document.template.id;
+      this.selectedTemplate = this.document.template;
     },
     methods: {
       ...mapActions(ns.DOCUMENT, [
@@ -99,13 +99,11 @@
       save(event) {
         event.target.classList.add('loading');
         let documentNameInput = document.getElementById('documentNameInput');
-        let documentTemplateSelect = document.getElementById('documentTemplateSelect');
         let data = {
           id: this.document.id,
           name: documentNameInput.value,
           // Temporarily disabled
           // public: this.$refs.documentPublicInput.checked,
-          template_id: this.selectedTemplate
         };
         this.updateDocument(data)
           .then(() => {
@@ -128,8 +126,18 @@
             event.target.classList.remove('loading');
           });
       },
-      saveSelection(id) {
-        this.selectedTemplate = id;
+      saveSelection(selection, name) {
+        this.selectedTemplate = selection;
+
+        let data = {
+          id: this.document.id,
+          template_id: this.selectedTemplate.id,
+          includes: ['template']
+        };
+        this.updateDocument(data)
+          .catch((err) => {
+            console.error(err);
+          })
       }
     }
   }
