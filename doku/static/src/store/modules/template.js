@@ -5,11 +5,22 @@ import * as ns from '../namespace';
 
 const state = {
   template: (window.templateObj !== undefined) ? JSON.parse(window.templateObj) : {},
+  templates: (window.templates !== undefined) ? JSON.parse(window.templates) : {},
 }
 
 const getters = {}
 
 const actions = {
+  fetchTemplates({commit}, options) {
+    return new Promise((resolve, reject) => {
+      templateApi.fetchTemplates(options)
+        .then((response) => {
+          commit(mutationTypes.SET_TEMPLATES, response.data.result)
+          resolve();
+        })
+        .catch(reject);
+    });
+  },
   updateTemplate({commit, rootState, dispatch}, template) {
     return new Promise((resolve, reject) => {
       templateApi.updateTemplate(template)
@@ -91,6 +102,9 @@ const mutations = {
   },
   removeTemplate(state, template) {
     
+  },
+  setTemplates(state, templates) {
+    state.templates = templates;
   }
 }
 
