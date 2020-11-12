@@ -46,18 +46,9 @@
       components: {
         TemplateItem, Modal, PlusIcon
       },
-      data() {
-        return {
-          templates: []
-        }
-      },
-      mounted() {
-        templateApi.fetchTemplates()
-          .then((response) =>{
-            this.templates = response.data.result;
-          })
-          .catch(console.error);
-      },
+      computed: mapState({
+        templates: state => state.template.templates,
+      }),
       methods: {
         openModal() {
           this.$refs.modal.open();
