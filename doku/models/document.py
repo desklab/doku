@@ -22,7 +22,7 @@ class Document(db.Model, DateMixin):
     # All variables
     variables = db.relationship(
         "Variable", cascade="all,delete", back_populates="document")
-    variable_groups = db.relationship("VariableGroup", back_populates="document")
+    variable_groups = db.relationship("VariableGroup", back_populates="document", cascade="all,delete")
     # Root variables are variables that do not belong to any variable
     # group
     root_variables = db.relationship(
