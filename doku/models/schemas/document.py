@@ -30,7 +30,9 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
     template = Nested("TemplateSchema", exclude=("documents",))
     variables = Nested("VariableSchema", exclude=("document",), many=True, partial=True)
     variable_groups = Nested("VariableGroupSchema", exclude=("document",), many=True)
-    root_variables = Nested("VariableSchema", exclude=("document",), many=True, partial=True)
+    root_variables = Nested(
+        "VariableSchema", exclude=("document",), many=True, partial=True
+    )
 
     render_url = fields.Method("_render_url", dump_only=True, allow_none=True)
     public_url = fields.Method("_public_url", dump_only=True, allow_none=True)
@@ -49,9 +51,11 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
     def create(cls, commit=True):
         data = cls.all_request_data()
         schema = cls(
-            unknown=RAISE, session=db.session, partial=True,
+            unknown=RAISE,
+            session=db.session,
+            partial=True,
             many=isinstance(data, list),
-            include_request=True
+            include_request=True,
         )
         try:
             document = schema.load(data)
@@ -86,7 +90,7 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
             partial=True,
             session=db.session,
             many=isinstance(data, list),
-            include_request=True
+            include_request=True,
         )
         try:
             document = schema.load(data)

@@ -6,7 +6,6 @@ from sqlalchemy import inspect, desc, asc, func
 from sqlalchemy.orm.exc import NoResultFound
 from flask_sqlalchemy.model import DeclarativeMeta
 from werkzeug.exceptions import NotFound
-
 from flask import request
 
 from doku import db
@@ -33,9 +32,7 @@ def get_or_404(query: Query, query_type: str = "one"):
 
 
 def get_or_create(model: db.Model, commit=False, **kwargs) -> db.Model:
-    """Get or create
-
-    """
+    """Get or create"""
     try:
         return db.session.query(model).filter_by(**kwargs).one()
     except NoResultFound:

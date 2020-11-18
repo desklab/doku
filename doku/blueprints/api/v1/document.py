@@ -106,6 +106,6 @@ def get_downloads_for_user(user_id: int) -> dict:
             "status": result.status,
             "date": _date,
             "timedelta": format_timedelta(datetime.now() - _date),
-            "date_format": format_datetime(_date)
+            "date_format": format_datetime(_date),
         }
     return downloads

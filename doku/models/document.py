@@ -1,10 +1,10 @@
-from doku.models import db, DateMixin
 from flask import session
+
+from doku.models import db, DateMixin
 
 
 class Document(db.Model, DateMixin):
-    """Document Model
-    """
+    """Document Model"""
 
     __tablename__ = "doku_document"
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -21,13 +21,16 @@ class Document(db.Model, DateMixin):
 
     # All variables
     variables = db.relationship(
-        "Variable", cascade="all,delete", back_populates="document")
-    variable_groups = db.relationship("VariableGroup", back_populates="document", cascade="all,delete")
+        "Variable", cascade="all,delete", back_populates="document"
+    )
+    variable_groups = db.relationship(
+        "VariableGroup", back_populates="document", cascade="all,delete"
+    )
     # Root variables are variables that do not belong to any variable
     # group
     root_variables = db.relationship(
         "Variable",
-        primaryjoin="and_(Variable.document_id == Document.id, Variable.group_id == null())"
+        primaryjoin="and_(Variable.document_id == Document.id, Variable.group_id == null())",
     )
 
     def __init__(self, *args, author_id=None, author=None, **kwargs):
@@ -36,7 +39,9 @@ class Document(db.Model, DateMixin):
             self.author_id = author_id
             super(Document, self).__init__(*args, **kwargs)
         else:
-            super(Document, self).__init__(*args, author_id=author_id, author=author, **kwargs)
+            super(Document, self).__init__(
+                *args, author_id=author_id, author=author, **kwargs
+            )
 
     def __str__(self):
         return self.name

@@ -5,7 +5,6 @@ from doku.models.resource import Resource
 from doku.models.snippet import Snippet
 from doku.models.template import Template, Stylesheet
 
-
 __all__ = [
     User,
     Document,
@@ -14,5 +13,5 @@ __all__ = [
     Template,
     Stylesheet,
     Resource,
-    Snippet
+    Snippet,
 ]

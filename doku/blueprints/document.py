@@ -4,11 +4,9 @@ from flask import Blueprint, render_template, send_file
 
 from doku import db
 from doku.models.document import Document
-from doku.models.schemas import TemplateSchema, StylesheetSchema
-from doku.models.schemas import DocumentSchema
+from doku.models.schemas import TemplateSchema, StylesheetSchema, DocumentSchema
 from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
-
 
 bp = Blueprint("document", __name__)
 
@@ -20,8 +18,9 @@ def index(document_id: int):
         db.session.query(Document).filter_by(id=document_id)
     )
     doc_schema = DocumentSchema(
-        session=db.session, instance=document,
-        include=("template", "variables", "variable_groups", "root_variables")
+        session=db.session,
+        instance=document,
+        include=("template", "variables", "variable_groups", "root_variables"),
     )
     template_schema = TemplateSchema(session=db.session)
     stylesheet_schemas = StylesheetSchema(session=db.session, many=True)

@@ -13,7 +13,16 @@ from doku.models import db
 from doku.tasks import celery
 from doku.models import base
 
-from doku.blueprints import auth, base, document, template, resources, account, snippet, stylesheets
+from doku.blueprints import (
+    auth,
+    base,
+    document,
+    template,
+    resources,
+    account,
+    snippet,
+    stylesheets,
+)
 from doku.blueprints import api
 from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.middlewares.hosts import host_middleware

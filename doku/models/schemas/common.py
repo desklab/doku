@@ -62,8 +62,7 @@ class ApiSchema(DokuSchema):
     @staticmethod
     @property
     def API_NAME():  # noqa
-        """Abstract property used as a placeholder for implementation
-        """
+        """Abstract property used as a placeholder for implementation"""
         raise NotImplementedError("API_NAME must be implemented")
 
     def _get_url(self, instance) -> Optional[str]:

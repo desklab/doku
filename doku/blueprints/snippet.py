@@ -15,9 +15,7 @@ bp = Blueprint("snippet", __name__)
 @login_required
 def index():
     page = get_pagination_page()
-    snippets = (
-        db.session.query(Snippet).paginate(page=page, per_page=10)
-    )
+    snippets = db.session.query(Snippet).paginate(page=page, per_page=10)
     return render_template("sites/snippets.html", snippets=snippets)
 
 
@@ -40,12 +38,15 @@ def get(snippet_id: int):
             error_messages = e.messages
             for error in error_messages.values():
                 flash(", ".join(error))
-    return render_template(
-        "sites/snippet_edit.html",
-        snippet=snippet,
-        snippet_json=snippet_schema.dump(snippet),
-        error_messages=error_messages
-    ), BadRequest.code if error_messages != {} else 200
+    return (
+        render_template(
+            "sites/snippet_edit.html",
+            snippet=snippet,
+            snippet_json=snippet_schema.dump(snippet),
+            error_messages=error_messages,
+        ),
+        BadRequest.code if error_messages != {} else 200,
+    )
 
 
 @bp.route("/create", methods=["POST"])

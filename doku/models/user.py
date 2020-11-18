@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Optional
 import json
 import secrets
+from typing import Optional
+
 from itsdangerous.encoding import base64_encode, base64_decode
 from itsdangerous.exc import BadData
-
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.security import generate_password_hash, check_password_hash, pbkdf2_hex
 from flask import session, request, current_app
@@ -14,8 +14,7 @@ from doku.models import db
 
 
 class User(db.Model):
-    """User Model
-    """
+    """User Model"""
 
     __tablename__ = "doku_user"
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)

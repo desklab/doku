@@ -11,5 +11,5 @@ __all__ = [
     TemplateSchema,
     StylesheetSchema,
     ResourceSchema,
-    SnippetSchema
+    SnippetSchema,
 ]

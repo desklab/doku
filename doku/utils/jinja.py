@@ -1,4 +1,6 @@
-from jinja2 import Environment, meta, Template as Jinja2Template, TemplateSyntaxError
+from jinja2 import Environment, meta
+from jinja2 import Template as Jinja2Template
+from jinja2 import TemplateSyntaxError
 from marshmallow import ValidationError
 
 
@@ -20,9 +22,7 @@ def validate_template(template_source: str) -> bool:
     except TemplateSyntaxError as e:
         raise ValidationError(message=str(e), field_name="source")
     variables = meta.find_undeclared_variables(content)
-    context = {
-        variable_name: "Foo Bar" for variable_name in variables
-    }
+    context = {variable_name: "Foo Bar" for variable_name in variables}
     try:
         template = Jinja2Template(template_source)
         template.render(**context)

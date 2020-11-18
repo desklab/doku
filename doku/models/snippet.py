@@ -17,8 +17,7 @@ class Snippet(db.Model, DateMixin):
     name = db.Column(db.String(255), unique=False, nullable=False)
 
     use_markdown = db.Column(db.Boolean, default=True)
-    css_class = db.Column(db.String(255), unique=False, nullable=True,
-                          default="")
+    css_class = db.Column(db.String(255), unique=False, nullable=True, default="")
     content = db.Column(db.UnicodeText, nullable=False, default="")
     compiled_content = db.Column(db.UnicodeText, nullable=False, default="")
 
@@ -36,10 +35,12 @@ def before_content_compiler(target, value, old_value, initiator):  # noqa
 @event.listens_for(Snippet.css_class, "set")
 def before_content_compiler(target, value, old_value, initiator):  # noqa
     target.compiled_content = compile_content(
-        target.content, value, target.use_markdown)
+        target.content, value, target.use_markdown
+    )
 
 
 @event.listens_for(Snippet.content, "set")
 def before_content_compiler(target, value, old_value, initiator):  # noqa
     target.compiled_content = compile_content(
-        value, target.css_class, target.use_markdown)
+        value, target.css_class, target.use_markdown
+    )

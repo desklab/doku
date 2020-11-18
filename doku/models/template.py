@@ -1,7 +1,8 @@
 import functools
 from typing import List, Tuple
 
-from jinja2 import Environment, meta, Template as Jinja2Template
+from jinja2 import Environment, meta
+from jinja2 import Template as Jinja2Template
 from weasyprint import HTML, CSS
 from pygments.formatters.html import HtmlFormatter
 

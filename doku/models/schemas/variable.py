@@ -9,7 +9,6 @@ from doku.models import DateSchemaMixin
 from doku.models.schemas.common import ApiSchema, NotEmptyString
 from doku.models.variable import VariableGroup, Variable
 
-
 VALID_VARIABLE_CHARACTERS = f"{string.ascii_letters}{string.digits}_"
 VARIABLE_NAME_ERROR = "The supplied name is not a valid variable name."
 
@@ -57,5 +56,7 @@ class VariableGroupSchema(ApiSchema):
 
     document_id = auto_field(load_only=True)
 
-    variables = Nested(VariableSchema, allow_none=True, exclude=("group", "document"), many=True)
+    variables = Nested(
+        VariableSchema, allow_none=True, exclude=("group", "document"), many=True
+    )
     document = Nested("DocumentSchema", exclude=("variable_groups",), dump_only=True)

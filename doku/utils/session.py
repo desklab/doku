@@ -23,7 +23,6 @@ from redis import Redis
 from werkzeug.datastructures import CallbackDict
 from itsdangerous import Signer, BadSignature, want_bytes
 
-
 from doku.utils import EMPTY
 from doku.models.user import User
 
@@ -126,8 +125,7 @@ class RedisSessionInterface(SessionInterface):
             return self.empty_session()
 
     def empty_session(self) -> SessionMixin:
-        """ Create new empty Session
-        """
+        """Create new empty Session"""
         return self.session_class(sid=self._get_unique_sid(), permanent=self.permanent)
 
     def save_session(self, app: Flask, session: Session, response: Response):

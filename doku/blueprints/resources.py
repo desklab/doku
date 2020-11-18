@@ -1,5 +1,5 @@
-from io import BytesIO
 import os
+from io import BytesIO
 
 from flask import (
     Blueprint,
@@ -10,7 +10,6 @@ from flask import (
     current_app,
     send_from_directory,
 )
-
 from werkzeug.exceptions import BadRequest
 
 from doku import db
@@ -18,7 +17,6 @@ from doku.models.resource import Resource, generate_filename
 from doku.utils.db import get_or_404, get_pagination_page
 from doku.utils.decorators import login_required
 from doku.models.schemas import ResourceSchema
-
 
 bp = Blueprint("resources", __name__)
 
@@ -51,7 +49,7 @@ def index():
     return render_template(
         "sites/resources.html",
         resources_json=resource_schemas.dumps(resources.items),
-        resources=resources
+        resources=resources,
     )
 
 

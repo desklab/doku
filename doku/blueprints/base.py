@@ -5,7 +5,6 @@ from doku.models.document import Document
 from doku.utils.decorators import login_required
 from doku.utils.db import get_pagination_page, get_ordering
 
-
 bp = Blueprint("base", __name__)
 
 

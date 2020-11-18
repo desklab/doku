@@ -2,9 +2,10 @@ from typing import List
 
 import bleach
 import markdown
+
 from doku.utils.markdown.extensions import RootClassExtension
 
-
+# fmt: off
 BLEACH_ALLOWED_TAGS: List[str] = [
     "h1", "h2", "h3", "h4", "h5", "h6",
     "b", "i", "strong", "em", "tt",
@@ -23,6 +24,7 @@ BLEACH_ALLOWED_ATTRS: dict = {
     "img": ["src", "alt", "title", "width", "height"],
     "a": ["href", "alt", "title"],
 }
+# fmt: on
 
 
 def compile_content(content: str, css_class: str, use_markdown: bool) -> str:
@@ -42,7 +44,7 @@ def compile_content(content: str, css_class: str, use_markdown: bool) -> str:
                     RootClassExtension(root_class=css_class),
                     "codehilite",
                     "fenced_code",
-                    "tables"
+                    "tables",
                 ],
             )
         else:

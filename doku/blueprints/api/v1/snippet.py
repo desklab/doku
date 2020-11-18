@@ -1,6 +1,6 @@
 from flask import Blueprint
-from doku.models.schemas import SnippetSchema
 
+from doku.models.schemas import SnippetSchema
 
 bp = Blueprint("api.v1.snippet", __name__)
 

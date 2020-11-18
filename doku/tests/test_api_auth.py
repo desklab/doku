@@ -1,6 +1,6 @@
 import time
-from base64 import b64encode, b64decode
 import binascii
+from base64 import b64encode, b64decode
 
 from flask import jsonify, json, url_for
 from werkzeug.exceptions import BadRequest, Unauthorized
@@ -10,7 +10,6 @@ from doku.models import db
 
 
 class APIAuthTest(DokuTest):
-
     def test_login(self):
         login = b64encode(f"{self.EMAIL}:{self.PASSWORD}".encode()).decode()
         headers = {"Authorization": f"Basic {login}"}

@@ -4,8 +4,7 @@ from flask import Flask
 
 
 class host_middleware:
-    """Host Middleware
-    """
+    """Host Middleware"""
 
     LOG_MESSAGE = "No host provided. Skip host middleware"
 

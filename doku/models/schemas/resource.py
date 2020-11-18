@@ -1,7 +1,8 @@
+import os
+
 from marshmallow_sqlalchemy import auto_field
 from marshmallow import fields, validate
 from flask import jsonify, current_app
-import os
 
 from doku.models import DateSchemaMixin
 from doku.models.resource import Resource

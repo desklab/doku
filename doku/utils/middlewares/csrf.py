@@ -149,9 +149,7 @@ class CSRFMiddleware:
         return _config
 
     def _create_string(self):
-        """Create a random string
-
-        """
+        """Create a random string"""
         length = self._config["TOKEN_LENGTH"]
         return secrets.token_hex(length)
 

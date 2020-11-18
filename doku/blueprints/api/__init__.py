@@ -3,8 +3,15 @@ from marshmallow.exceptions import ValidationError
 from flask import Flask, request, session, Blueprint, jsonify
 
 from doku.blueprints.api import v1
-from doku.blueprints.api.v1 import document, template, variable, stylesheet, resource, \
-    snippet, vargroup
+from doku.blueprints.api.v1 import (
+    document,
+    template,
+    variable,
+    stylesheet,
+    resource,
+    snippet,
+    vargroup,
+)
 from doku.models.user import User
 
 

@@ -39,7 +39,11 @@ class Variable(db.Model, DateMixin):
     parent_id = db.Column(db.Integer, db.ForeignKey("doku_variable.id"), nullable=True)
     snippet_id = db.Column(db.Integer, db.ForeignKey("doku_snippet.id"), nullable=True)
     group_id = db.Column(
-        db.Integer, db.ForeignKey("doku_variable_group.id", ondelete="SET NULL"), nullable=True, default=None)
+        db.Integer,
+        db.ForeignKey("doku_variable_group.id", ondelete="SET NULL"),
+        nullable=True,
+        default=None,
+    )
 
     children = db.relationship(
         "Variable",
@@ -94,7 +98,9 @@ class Variable(db.Model, DateMixin):
 
 
 @event.listens_for(Variable.use_markdown, "set")
-def before_content_compiler(target: Variable, value, old_value, initiator):  # noqa: F841
+def before_content_compiler(
+    target: Variable, value, old_value, initiator
+):  # noqa: F841
     target.compiled_content = compile_content(target.content, target.css_class, value)
 
 
@@ -129,14 +135,15 @@ class VariableGroup(db.Model):
     A group is used to manage variables more easily by placing them
     into groups that can be hidden in the user interface.
     """
+
     __tablename__ = "doku_variable_group"
 
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
 
     name = db.Column(db.String(255), unique=False, nullable=False)
     document_id = db.Column(
-        db.Integer, db.ForeignKey("doku_document.id"), nullable=False)
+        db.Integer, db.ForeignKey("doku_document.id"), nullable=False
+    )
 
-    document = db.relationship(
-        Document, back_populates="variable_groups")
+    document = db.relationship(Document, back_populates="variable_groups")
     variables = db.relationship(Variable, back_populates="group")
