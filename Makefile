@@ -24,7 +24,10 @@ pip-install:
 	pip install -r requirements.txt
 
 lint:
-	flake8 doku --extend-exclude ./doku/static
+	pylint doku
 
 black:
-	black --exclude doku/static/ doku
+	black doku
+
+isort:
+	isort doku
