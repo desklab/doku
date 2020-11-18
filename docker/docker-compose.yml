@@ -29,7 +29,9 @@ services:
     ports:
       - 5432:5432
   worker:
-    build: .
+    # Use parent directory as files have been moved into the `docker`
+    # directory.
+    build: ..
     container_name: worker
     networks:
       - internal

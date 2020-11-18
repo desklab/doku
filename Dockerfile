@@ -30,8 +30,9 @@ RUN rm -rf ~/.cache/pip/*
 COPY . /app/
 
 RUN useradd doku
-RUN mkdir /app/resources
-RUN mkdir /app/shared
+RUN mkdir -p /app/resources
+RUN mkdir -p /app/shared
+RUN mv /app/docker/* /app/
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/healthcheck.sh
 RUN chmod +x /app/worker.sh
