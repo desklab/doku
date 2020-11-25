@@ -52,7 +52,9 @@ class Document(db.Model, DateMixin):
 
     @property
     def filename(self):
-        return "_".join(self.name.split()).lower()
+        allowlist = ["_", "-", " "]
+        save_name = "".join(c for c in self.name if c.isalnum() or c in allowlist)
+        return "_".join(save_name.split()).lower().rstrip().lstrip()
 
     def render(self):
         return self.template.render(self.variables)
