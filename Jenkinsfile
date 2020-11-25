@@ -56,8 +56,8 @@ pipeline {
       }
       steps {
         sh 'docker login https://reg.desk-lab.de --username $REGISTRY_USR --password $REGISTRY_PSW'
-        sh 'cd /home/jenkins/server && docker-compose pull doku dokustatic | cat'
-        sh 'cd /home/jenkins/server && docker-compose up -d doku dokustatic | cat'
+        sh 'cd /home/jenkins/server && docker-compose pull doku dokustatic dokuworker | cat'
+        sh 'cd /home/jenkins/server && docker-compose up -d doku dokustatic dokuworker | cat'
       }
     }
   }
