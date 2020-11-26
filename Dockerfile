@@ -15,24 +15,6 @@ RUN apt-get -y install curl build-essential python3-dev python3-pip python3-setu
 # Install fonts
 RUN apt-get -y install fonts-comfortaa
 
-ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Regular.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /usr/local/share/fonts/
-
-ADD https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Bold.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Italic.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf /usr/local/share/fonts/
-
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Bold.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Medium.ttf  /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Regular.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Light.ttf  /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Thin.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-BoldItalic.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-MediumItalic.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Italic.ttf /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-LightItalic.ttf  /usr/local/share/fonts/
-ADD https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-ThinItalic.ttf /usr/local/share/fonts/
-
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app
 RUN pip --no-cache-dir install -r requirements.txt
@@ -42,7 +24,7 @@ RUN rm -rf ~/.cache/pip/*
 
 COPY . /app/
 
-RUN useradd doku
+RUN useradd -m doku
 RUN mkdir -p /app/resources
 RUN mkdir -p /app/shared
 RUN mv /app/docker/* /app/
@@ -53,6 +35,25 @@ RUN chown -R doku /app
 
 USER doku
 
+RUN mkdir -p /home/doku/.local/share/fonts
+
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /home/doku/.local/share/fonts
+
+ADD --chown=doku https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Italic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf /home/doku/.local/share/fonts
+
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Medium.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Light.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Thin.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-BoldItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-MediumItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Italic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-LightItalic.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-ThinItalic.ttf /home/doku/.local/share/fonts
 
 EXPOSE 8000
 WORKDIR /app
