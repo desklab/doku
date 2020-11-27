@@ -7,7 +7,9 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --stats minimal --watch --hot",
-    "build": "cross-env NODE_ENV=production webpack --stats normal --mode production"
+    "build": "cross-env NODE_ENV=production webpack --stats normal --mode production",
+    "lint": "eslint --ext .js,.vue src",
+    "lint.fix": "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
     "axios": "^0.21.0",

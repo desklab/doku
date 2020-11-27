@@ -1,48 +1,56 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:vue/essential"
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "vue"
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      2
     ],
-    "parserOptions": {
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "vue"
+    "linebreak-style": [
+      "error",
+      "unix"
     ],
-    "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "max-len": [
-            "error",
-            {
-                "code": 88
-            },
-            {
-                "comments": 72
-            }
-        ],
-        "eol-last": [
-            "error",
-            "always"
-        ]
-    }
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 88,
+        "comments": 72
+      }
+    ],
+    "eol-last": [
+      "error",
+      "always"
+    ],
+    "vue/max-len": ["error", {
+      "code": 88,
+      "template": 88,
+      "tabWidth": 2,
+      "comments": 72,
+      "ignoreHTMLAttributeValues": true
+    }],
+    "vue/max-attributes-per-line": [
+      "off"
+    ]
+  }
 }
