@@ -7,9 +7,9 @@ from marshmallow_sqlalchemy.fields import Nested
 from werkzeug.exceptions import BadRequest
 
 from doku.models import DateSchemaMixin, db
-from doku.models.variable import Variable
-from doku.models.schemas.common import ApiSchema, DokuSchema, NotEmptyString
+from doku.models.schemas.common import ApiSchema, NotEmptyString
 from doku.models.template import Template, Stylesheet
+from doku.models.variable import Variable
 from doku.utils.db import get_or_create, get_or_404
 from doku.utils.jinja import validate_template
 
@@ -85,7 +85,7 @@ class StylesheetSchema(ApiSchema, DateSchemaMixin):
 
     upload_url = fields.Method("_upload_url", dump_only=True, allow_none=True)
 
-    def _upload_url(self, stylesheet) -> Optional[str]:
+    def _upload_url(self, stylesheet) -> Optional[str]:  # noqa
         if stylesheet.id is None:
             return None
         return url_for("api.v1.stylesheet.upload", stylesheet_id=stylesheet.id)

@@ -1,13 +1,9 @@
 import json
 import os
 import shutil
-from typing import Optional
 
 from celery.result import AsyncResult
 from celery.states import SUCCESS
-from sqlalchemy.orm.exc import NoResultFound
-from werkzeug.exceptions import Unauthorized, Forbidden, NotFound, BadRequest
-from werkzeug.security import safe_join
 from flask import (
     Blueprint,
     session,
@@ -19,12 +15,14 @@ from flask import (
     current_app,
     send_file,
 )
+from werkzeug.exceptions import NotFound, BadRequest
+from werkzeug.security import safe_join
 
+from doku.blueprints.api.v1.document import get_downloads_for_user
 from doku.models import db
 from doku.models.user import User
-from doku.blueprints.api.v1.document import get_downloads_for_user
-from doku.utils.decorators import login_required
 from doku.tasks import celery
+from doku.utils.decorators import login_required
 
 bp = Blueprint("account", __name__)
 
