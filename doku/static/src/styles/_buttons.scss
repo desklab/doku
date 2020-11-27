@@ -21,5 +21,11 @@
   &.btn-black {
     @include button-variant-dark($black);
   }
+  &.btn-black-outline {
+    @include button-outline-variant($black);
+  }
+  &.btn-error-outline {
+    @include button-outline-variant($error-color);
+  }
 }
 

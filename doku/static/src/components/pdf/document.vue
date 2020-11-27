@@ -2,54 +2,57 @@
   <div class="pdf-document">
     <PDFPage
       v-for="page in pages"
-      v-bind="{page, scale}"
       :key="page.pageNumber"
+      v-bind="{page, scale}"
     />
   </div>
 </template>
 
 <script>
-  import PDFPage from './page.vue';
-  import range from 'lodash/range';
-  // Due to some change (what?), this does not work anymore
-  // import { pdfjs } from 'pdfjs-dist/build/pdf';
-  // Use require instead
-  let pdfjs = require('pdfjs-dist/build/pdf');
-  import PdfjsWorker from 'pdfjs-dist/build/pdf.worker';
+import PDFPage from './page.vue';
+// Due to some change (what?), this does not work anymore
+// import { pdfjs } from 'pdfjs-dist/build/pdf';
+// Use require instead
+// eslint-disable-next-line no-undef
+let pdfjs = require('pdfjs-dist/build/pdf');
+import PdfjsWorker from 'pdfjs-dist/build/pdf.worker';
 
-  pdfjs.GlobalWorkerOptions.workerPort = new PdfjsWorker();
+pdfjs.GlobalWorkerOptions.workerPort = new PdfjsWorker();
 
-  export default {
-    props: ['url', 'scale'],
-    name: 'PDFDocument',
-    components: {
-      PDFPage,
+export default {
+  name: 'PDFDocument',
+  components: {
+    PDFPage,
+  },
+  props: ['url', 'scale'],
+  data() {
+    return {
+      pdf: undefined,
+      pages: []
+    };
+  },
+  watch: {
+    pdf(pdf) {
+      this.pages = [];
+      const promises = [
+        // Create array of length pdf.numPages with indices
+        ...Array(pdf.numPages).keys()
+      ].map(number => pdf.getPage(number + 1));
+      Promise.all(promises).then(pages => (this.pages = pages));
     },
-    data() {
-      return {
-        pdf: undefined,
-        pages: []
-      };
+  },
+  methods: {
+    fetchPDF(loader) {
+      loader.classList.add('loading');
+      pdfjs.getDocument(this.url).promise.then(pdf => {
+        this.pdf = pdf;
+        if (loader !== undefined) {
+          loader.classList.remove('loading');
+        }
+      });
     },
-    methods: {
-      fetchPDF(loader) {
-        loader.classList.add('loading');
-        pdfjs.getDocument(this.url).promise.then(pdf => {
-          this.pdf = pdf;
-          if (loader !== undefined) {
-            loader.classList.remove('loading');
-          }
-        });
-      },
-    },
-    watch: {
-      pdf(pdf) {
-        this.pages = [];
-        const promises = range(1, pdf.numPages + 1).map(number => pdf.getPage(number));
-        Promise.all(promises).then(pages => (this.pages = pages));
-      },
-    },
-  }
+  },
+};
 </script>
 
 <style scoped>
