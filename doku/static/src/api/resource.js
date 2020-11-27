@@ -15,4 +15,4 @@ export default {
   fetchResource(options) {
     return axios.get(RESOURCE_API, {params: options});
   }
-}
+};

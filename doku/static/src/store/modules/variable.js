@@ -2,9 +2,9 @@ import variableApi from '../../api/variable';
 import * as actionTypes from '../types/actions';
 import * as ns from '../namespace';
 
-const state = {}
+const state = {};
 
-const getters = {}
+const getters = {};
 
 const actions = {
   /**
@@ -80,9 +80,9 @@ const actions = {
         .catch(reject);
     });
   },
-}
+};
 
-const mutations = {}
+const mutations = {};
 
 export default {
   namespaced: true,
@@ -90,4 +90,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};

@@ -2,9 +2,9 @@ import vargroupApi from '../../api/vargroup';
 import * as actionTypes from '../types/actions';
 import * as ns from '../namespace';
 
-const state = {}
+const state = {};
 
-const getters = {}
+const getters = {};
 
 const actions = {
   /**
@@ -80,11 +80,11 @@ const actions = {
           ).then(resolve).catch(reject);
         })
         .catch(reject);
-    })
+    });
   }
-}
+};
 
-const mutations = {}
+const mutations = {};
 
 export default {
   namespaced: true,
@@ -92,4 +92,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};

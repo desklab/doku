@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Taken from codemirror/mode/xml/xml.js
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE

@@ -7,4 +7,4 @@ const axiosInstance = axios.create({
 
 export {
   axiosInstance
-}
+};

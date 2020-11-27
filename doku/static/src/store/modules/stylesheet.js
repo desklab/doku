@@ -4,9 +4,9 @@ import * as actionTypes from '../types/actions';
 
 const state = {
   stylesheets: (window.stylesheets !== undefined) ? JSON.parse(window.stylesheets) : [],
-}
+};
 
-const getters = {}
+const getters = {};
 
 const actions = {
   uploadStylesheet({commit, state}, data) {
@@ -32,7 +32,7 @@ const actions = {
           commit(mutationTypes.SET_STYLESHEET, response.data);
           resolve();
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
   fetchStylesheets({commit, state}, options) {
@@ -43,7 +43,7 @@ const actions = {
           commit(mutationTypes.SET_STYLESHEETS, response.data.results);
           resolve();
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
   deleteStylesheet({commit, dispatch, state}, data) {
@@ -57,20 +57,20 @@ const actions = {
       stylesheetApi.deleteStylesheet(data.url)
         .then(res => {
           commit(mutationTypes.DELETE_STYLESHEET, data.id);
-          resolve()
+          resolve();
         }).catch(reject);
     });
   },
   setStylesheets({commit, state}, data){
     return new Promise((resolve, reject) => {
       stylesheetApi.setStylesheets(data)
-      .then(res => {
-        commit(mutationTypes.SET_STYLESHEETS, data);
-        resolve()
-      }).catch(reject);
+        .then(res => {
+          commit(mutationTypes.SET_STYLESHEETS, data);
+          resolve();
+        }).catch(reject);
     });
   },
-}
+};
 
 const mutations = {
   setStylesheets(state, styles) {
@@ -93,7 +93,7 @@ const mutations = {
       }
     }
   }
-}
+};
 
 export default {
   namespaced: true,
@@ -101,4 +101,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};

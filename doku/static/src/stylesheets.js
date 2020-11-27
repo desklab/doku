@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import store from './store'
+import store from './store';
 import Stylesheets from './sites/stylesheets.vue';
 import './styles/main.scss';
 

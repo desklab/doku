@@ -7,4 +7,4 @@ export default {
     options = options || {};
     return axios.get(SNIPPET_API, options);
   }
-}
+};
