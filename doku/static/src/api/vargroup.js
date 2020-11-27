@@ -12,4 +12,4 @@ export default {
   updateVariableGroups(variableGroup) {
     return axios.patch(VARIABLE_GROUP_API, variableGroup);
   }
-}
+};

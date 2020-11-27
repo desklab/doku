@@ -15,4 +15,4 @@ export default {
   fetchVariables(options) {
     return axios.get(VARIABLE_API, {params: options});
   }
-}
+};

@@ -15,7 +15,7 @@ const defaultConfig = {
 const state = {
   document: (window.documentObj !== undefined) ? JSON.parse(window.documentObj) : {},
   documentUpdateStatus: null
-}
+};
 
 const getters = {
   documentVariables: state => {
@@ -27,7 +27,7 @@ const getters = {
   documentGroups: state => {
     return state.document.variable_groups;
   }
-}
+};
 
 const actions = {
   updateDocument({commit}, data) {
@@ -37,7 +37,7 @@ const actions = {
           commit(mutationTypes.SET_DOCUMENT, response.data);
           resolve();
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
   removeDocument({commit}, data) {
@@ -46,7 +46,7 @@ const actions = {
         .then(response => {
           resolve();
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
   fetchCurrentDocument({state, commit}) {
@@ -57,9 +57,9 @@ const actions = {
           commit(mutationTypes.SET_DOCUMENT, response.data);
           resolve();
         }).catch(reject);
-    })
+    });
   }
-}
+};
 
 const mutations = {
   setDocument(state, document) {
@@ -68,7 +68,7 @@ const mutations = {
   setDocumentTemplate(state, template) {
     Object.assign(state.document.template, template);
   },
-}
+};
 
 export default {
   namespaced: true,
@@ -76,4 +76,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};

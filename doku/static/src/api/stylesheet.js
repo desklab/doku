@@ -22,4 +22,4 @@ export default {
   deleteStylesheet(stylesheetURL) {
     return axios.delete(stylesheetURL);
   }
-}
+};

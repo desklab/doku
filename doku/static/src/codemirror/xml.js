@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Taken from codemirror/mode/xml/xml.js
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
@@ -57,16 +58,16 @@ export default function(CodeMirror) {
     var defaults = config_.htmlMode ? htmlConfig : xmlConfig
     for (var prop in defaults) config[prop] = defaults[prop]
     for (var prop in config_) config[prop] = config_[prop]
-  
+
     // Return variables for tokenizers
     var type, setStyle;
-  
+
     function inText(stream, state) {
       function chain(parser) {
         state.tokenize = parser;
         return parser(stream, state);
       }
-  
+
       var ch = stream.next();
       if (ch == "<") {
         if (stream.eat("!")) {
@@ -108,7 +109,7 @@ export default function(CodeMirror) {
       }
     }
     inText.isInText = true;
-  
+
     function inTag(stream, state) {
       var ch = stream.next();
       if (ch == ">" || (ch == "/" && stream.eat(">"))) {
@@ -133,7 +134,7 @@ export default function(CodeMirror) {
         return "word";
       }
     }
-  
+
     function inAttribute(quote) {
       var closure = function(stream, state) {
         while (!stream.eol()) {
@@ -147,7 +148,7 @@ export default function(CodeMirror) {
       closure.isInAttribute = true;
       return closure;
     }
-  
+
     function inBlock(style, terminator) {
       return function(stream, state) {
         while (!stream.eol()) {
@@ -160,7 +161,7 @@ export default function(CodeMirror) {
         return style;
       }
     }
-  
+
     function doctype(depth) {
       return function(stream, state) {
         var ch;
@@ -181,7 +182,7 @@ export default function(CodeMirror) {
         return "meta";
       };
     }
-  
+
     function Context(state, tagName, startOfLine) {
       this.prev = state.context;
       this.tagName = tagName;
@@ -207,7 +208,7 @@ export default function(CodeMirror) {
         popContext(state);
       }
     }
-  
+
     function baseState(type, stream, state) {
       if (type == "openTag") {
         state.tagStart = stream.column();
@@ -252,7 +253,7 @@ export default function(CodeMirror) {
         return closeStateErr;
       }
     }
-  
+
     function closeState(type, _stream, state) {
       if (type != "endTag") {
         setStyle = "error";
@@ -265,7 +266,7 @@ export default function(CodeMirror) {
       setStyle = "error";
       return closeState(type, stream, state);
     }
-  
+
     function attrState(type, _stream, state) {
       if (type == "word") {
         setStyle = "attribute";
@@ -300,7 +301,7 @@ export default function(CodeMirror) {
       if (type == "string") return attrContinuedState;
       return attrState(type, stream, state);
     }
-  
+
     return {
       startState: function(baseIndent) {
         var state = {tokenize: inText,
@@ -311,11 +312,11 @@ export default function(CodeMirror) {
         if (baseIndent != null) state.baseIndent = baseIndent
         return state
       },
-  
+
       token: function(stream, state) {
         if (!state.tagName && stream.sol())
           state.indented = stream.indentation();
-  
+
         if (stream.eatSpace()) return null;
         type = null;
         var style = state.tokenize(stream, state);
@@ -327,7 +328,7 @@ export default function(CodeMirror) {
         }
         return style;
       },
-  
+
       indent: function(state, textAfter, fullLine) {
         var context = state.context;
         // Indent multi-line strings (e.g. css).
@@ -374,23 +375,23 @@ export default function(CodeMirror) {
         if (context) return context.indent + indentUnit;
         else return state.baseIndent || 0;
       },
-  
+
       electricInput: /<\/[\s\w:]+>$/,
       blockCommentStart: "<!--",
       blockCommentEnd: "-->",
-  
+
       configuration: config.htmlMode ? "html" : "xml",
       helperType: config.htmlMode ? "html" : "xml",
-  
+
       skipAttribute: function(state) {
         if (state.state == attrValueState)
           state.state = attrState
       },
-  
+
       xmlCurrentTag: function(state) {
         return state.tagName ? {name: state.tagName, close: state.type == "closeTag"} : null
       },
-  
+
       xmlCurrentContext: function(state) {
         var context = []
         for (var cx = state.context; cx; cx = cx.prev)
@@ -399,10 +400,10 @@ export default function(CodeMirror) {
       }
     };
   });
-  
+
   CodeMirror.defineMIME("text/xml", "xml");
   CodeMirror.defineMIME("application/xml", "xml");
   if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
     CodeMirror.defineMIME("text/html", {name: "xml", htmlMode: true});
-  
+
 }

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import store from './store'
+import store from './store';
 import Edit from './sites/edit.vue';
 import './styles/main.scss';
 

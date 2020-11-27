@@ -26,4 +26,4 @@ export default {
   fetchIDs() {
     return axios.get(`${DOCUMENT_API}ids`);
   }
-}
+};

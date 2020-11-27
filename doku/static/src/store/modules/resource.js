@@ -4,9 +4,9 @@ import * as actionTypes from '../types/actions';
 
 const state = {
   resources: (window.resources !== undefined) ? JSON.parse(window.resources) : [],
-}
+};
 
-const getters = {}
+const getters = {};
 
 const actions = {
   uploadResource({commit, state}, data) {
@@ -33,7 +33,7 @@ const actions = {
           commit(mutationTypes.SET_RESOURCES, response.data);
           resolve();
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
   removeResource({commit, dispatch, state}, data) {
@@ -47,7 +47,7 @@ const actions = {
       resourceApi.removeResource(data.url)
         .then(res => {
           commit(mutationTypes.REMOVE_RESOURCE, data.id);
-          resolve()
+          resolve();
         }).catch(reject);
     });
   },
@@ -58,10 +58,10 @@ const actions = {
           commit(mutationTypes.SET_RESOURCE, response.data);
           resolve();
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
-}
+};
 
 const mutations = {
   removeResource(state, id) {
@@ -81,7 +81,7 @@ const mutations = {
       }
     }
   }
-}
+};
 
 export default {
   namespaced: true,
@@ -89,4 +89,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};

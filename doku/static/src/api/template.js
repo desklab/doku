@@ -24,4 +24,4 @@ export default {
   removeTemplate(url, template){
     return axios.delete(url, {data: template});
   }
-}
+};

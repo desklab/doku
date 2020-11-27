@@ -6,16 +6,16 @@ import * as ns from '../namespace';
 const state = {
   template: (window.templateObj !== undefined) ? JSON.parse(window.templateObj) : {},
   templates: (window.templates !== undefined) ? JSON.parse(window.templates) : {},
-}
+};
 
-const getters = {}
+const getters = {};
 
 const actions = {
   fetchTemplates({commit}, options) {
     return new Promise((resolve, reject) => {
       templateApi.fetchTemplates(options)
         .then((response) => {
-          commit(mutationTypes.SET_TEMPLATES, response.data.result)
+          commit(mutationTypes.SET_TEMPLATES, response.data.result);
           resolve();
         })
         .catch(reject);
@@ -33,7 +33,7 @@ const actions = {
           if (hasMissing && rootState.document.document.id !== undefined) {
             let options = {
               document_id: rootState.document.document.id
-            }
+            };
             dispatch(
               ns.document(actionTypes.FETCH_CURRENT_DOCUMENT),
               options, {root: true}
@@ -42,7 +42,7 @@ const actions = {
             resolve();
           }
         })
-        .catch(reject)
+        .catch(reject);
     });
   },
   removeTemplate({commit}, data){
@@ -50,7 +50,7 @@ const actions = {
       templateApi.removeTemplate(data)
         .then(res => {
           commit(mutationTypes.REMOVE_TEMPLATE, res.data);
-          resolve()
+          resolve();
         }).catch(reject);
     });
   },
@@ -70,7 +70,7 @@ const actions = {
             res.data.styles,
             {root: true}
           );
-          resolve()
+          resolve();
         }).catch(reject);
     });
   },
@@ -90,11 +90,11 @@ const actions = {
             res.data.styles,
             {root: true}
           );
-          resolve()
+          resolve();
         }).catch(reject);
     });
   }
-}
+};
 
 const mutations = {
   setTemplate(state, template) {
@@ -106,7 +106,7 @@ const mutations = {
   setTemplates(state, templates) {
     state.templates = templates;
   }
-}
+};
 
 export default {
   namespaced: true,
@@ -114,4 +114,4 @@ export default {
   getters,
   actions,
   mutations
-}
+};
