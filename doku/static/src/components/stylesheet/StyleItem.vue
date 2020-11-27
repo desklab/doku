@@ -4,10 +4,10 @@
     <span v-if="isEmpty" class="chip bg-error">Empty</span>
     <span v-if="!isUsed" class="chip bg-warning">Unused</span>
     <span v-if="numberOfUses > 1" class="chip text-success">
-      Used by {{ numberOfUses }} templates
+      Used by {{ numberOfUses }} Templates
     </span>
     <span v-if="numberOfUses === 1" class="chip text-success">
-      Used by {{ numberOfUses }} template
+      Used by {{ numberOfUses }} Template
     </span>
     <div class="btn-group btn-sm float-right">
       <animated-notice ref="notice" />
