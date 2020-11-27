@@ -2,14 +2,14 @@
   <modal ref="modal" :title="title">
     <div class="modal-body">
       <div class="content">
-          <div class="form-group p-2">
-            <label class="form-label" for="textInput">Name</label>
-            <input v-on:keyup="$event.target.classList.remove('is-error')" name="name" class="form-input" type="text" id="textInput" pattern="^.{1,}$" required>
-          </div>
+        <div class="form-group p-2">
+          <label class="form-label" for="textInput">Name</label>
+          <input id="textInput" name="name" class="form-input" type="text" pattern="^.{1,}$" required @keyup="$event.target.classList.remove('is-error')">
+        </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button @click="save" class="btn btn-link">
+      <button class="btn btn-link" @click="save">
         Save
       </button>
     </div>
@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import Modal from "./Modal";
-import AnimatedNotice from "../AnimatedNotice";
+import Modal from './Modal';
+import AnimatedNotice from '../AnimatedNotice';
 
 /**
  * Text Modal
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       loaded: {}
-    }
+    };
   },
   methods: {
     toggle() {
@@ -61,7 +61,7 @@ export default {
       this.$emit('doku-text-entered', textInput.value);
     }
   }
-}
+};
 </script>
 
 <style scoped>

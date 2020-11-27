@@ -1,68 +1,77 @@
 <template>
   <div class="doku-inline-var-code">
     <div class="doku-inline-var-controls">
-      <animated-toggle inputName="use_markdown" v-if="!variable.is_list" ref="markdownToggle" v-bind:is-checked="variable.use_markdown">
-        <template v-slot:on>Markdown</template>
-        <template v-slot:off>Raw</template>
+      <animated-toggle v-if="!variable.is_list" ref="markdownToggle"
+                       input-name="use_markdown" :is-checked="variable.use_markdown"
+      >
+        <template #on>
+          Markdown
+        </template>
+        <template #off>
+          Raw
+        </template>
       </animated-toggle>
       <!--
         The slot is used to extend the editor by providing
         additional buttons and actions
       -->
-      <slot></slot>
+      <slot />
       <div class="form-inline">
-        <input type="text" placeholder="CSS Class" class="form-input input-sm" name="css_class" ref="cssClassInput" :value="variable.css_class">
+        <input ref="cssClassInput" type="text" placeholder="CSS Class"
+               class="form-input input-sm" name="css_class" :value="variable.css_class"
+        >
       </div>
     </div>
-    <Editor ref="editor" v-bind:mode="'text/x-markdown'" inputName="content" v-bind:value="variable.content" v-bind:height="'auto'"></Editor>
+    <Editor
+      ref="editor" :mode="'text/x-markdown'" input-name="content"
+      :value="variable.content" :height="'auto'"
+    />
   </div>
 </template>
 
 <script>
-  import Editor from '../ui/Editor.vue';
-  import AnimatedNotice from "../ui/AnimatedNotice";
-  import AnimatedToggle from "../ui/form/AnimatedToggle";
+import Editor from '../ui/Editor.vue';
+import AnimatedToggle from '../ui/form/AnimatedToggle';
 
-  export default {
-    name: 'VariableEditor',
-    props: {
-      variable: {
-        type: Object
-      },
-      documentId: {
-        type: Number,
-        default: null
-      }
+export default {
+  name: 'VariableEditor',
+  components: {
+    AnimatedToggle,
+    Editor,
+  },
+  props: {
+    variable: {
+      type: Object,
+      default: undefined
     },
-    components: {
-      AnimatedToggle,
-      AnimatedNotice,
-      Editor,
+    documentId: {
+      type: Number,
+      default: null
+    }
+  },
+  data() {
+    return {
+      showCode: false,
+    };
+  },
+  mounted() {
+  },
+  methods: {
+    getValue() {
+      return this.$refs.editor.getValue();
     },
-    data() {
-      return {
-        showCode: false,
-        _showDone: false
-      }
+    getCssClass() {
+      return this.$refs.cssClassInput.value;
     },
-    mounted() {
+    getUseMarkdown() {
+      return this.$refs.markdownToggle.checked;
     },
-    methods: {
-      getValue() {
-        return this.$refs.editor.getValue();
-      },
-      getCssClass() {
-        return this.$refs.cssClassInput.value;
-      },
-      getUseMarkdown() {
-        return this.$refs.markdownToggle.checked;
-      },
-      refresh() {
-        this.$refs.editor.editor.refresh();
-        this.$refs.editor.editor.focus();
-      }
+    refresh() {
+      this.$refs.editor.editor.refresh();
+      this.$refs.editor.editor.focus();
     }
   }
+};
 </script>
 
 <style scoped>

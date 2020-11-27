@@ -4,18 +4,18 @@
       <div class="content">
         <div v-for="item in items" :key="item.id" class="form-group">
           <label class="form-radio c-hand">
-            <input type="radio" name="item" :value="item.id" @change="select(item, $event)" :checked="selectedItem !== undefined && selectedItem !== null && selectedItem.id === item.id">
-            <i class="form-icon"></i> {{ item.name }}
+            <input type="radio" name="item" :value="item.id" :checked="selectedItem !== undefined && selectedItem !== null && selectedItem.id === item.id" @change="select(item, $event)">
+            <i class="form-icon" /> {{ item.name }}
           </label>
         </div>
-        <pagination :page="this.page" :pagination="pagination" :callback="setPage"></pagination>
+        <pagination :page="this.page" :pagination="pagination" :callback="setPage" />
       </div>
     </div>
     <div class="modal-footer">
       <button v-if="none" class="btn btn-link float-left" @click="selectNone()">
         Select None
       </button>
-      <button @click="close" class="btn btn-link">
+      <button class="btn btn-link" @click="close">
         Close
       </button>
       <button class="btn btn-primary ml-2" @click="saveSelection()">
@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import Modal from "./Modal";
-import Pagination from "../Pagination";
-import AnimatedNotice from "../AnimatedNotice";
+import Modal from './Modal';
+import Pagination from '../Pagination';
+import AnimatedNotice from '../AnimatedNotice';
 
 /**
  * Select Modal
@@ -74,7 +74,7 @@ export default {
       },
       page: 1,
       loaded: {}
-    }
+    };
   },
   mounted() {
     this.selectedItem = this.defaultSelection;
@@ -140,7 +140,7 @@ export default {
       this.saveSelection();
     }
   }
-}
+};
 </script>
 
 <style scoped>

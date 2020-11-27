@@ -1,22 +1,39 @@
 <template>
   <div>
     <div class="doku-edit-vars">
-      <folder-row :nested="true" :name="document.name" :always-open="true" :has-image="false" :allow-add="true" :allow-remove="false" v-on:doku-dragend="onDrop($event, null)" v-on:doku-add-folder="addGroup">
+      <folder-row
+        :nested="true" :name="document.name" :always-open="true" :has-image="false"
+        :allow-add="true" :allow-remove="false"
+        @doku-dragend="onDrop($event, null)" @doku-add-folder="addGroup"
+      >
         <div class="folder-list mb-2">
-          <folder-row v-for="group in documentGroups" :name="group.name" :key="group.id" v-on:doku-dragend="onDrop($event, group.id)" :allow-add="false" :allow-remove="true" v-on:doku-remove-folder="removeGroup($event, group.id)" v-on:doku-rename-folder="renameGroup(group.id, $event)">
-            <inline-variable ref="vars" v-for="variable in group.variables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable"></inline-variable>
+          <folder-row
+            v-for="group in documentGroups" :key="group.id" :name="group.name"
+            :allow-add="false" :allow-remove="true"
+            @doku-dragend="onDrop($event, group.id)"
+            @doku-remove-folder="removeGroup($event, group.id)"
+            @doku-rename-folder="renameGroup(group.id, $event)"
+          >
+            <inline-variable
+              v-for="variable in group.variables.filter(v => v.parent == null)"
+              ref="vars" :key="variable.id" :document-id="document.id"
+              :variable="variable"
+            />
           </folder-row>
         </div>
-        <inline-variable ref="vars" v-for="variable in documentRootVariables.filter(v => v.parent == null)" :document-id="document.id" :key="variable.id" :variable="variable"></inline-variable>
+        <inline-variable
+          v-for="variable in documentRootVariables.filter(v => v.parent == null)"
+          ref="vars" :key="variable.id" :document-id="document.id" :variable="variable"
+        />
       </folder-row>
     </div>
     <div class="editor-toolbar">
       <div class="ml-3">
-        <div class="loading" v-if="loading"></div>
+        <div v-if="loading" class="loading" />
       </div>
-      <animated-notice ref="toolbarNotice"></animated-notice>
+      <animated-notice ref="toolbarNotice" />
       <div>
-        <button ref="saveButton" @click="save" class="btn btn-primary">
+        <button ref="saveButton" class="btn btn-primary" @click="save">
           Save All
         </button>
       </div>
@@ -28,11 +45,11 @@
         </div>
       </div>
       <div class="modal-footer">
-        <animated-notice ref="modalNotice"></animated-notice>
-        <button @click="save($event,true)" class="btn btn btn-primary">
+        <animated-notice ref="modalNotice" />
+        <button class="btn btn btn-primary" @click="save($event,true)">
           Save
         </button>
-        <button @click="closeConfirmModal" class="btn btn-link">
+        <button class="btn btn-link" @click="closeConfirmModal">
           Close
         </button>
       </div>
@@ -41,13 +58,13 @@
 </template>
 
 <script>
-import InlineVariable from "./InlineVariable";
-import {mapActions, mapState, mapGetters} from "vuex";
-import Modal from "../ui/modal/Modal";
+import InlineVariable from './InlineVariable';
+import {mapActions, mapState, mapGetters} from 'vuex';
+import Modal from '../ui/modal/Modal';
 import * as actionTypes from '../../store/types/actions';
 import * as getterTypes from '../../store/types/getters';
-import AnimatedNotice from "../ui/AnimatedNotice";
-import FolderRow from "../ui/FolderRow";
+import AnimatedNotice from '../ui/AnimatedNotice';
+import FolderRow from '../ui/FolderRow';
 
 export default {
   name: 'MultiVariableEditor',
@@ -59,11 +76,8 @@ export default {
   },
   data() {
     return {
-      _showNotice: false,
-      _noticeText: '',
-      _noticeClass: '',
       loading: false
-    }
+    };
   },
   computed: {
     ...mapGetters('document', {
@@ -126,7 +140,7 @@ export default {
     save(event, sure) {
       if (!sure) {
         this.openConfirmModal();
-        return
+        return;
       }
       event.target.classList.add('loading');
       let variables = [];
@@ -169,10 +183,10 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-        })
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>
