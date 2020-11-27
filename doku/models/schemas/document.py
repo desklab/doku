@@ -9,7 +9,7 @@ from werkzeug.exceptions import BadRequest
 from doku.models import DateSchemaMixin, db
 from doku.models.document import Document
 from doku.models.schemas.common import ApiSchema, NotEmptyString
-from doku.models.template import Template, DEFAULT_TEMPLATE, Stylesheet
+from doku.models.template import Template, DEFAULT_TEMPLATE
 from doku.models.variable import Variable
 from doku.utils.db import get_or_create
 
@@ -37,12 +37,12 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
     render_url = fields.Method("_render_url", dump_only=True, allow_none=True)
     public_url = fields.Method("_public_url", dump_only=True, allow_none=True)
 
-    def _render_url(self, instance) -> Optional[str]:
+    def _render_url(self, instance) -> Optional[str]:  # noqa
         if instance.id is None:
             return None
         return url_for("document.render", document_id=instance.id)
 
-    def _public_url(self, instance) -> Optional[str]:
+    def _public_url(self, instance) -> Optional[str]:  # noqa
         if instance.id is None:
             return None
         return url_for("document.index", document_id=instance.id)
