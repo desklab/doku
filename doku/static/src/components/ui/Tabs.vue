@@ -18,8 +18,8 @@ export default {
   name: 'Tabs',
   props: {
     tabs: {
-      type: Object,
-      default: undefined
+      type: Array,
+      default: null
     },
     selectedTab: {
       type: Number,
