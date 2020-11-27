@@ -42,16 +42,12 @@ class Template(db.Model, DateMixin):
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
 
     name = db.Column(db.String(255), unique=False, nullable=False)
-    base_style_id = db.Column(
-        db.Integer, db.ForeignKey("doku_stylesheet.id"), nullable=True
-    )
     source = db.Column(db.UnicodeText, nullable=True, default=DEFAULT_TEMPLATE)
 
     documents = db.relationship("Document", back_populates="template")
-    base_style = db.relationship("Stylesheet", back_populates="base_templates")
-    styles = db.relationship(
-        "Stylesheet", secondary=template_stylesheet_relation, back_populates="templates"
-    )
+    styles = db.relationship("Stylesheet",
+                             secondary=template_stylesheet_relation,
+                             back_populates="templates")
 
     def __str__(self):
         return self.name
@@ -71,8 +67,6 @@ class Template(db.Model, DateMixin):
         stylesheets = [
             style.as_css for style in self.styles if style.source is not None
         ]
-        if self.base_style is not None and self.base_style.source is not None:
-            stylesheets = [self.base_style.as_css] + stylesheets
         template = Jinja2Template(self.source)
         context: dict = {
             var.name: var.get_compiled_content()
@@ -106,10 +100,9 @@ class Stylesheet(db.Model, DateMixin):
     name = db.Column(db.String(255), unique=False, nullable=False)
     source = db.Column(db.UnicodeText, nullable=True)
 
-    base_templates = db.relationship("Template", back_populates="base_style")
-    templates = db.relationship(
-        "Template", secondary=template_stylesheet_relation, back_populates="styles"
-    )
+    templates = db.relationship("Template",
+                                secondary=template_stylesheet_relation,
+                                back_populates="styles")
 
     MAX_CONTENT_LENGTH = 125000
 
