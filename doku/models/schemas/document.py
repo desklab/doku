@@ -62,12 +62,9 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
         except ValidationError as e:
             return jsonify(e.messages), BadRequest.code
         if document.template_id is None:
-            template = Template(name=f"{document.name} - Template")
+            template = Template(name=f"Template for {document.name}")
             template.source = DEFAULT_TEMPLATE
-            stylesheet = Stylesheet(name=f"{document.name} - Styles")
-            template.base_style = stylesheet
             document.template = template
-            db.session.add(stylesheet)
             db.session.add(template)
         else:
             document.template = (
