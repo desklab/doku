@@ -10,6 +10,7 @@ from flask import (
     current_app,
     send_from_directory,
 )
+from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest
 
 from doku import db
@@ -47,7 +48,9 @@ def index():
     page = get_pagination_page()
     stylesheets = db.session.query(Stylesheet).paginate(page=page, per_page=10)
 
-    stylesheet_schemas = StylesheetSchema(session=db.session, many=True)
+    stylesheet_schemas = StylesheetSchema(
+        session=db.session, many=True, include=("source",)
+    )
     return render_template(
         "sites/stylesheets.html",
         stylesheets_json=stylesheet_schemas.dumps(stylesheets.items),

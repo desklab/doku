@@ -74,13 +74,14 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
 class StylesheetSchema(ApiSchema, DateSchemaMixin):
     class Meta:
         model = Stylesheet
+        exclude = ("source",)
         load_instance = True
 
     API_NAME = "stylesheet"
 
     id = auto_field()
     name = NotEmptyString()
-    source = auto_field()
+    source = fields.String()
     templates = Nested("TemplateSchema", exclude=("styles",), many=True)
 
     upload_url = fields.Method("_upload_url", dump_only=True, allow_none=True)
