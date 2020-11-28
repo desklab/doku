@@ -33,7 +33,7 @@
           <div class="form-group p-2">
             <label class="form-label">Template</label>
             <div class="border rounded-lg mt-2 p-4">
-              <span v-if="selectedTemplate !== null || selectedTemplate !== undefined"
+              <span v-if="selectedTemplate !== null && selectedTemplate !== undefined"
                     class="d-block mb-3"
               >
                 Template: <b>{{ selectedTemplate.name }}</b>
@@ -86,7 +86,7 @@ export default {
   },
   data() {
     return {
-      selectedTemplate: null,
+      selectedTemplate: undefined,
       templates: [],
       templateApiFetch: templateApi.fetchTemplates
     };
@@ -115,7 +115,7 @@ export default {
         return;
       }
       event.target.classList.add('loading');
-      let template_id = this.selectedTemplateId;
+      let template_id = this.selectedTemplate;
       let data = {
         name: documentNameInput.value,
         public: true, //documentPublicInput.checked,
@@ -134,7 +134,7 @@ export default {
       this.selectedTemplate = template;
     },
     selectNone() {
-      this.selectedTemplate = null;
+      this.selectedTemplate = undefined;
     }
   }
 };
