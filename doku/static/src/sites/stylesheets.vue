@@ -12,7 +12,6 @@
 <script>
 import {mapState} from 'vuex';
 
-import stylesheetApi from '../api/stylesheet';
 import StyleItem from '../components/stylesheet/StyleItem';
 
 
@@ -29,9 +28,7 @@ export default {
   computed: mapState({
     stylesheets: state => state.stylesheet.stylesheets,
   }),
-  mounted() {
-    stylesheetApi.fetchStylesheets().then(res => this.allStylesheets = res.data.result);
-  }
+  mounted() {}
 };
 </script>
 

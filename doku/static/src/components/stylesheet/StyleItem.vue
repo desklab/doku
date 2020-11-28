@@ -1,12 +1,12 @@
 <template>
   <div class="border rounded p-4 bg-gray">
     <text-edit :text="stylesheet.name" :save="saveName" :placeholder="'Name'" />
-    <span v-if="isEmpty" class="chip bg-error">Empty</span>
+    <span v-if="isEmpty" class="chip border">Empty</span>
     <span v-if="!isUsed" class="chip bg-warning">Unused</span>
-    <span v-if="numberOfUses > 1" class="chip text-success">
+    <span v-if="numberOfUses > 1" class="chip border text-success">
       Used by {{ numberOfUses }} Templates
     </span>
-    <span v-if="numberOfUses === 1" class="chip text-success">
+    <span v-if="numberOfUses === 1" class="chip border text-success">
       Used by {{ numberOfUses }} Template
     </span>
     <div class="btn-group btn-sm float-right">
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     isEmpty: function() {
-      return this.stylesheet.source == null;
+      return this.stylesheet.source == null || this.stylesheet.source === '';
     },
     isUsed: function() {
       return this.numberOfUses > 0;
