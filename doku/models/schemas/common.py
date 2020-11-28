@@ -2,7 +2,6 @@ from typing import Optional, Union
 
 from flask import request, jsonify, url_for, has_request_context
 from marshmallow import EXCLUDE, RAISE, ValidationError, fields
-from marshmallow_sqlalchemy import SQLAlchemySchema
 from werkzeug.exceptions import BadRequest
 
 from doku import db
