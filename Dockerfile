@@ -55,6 +55,29 @@ ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master
 ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-LightItalic.ttf  /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-ThinItalic.ttf /home/doku/.local/share/fonts
 
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_AMS-Regular.ttf /app/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Caligraphic-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Caligraphic-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Fraktur-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Fraktur-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Main-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Main-BoldItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Main-Italic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Main-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Math-BoldItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Math-Italic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_SansSerif-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_SansSerif-Italic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_SansSerif-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Script-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Size1-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Size2-Regular.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Size3-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Size4-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Typewriter-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Size3-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Size3-Regular.ttf /home/doku/.local/share/fonts
+
 EXPOSE 8000
 WORKDIR /app
 
