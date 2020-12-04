@@ -17,7 +17,7 @@ body {
   width: 100%;
 
   .sidebar-container {
-    background: $gray-100;
+    background: $sidebar-background;
     width: $unit-12;
     overflow: hidden;
     transition: width .1s;
@@ -25,17 +25,20 @@ body {
     display: flex;
     flex-direction: column;
     .sidebar-item {
-      height: $unit-12;
+      height: $unit-14;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
       flex-shrink: 0;
       text-decoration: none !important;
-      color: $dark-color !important;
+      color: $sidebar-color !important;
+      &:hover {
+        background-color: darken($sidebar-background, 4);
+      }
       a {
         text-decoration: none !important;
-        color: $dark-color !important;
+        color: $sidebar-color !important;
       }
       &.active {
         .sidebar-icon {
@@ -70,7 +73,7 @@ body {
       }
     }
     &.active {
-      width: 10rem;
+      min-width: 12rem;
     }
   }
   .sidebar-content {
