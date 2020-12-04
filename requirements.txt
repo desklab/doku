@@ -22,3 +22,4 @@ markdown>=3.2.2
 bleach
 Pygments>=2.6.1
 jinja2
+markdown-katex
