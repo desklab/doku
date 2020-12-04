@@ -55,7 +55,7 @@ ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master
 ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-LightItalic.ttf  /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-ThinItalic.ttf /home/doku/.local/share/fonts
 
-ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_AMS-Regular.ttf /app/fonts
+ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_AMS-Regular.ttf /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Caligraphic-Bold.ttf /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Caligraphic-Regular.ttf /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Fraktur-Bold.ttf /home/doku/.local/share/fonts
