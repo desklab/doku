@@ -2,6 +2,7 @@ from typing import List
 
 import bleach
 import markdown
+import markdown_katex
 
 from doku.utils.markdown.extensions import RootClassExtension
 
@@ -45,7 +46,14 @@ def compile_content(content: str, css_class: str, use_markdown: bool) -> str:
                     "codehilite",
                     "fenced_code",
                     "tables",
+                    "markdown_katex",
                 ],
+                extension_configs={
+                    "markdown_katex": {
+                        "no_inline_svg": True,      # needed for WeasyPrint
+                        "insert_fonts_css": True,
+                    },
+                }
             )
         else:
             return content
