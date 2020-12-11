@@ -115,12 +115,13 @@ export default {
         return;
       }
       event.target.classList.add('loading');
-      let template_id = this.selectedTemplate;
+      let template = this.selectedTemplate;
       let data = {
         name: documentNameInput.value,
-        public: true, //documentPublicInput.checked,
-        template_id: (template_id === '') ? null : template_id
+        public: true,
       };
+      if (template !== undefined && template !== null)
+        data.template_id = template.id;
       documentApi.createDocument(data)
         .then((response) => {
           window.location.href = response.data.public_url;
