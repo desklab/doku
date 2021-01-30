@@ -1,4 +1,5 @@
 from io import BytesIO
+from xml.etree import ElementTree
 
 from flask import Blueprint, render_template, send_file
 
@@ -45,5 +46,21 @@ def render(document_id: int):
         file,
         mimetype="application/pdf",
         attachment_filename=f"{document.filename}.pdf",
+        cache_timeout=0,
+    )
+
+
+@bp.route("/<int:document_id>/html", methods=["GET"])
+@login_required
+def html(document_id: int):
+    document: Document = get_or_404(
+        db.session.query(Document).filter_by(id=document_id)
+    )
+    output = document.html().etree_element
+    file = BytesIO(ElementTree.tostring(output, method="html"))
+    return send_file(
+        file,
+        mimetype="text/plain",
+        attachment_filename=f"{document.filename}.html",
         cache_timeout=0,
     )

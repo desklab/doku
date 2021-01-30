@@ -63,6 +63,10 @@ class Template(db.Model, DateMixin):
         html, stylesheets = self._render(variables)
         return html.write_pdf(stylesheets=stylesheets)
 
+    def html(self, variables) -> HTML:
+        html, _ = self._render(variables)
+        return html
+
     def _render(self, variables) -> Tuple[HTML, List[CSS]]:
         stylesheets = [
             style.as_css for style in self.styles if style.source is not None
