@@ -1,0 +1,56 @@
+.doku-dropzone {
+  position: relative;
+  height: $control-width-sm;
+  background-color: $gray-100;
+  margin: $unit-3;
+  outline: $unit-1 $gray-200 dashed;
+  padding: $unit-2;
+  outline-offset: -$unit-2;
+  border-radius: $border-radius;
+  transition: all 0.1s;
+
+  &:focus-within {
+    outline-offset: 0;
+    outline-width: $unit-h1;
+  }
+
+  input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .dropzone-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: none;
+    .upload-icon {
+      margin: $unit-2 auto;
+    }
+    span {
+      margin: $unit-2 auto;
+      .virtual-link {
+        font-weight: bold;
+        cursor: pointer;
+        pointer-events: all !important;
+      }
+    }
+  }
+
+  &.dragover {
+    background-color: $gray-200;
+    outline-color: $gray-300;
+    outline-offset: -$unit-h1;
+  }
+}
