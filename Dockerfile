@@ -27,7 +27,7 @@ COPY . /app/
 RUN useradd -m doku
 RUN mkdir -p /app/resources
 RUN mkdir -p /app/shared
-RUN mv /app/docker/* /app/
+RUN find /app/docker -type f -exec mv {} /app \;
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/healthcheck.sh
 RUN chmod +x /app/worker.sh
