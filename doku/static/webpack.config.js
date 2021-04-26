@@ -1,174 +1,166 @@
 const path = require('path');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const autoprefixer = require('autoprefixer');
 
 
-module.exports = {
-  entry: {
-    main: './src/main.js',
-    edit: './src/edit.js',
-    edit_template: './src/edit_template.js',
-    resources: './src/resources.js',
-    templates: './src/templates.js',
-    stylesheets: './src/stylesheets.js',
-    snippet: './src/snippet.js'
-  },
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/static/',
-    filename: '[name].bundle.js'
-  },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      name: 'vendor',
-      minChunks: 2
-    },
-    runtimeChunk: {
-      name: 'runtime'
-    },
-    minimize: process.env.NODE_ENV === 'production',
-    minimizer: [
-      new TerserPlugin()
-    ]
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {outputPath: 'css/', name: '[name].min.css'}
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  require('autoprefixer')
-                ]
-              }
-            }
-          },
-          // 'css-loader',
-          // 'vue-style-loader'
-        ],
-      },
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {outputPath: 'css/', name: '[name].min.css'}
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  require('autoprefixer')
-                ]
-              }
-            }
-          },
-          {
-            loader: 'sass-loader'
-          },
+const postcssLoader = (env, options) => {
+  return {
+    loader: 'postcss-loader',
+    options: {
+      postcssOptions: {
+        plugins: [
+          autoprefixer
         ]
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-            // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
-            // the "scss" and "sass" values for the lang attribute to the right configs here.
-            // other preprocessors should work out of the box, no loader config like this necessary.
-          }
-          // other vue-loader options go here
-        }
-      },
-      {
-        test: /\.worker\.js$/,
-        loader: 'worker-loader',
-        options: {
-          filename: '[name].bundle.js'
-        }
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          presets: ['@babel/preset-env']
-        }
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]',
-          publicPath: '/static/assets',
-          outputPath: 'assets',
-          esModule: false,
-        }
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        loader: "file-loader",
-        options: {
-          name: '[name].[ext]?[hash]',
-          publicPath: '/static/assets',
-          outputPath: 'assets',
-          esModule: false,
-        }
       }
-    ]
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new VueLoaderPlugin(),
-    new webpack.IgnorePlugin({resourceRegExp: /..\/..\/lib\/codemirror/}),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'assets', to: 'assets' },
-      ]
-    }),
-  ],
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js'
-    },
-    extensions: ['*', '.js', '.vue', '.json']
-  },
-  watchOptions: {
-    ignored: /node_modules/
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true
-  },
-  performance: {
-    hints: false
-  },
-  devtool: '#eval-source-map',
-  mode: process.env.NODE_ENV
+    }
+  };
 };
 
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map';
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    })
-  ]);
-}
+const cssFileLoader = (env, options) => {
+  return {
+    loader: 'file-loader',
+    options: {outputPath: 'css/', name: '[name].min.css'}
+  };
+};
+
+
+const config = (env, options) => {
+  let isProduction = options.mode === 'production';
+  return {
+    name: 'doku',
+    entry: {
+      main: './src/main.js',
+      edit: './src/edit.js',
+      edit_template: './src/edit_template.js',
+      resources: './src/resources.js',
+      templates: './src/templates.js',
+      stylesheets: './src/stylesheets.js',
+      snippet: './src/snippet.js',
+    },
+    output: {
+      path: path.resolve(__dirname, './dist'),
+      publicPath: '/static/',
+      filename: '[name].bundle.js'
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        name: 'vendor',
+        minChunks: 2
+      },
+      runtimeChunk: {
+        name: 'runtime'
+      },
+      minimize: isProduction,
+      minimizer: [
+        new TerserPlugin()
+      ]
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
+            cssFileLoader(env, options),
+            'extract-loader',
+            'css-loader',
+            postcssLoader(env, options)
+          ]
+        },
+        {
+          test: /\.scss$/,
+          exclude: /node_modules/,
+          use: [
+            cssFileLoader(env, options),
+            'extract-loader',
+            'css-loader',
+            postcssLoader(env, options),
+            {loader: 'sass-loader'}
+          ]
+        },
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader',
+          options: {}
+        },
+        {
+          test: /\.worker\.js$/,
+          loader: 'worker-loader',
+          options: {
+            filename: '[name].bundle.js'
+          }
+        },
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
+          exclude: /node_modules/,
+          options: {
+            presets: ['@babel/preset-env'],
+          }
+        },
+        {
+          test: /\.(png|jpg|gif|svg)$/,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]?[hash]',
+            publicPath: '/static/assets',
+            outputPath: 'assets',
+            esModule: false,
+          }
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]?[hash]',
+            publicPath: '/static/assets',
+            outputPath: 'assets',
+            esModule: false,
+          }
+        }
+      ]
+    },
+    target: 'browserslist',
+    plugins: [
+      new webpack.ProgressPlugin(),
+      new CleanWebpackPlugin(),
+      new VueLoaderPlugin(),
+      new webpack.IgnorePlugin({resourceRegExp: /..\/..\/lib\/codemirror/}),
+      new CopyWebpackPlugin({
+        patterns: [
+          {from: 'assets', to: 'assets'},
+        ]
+      }),
+    ],
+    watchOptions: {
+      ignored: ['**/*.py', '**/node_modules'],
+    },
+    resolve: {
+      alias: {
+        'vue$': 'vue/dist/vue.esm.js'
+      },
+      extensions: ['*', '.js', '.vue', '.json']
+    },
+    performance: {
+      hints: 'warning'
+    },
+    devServer: {
+      historyApiFallback: true,
+      noInfo: true,
+      overlay: true
+    },
+    // use 'eval-source-map' for higher quality source maps
+    devtool: (isProduction) ? false : 'eval-source-map',
+    watch: !isProduction,
+  };
+};
+
+module.exports = (env, options) => {
+  return [
+    config(env, options)
+  ];
+};
