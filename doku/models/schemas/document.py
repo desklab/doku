@@ -28,10 +28,12 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
     template_id = auto_field(load_only=True)
 
     template = Nested("TemplateSchema", exclude=("documents",))
-    variables = Nested("VariableSchema", exclude=("document",), many=True, partial=True)
+    variables = Nested(
+        "VariableSchema", exclude=("document",), many=True, metadata=dict(partial=True)
+    )
     variable_groups = Nested("VariableGroupSchema", exclude=("document",), many=True)
     root_variables = Nested(
-        "VariableSchema", exclude=("document",), many=True, partial=True
+        "VariableSchema", exclude=("document",), many=True, metadata=dict(partial=True)
     )
 
     render_url = fields.Method("_render_url", dump_only=True, allow_none=True)
@@ -53,7 +55,7 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
         schema = cls(
             unknown=RAISE,
             session=db.session,
-            partial=True,
+            metadata=dict(partial=True),
             many=isinstance(data, list),
             include_request=True,
         )
@@ -84,7 +86,7 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
         data = cls.all_request_data()
         schema = cls(
             unknown=EXCLUDE,
-            partial=True,
+            metadata=dict(partial=True),
             session=db.session,
             many=isinstance(data, list),
             include_request=True,

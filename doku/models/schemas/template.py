@@ -46,7 +46,9 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
     @classmethod
     def update(cls, commit=True):
         data = cls.all_request_data()
-        schema = cls(partial=True, session=db.session, many=isinstance(data, list))
+        schema = cls(
+            metadata=dict(partial=True), session=db.session, many=isinstance(data, list)
+        )
         try:
             template = schema.load(data)
         except ValidationError as e:

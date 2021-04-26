@@ -35,8 +35,12 @@ class VariableSchema(ApiSchema, DateSchemaMixin):
 
     parent = Nested("VariableSchema", allow_none=True, exclude=("children",))
     document = Nested("DocumentSchema", exclude=("variables",), dump_only=True)
-    children = Nested("VariableSchema", exclude=("parent",), many=True, partial=True)
-    snippet = Nested("SnippetSchema", exclude=("used_by",), many=False, partial=True)
+    children = Nested(
+        "VariableSchema", exclude=("parent",), many=True, metadata=dict(partial=True)
+    )
+    snippet = Nested(
+        "SnippetSchema", exclude=("used_by",), many=False, metadata=dict(partial=True)
+    )
     group = Nested("VariableGroupSchema", exclude=("variables", "document"))
 
     used = fields.Boolean(dump_only=True)
