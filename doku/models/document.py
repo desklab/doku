@@ -31,6 +31,7 @@ class Document(db.Model, DateMixin):
     root_variables = db.relationship(
         "Variable",
         primaryjoin="and_(Variable.document_id == Document.id, Variable.group_id == null())",
+        overlaps="variables, document"
     )
 
     def __init__(self, *args, author_id=None, author=None, **kwargs):
