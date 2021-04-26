@@ -22,16 +22,16 @@ RUN pip install uwsgi
 
 RUN rm -rf ~/.cache/pip/*
 
-COPY . /app/
-
 RUN useradd -m doku
+
+ADD --chown=doku . /app/
 RUN mkdir -p /app/resources
 RUN mkdir -p /app/shared
 RUN find /app/docker -type f -exec mv {} /app \;
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/healthcheck.sh
 RUN chmod +x /app/worker.sh
-RUN chown -R doku /app
+# RUN chown -R doku /app
 
 USER doku
 

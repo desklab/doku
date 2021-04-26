@@ -50,8 +50,8 @@ def compile_content(content: str, css_class: str, use_markdown: bool) -> str:
                 ],
                 extension_configs={
                     "markdown_katex": {
-                        "no_inline_svg": True,      # needed for WeasyPrint
-                        "insert_fonts_css": True,
+                        "no_inline_svg": True,  # needed for WeasyPrint
+                        "insert_fonts_css": False,
                     },
                 }
             )

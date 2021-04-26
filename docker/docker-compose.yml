@@ -38,7 +38,7 @@ services:
     depends_on:
       - redis
     volumes:
-      - ./shared:/app/shared
+      - ../shared:/app/shared
     environment:
       REDIS_HOST: 'redis'
       DOKU_SECRET: 'very_secret'
