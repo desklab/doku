@@ -1,4 +1,4 @@
-FROM node:14 AS build
+FROM node:16 AS build
 LABEL maintainer="j.drotleff@desk-lab.de"
 
 WORKDIR /usr/src/doku
