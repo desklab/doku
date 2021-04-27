@@ -16,6 +16,9 @@ jobs:
       - name: Install Python Requirements
         run: pip install -r requirements.txt
 
+      - name: Start Database
+        run: cd docker && docker-compose up -d
+
       - name: Launch Tests
         run: |
           pytest doku/tests --junitxml=TESTS.xml
