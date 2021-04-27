@@ -47,7 +47,7 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
     def update(cls, commit=True):
         data = cls.all_request_data()
         schema = cls(
-            metadata=dict(partial=True), session=db.session, many=isinstance(data, list)
+            partial=True, session=db.session, many=isinstance(data, list)
         )
         try:
             template = schema.load(data)

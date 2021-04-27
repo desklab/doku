@@ -17,7 +17,7 @@ def upload(stylesheet_id: int):
         db.session.query(Stylesheet).filter_by(id=stylesheet_id)
     )
     schema = StylesheetSchema(
-        unknown=EXCLUDE, session=db.session, instance=style, metadata=dict(partial=True)
+        unknown=EXCLUDE, session=db.session, instance=style, partial=True
     )
 
     data = dict(request.form.copy())

@@ -55,7 +55,7 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
         schema = cls(
             unknown=RAISE,
             session=db.session,
-            metadata=dict(partial=True),
+            partial=True,
             many=isinstance(data, list),
             include_request=True,
         )
@@ -86,7 +86,7 @@ class DocumentSchema(ApiSchema, DateSchemaMixin):
         data = cls.all_request_data()
         schema = cls(
             unknown=EXCLUDE,
-            metadata=dict(partial=True),
+            partial=True,
             session=db.session,
             many=isinstance(data, list),
             include_request=True,
