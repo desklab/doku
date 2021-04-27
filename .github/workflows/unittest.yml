@@ -4,6 +4,16 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
+
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
@@ -16,14 +26,10 @@ jobs:
       - name: Install Python Requirements
         run: pip install -r requirements.txt
 
-      - name: Start Database
-        run: |
-          docker network create internal
-          cd docker && docker-compose up -d
-
       - name: Launch Tests
         run: |
           pytest doku/tests --junitxml=TESTS.xml
           junit 'TESTS.xml'
         env:
           REDIS_HOST: 'redis'
+          REDIS_PORT: 6379
