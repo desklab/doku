@@ -32,5 +32,5 @@ jobs:
           pytest doku/tests --junitxml=TESTS.xml
           junit 'TESTS.xml'
         env:
-          REDIS_HOST: 'redis'
+          REDIS_HOST: 'localhost'
           REDIS_PORT: 6379
