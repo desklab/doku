@@ -28,8 +28,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Launch Tests
-        run: |
-          pytest doku/tests
+        run: pytest doku/tests
         env:
           REDIS_HOST: 'localhost'
           REDIS_PORT: 6379

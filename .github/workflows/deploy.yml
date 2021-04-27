@@ -1,0 +1,56 @@
+name: unittest
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v2
+     
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: '3.x'
+      
+      - name: Install Python Requirements
+        run: pip install -r requirements.txt
+
+      - name: Test
+        run: pytest doku/tests
+        env:
+          REDIS_HOST: 'localhost'
+          REDIS_PORT: 6379
+
+      - name: Build
+        run: |
+          docker build -t reg.desk-lab.de/doku -t reg.desk-lab.de/doku:${{ github.sha }} .
+          cd doku/static && docker build -t reg.desk-lab.de/doku-static -t reg.desk-lab.de/doku-static:${{ github.sha }} .
+          docker login https://reg.desk-lab.de --username ${{ secrets.REGISTRY_USR }} --password ${{ secrets.REGISTRY_PSW }}
+          docker push reg.desk-lab.de/doku-static | cat
+          docker push reg.desk-lab.de/doku-static:${{ github.sha }} | cat
+          docker push reg.desk-lab.de/doku | cat
+          docker push reg.desk-lab.de/doku:${{ github.sha }} | cat
+
+      - name: Deploy
+        run: |
+          docker login https://reg.desk-lab.de --username ${{ secrets.REGISTRY_USR }} --password ${{ secrets.REGISTRY_PSW }}
+          cd /home/jenkins/server && docker-compose pull doku dokustatic dokuworker | cat
+          cd /home/jenkins/server && docker-compose up -d doku dokustatic dokuworker | cat
+
+
+          
