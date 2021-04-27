@@ -40,7 +40,7 @@ jobs:
         run: |
           docker build -t reg.desk-lab.de/doku -t reg.desk-lab.de/doku:${{ github.sha }} .
           cd doku/static && docker build -t reg.desk-lab.de/doku-static -t reg.desk-lab.de/doku-static:${{ github.sha }} .
-          docker login https://reg.desk-lab.de --username ${{ secrets.REGISTRY_USR }} --password ${{ secrets.REGISTRY_PSW }}
+          docker login https://reg.desk-lab.de --username ${{ secrets.DOCKER_REGISTRY_USER }} --password ${{ secrets.DOCKER_REGISTRY_PASSWORD}}
           docker push reg.desk-lab.de/doku-static | cat
           docker push reg.desk-lab.de/doku-static:${{ github.sha }} | cat
           docker push reg.desk-lab.de/doku | cat
@@ -48,7 +48,7 @@ jobs:
 
       - name: Deploy
         run: |
-          docker login https://reg.desk-lab.de --username ${{ secrets.REGISTRY_USR }} --password ${{ secrets.REGISTRY_PSW }}
+          docker login https://reg.desk-lab.de --username ${{ secrets.DOCKER_REGISTRY_USER }} --password ${{ secrets.DOCKER_REGISTRY_PASSWORD}}
           cd /home/jenkins/server && docker-compose pull doku dokustatic dokuworker | cat
           cd /home/jenkins/server && docker-compose up -d doku dokustatic dokuworker | cat
 
