@@ -1,11 +1,11 @@
-name: deploy
+name: upload
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  deploy:
+  upload:
     runs-on: ubuntu-latest
 
     services:
