@@ -76,3 +76,5 @@ coverage/
 
 doku/static/dist
 doku/static/node_modules
+
+.github
