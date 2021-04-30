@@ -15,20 +15,42 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: 'password_doku'
+          POSTGRES_USER: 'doku_user'
+          POSTGRES_DB: 'doku_db'
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v2
-     
+
       - name: Setup Python
         uses: actions/setup-python@v2.2.1
         with:
           python-version: '3.x'
-      
+
+      - name: Install WeasyPrint (includes Pango)
+        run: sudo apt-get update && sudo apt-get install weasyprint
+
       - name: Install Python Requirements
         run: pip install -r requirements.txt
 
       - name: Launch Tests
         run: pytest doku/tests
         env:
+          DOKU_CONFIG: 'config.prod'
+          FLASK_ENV: 'production'
           REDIS_HOST: 'localhost'
           REDIS_PORT: 6379
+          DOKU_DB_PASSWORD: 'password_doku'
+          DOKU_DB_USER: 'doku_user'
+          DOKU_DB_DATABASE: 'doku_db'
+          DOKU_DB_HOST: 'localhost'
