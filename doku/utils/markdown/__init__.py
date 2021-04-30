@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 import bleach
 import markdown
@@ -28,16 +28,16 @@ BLEACH_ALLOWED_ATTRS: dict = {
 # fmt: on
 
 
-def compile_content(content: str, css_class: str, use_markdown: bool) -> str:
-    # Make sure we sanitize content before saving it as
-    # ``compiled_content`` even if we do not use markdown.
-    content = bleach.clean(content, BLEACH_ALLOWED_TAGS, BLEACH_ALLOWED_ATTRS)
+def compile_content(content: str, css_class: Optional[str], use_markdown: bool) -> str:
     if content is None or content == "":
         # In previous versions, the content was set to ""
         # However, this will trigger a recursive function call and
         # should thus be avoided
         return ""
     else:
+        # Make sure we sanitize content before saving it as
+        # ``compiled_content`` even if we do not use markdown.
+        content = bleach.clean(content, BLEACH_ALLOWED_TAGS, BLEACH_ALLOWED_ATTRS)
         if use_markdown:
             return markdown.markdown(
                 content,
