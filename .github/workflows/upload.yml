@@ -1,11 +1,14 @@
-name: deploy
+name: Build and Deploy
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Test"]
+    branches: [main]
+    types:
+      - completed
 
 jobs:
-  upload:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,6 +47,7 @@ jobs:
             reg.desk-lab.de/doku:${{ github.sha }}
             reg.desk-lab.de/doku
   deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
