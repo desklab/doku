@@ -7,10 +7,8 @@ from doku.models.schemas import VariableSchema, TemplateSchema
 
 class TestJinja(unittest.TestCase):
     def setUp(self):
-        self.variable_schema = VariableSchema()
-        self.template_schema = TemplateSchema()
-        self.variable_schema.opts.load_instance = False
-        self.template_schema.opts.load_instance = False
+        self.variable_schema = VariableSchema(load_instance=False)
+        self.template_schema = TemplateSchema(load_instance=False)
 
     def test_invalid_variable_name(self):
         with self.assertRaises(ValidationError):
