@@ -63,6 +63,7 @@ jobs:
           ANSIBLE_REMOTE_USER: ${{ secrets.DEPLOY_USER }}
           SSH_PRIVATE_KEY : ${{ secrets.DEPLOY_SSH_KEY }}
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          ANSIBLE_HOST_KEY_CHECKING: 'False'
         run: |
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "$SSH_PRIVATE_KEY"
