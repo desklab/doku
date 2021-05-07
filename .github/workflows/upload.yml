@@ -1,4 +1,4 @@
-name: upload
+name: deploy
 
 on:
   push:
@@ -43,3 +43,22 @@ jobs:
           tags: |
             reg.desk-lab.de/doku:${{ github.sha }}
             reg.desk-lab.de/doku
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+
+      - name: Run Ansible Playbook
+        working-directory: './.github/ansible'
+        env:
+          REMOTE_PROJECT_SRC: ${{ secrets.DEPLOY_PROJECT_SRC }}
+          ANSIBLE_REMOTE_USER: ${{ secrets.DEPLOY_USER }}
+          ANSIBLE_PRIVATE_KEY_FILE: ./private_key
+          SSH_PRIVATE_KEY : ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > $ANSIBLE_PRIVATE_KEY_FILE
+          ansible-playbook --inventory ${{ secrets.DEPLOY_HOST }}, deploy.yml

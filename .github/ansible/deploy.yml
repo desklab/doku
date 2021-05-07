@@ -1,0 +1,16 @@
+---
+- name: Deploy doku
+  hosts: all
+  vars:
+    - ansible_python_interpreter: '/usr/bin/python3'
+  tasks:
+    - name: Pull Docker Images and Restart
+      docker_compose:
+        project_src: "{{ lookup('env','REMOTE_PROJECT_SRC') }}"
+        services:
+          - dokuworker
+          - dokustatic
+          - doku
+        restarted: yes
+        pull: yes
+        state: present
