@@ -1,11 +1,11 @@
 pytest
 
-flask
+flask==1.1.4
 sentry-sdk[flask]>=0.17.3
-Flask-Babel
-werkzeug
-itsdangerous
-click
+Flask-Babel==1.0.0
+werkzeug==1.0.1
+itsdangerous==1.1.0
+click==7.1.2
 
 celery>=4.4.7
 redis
@@ -17,9 +17,9 @@ alembic>=1.4.2
 marshmallow>=3.7.1
 marshmallow_sqlalchemy
 
-WeasyPrint>=51
+WeasyPrint==52.5
 markdown>=3.2.2
 bleach
 Pygments>=2.6.1
-jinja2
+jinja2==2.11.3
 markdown-katex
