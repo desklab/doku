@@ -20,7 +20,7 @@
             </div>
         {% endfor %}
     </div>
-    {% with pagination=snippets, page_url='base.index' %}
+    {% with pagination=snippets, page_url='snippet.index' %}
         {% include "components/pagination.html" %}
     {% endwith %}
 {% endblock %}
