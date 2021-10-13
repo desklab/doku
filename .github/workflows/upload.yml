@@ -52,7 +52,7 @@ jobs:
           flavor: |
             latest=${{ !github.event.release.prerelease }}
 
-      - name: Build and push
+      - name: Build and push doku static
         uses: docker/build-push-action@v2
         with:
           file: 'doku/static/Dockerfile'
