@@ -36,7 +36,7 @@ jobs:
             type=semver,pattern={{version}}
             type=raw,value=dev,enable=${{ github.event.release.prerelease }}
           flavor: |
-            prefix=static
+            prefix=static-,onlatest=true
             latest=${{ !github.event.release.prerelease }}
 
       - name: Extract metadata (tags, labels) for Docker
