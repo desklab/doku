@@ -163,10 +163,10 @@ class RedisSessionInterface(SessionInterface):
             time=app.permanent_session_lifetime,
             value=raw_session,
         )
-        sid_signed = self._signer.sign(session.sid)
+        sid_signed: bytes = self._signer.sign(session.sid)
         response.set_cookie(
             app.session_cookie_name,
-            sid_signed,
+            sid_signed.decode("utf-8"),
             domain=domain,
             path=path,
             httponly=httponly,

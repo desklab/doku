@@ -3,14 +3,14 @@ pytest
 flask>=2.0
 sentry-sdk[flask]
 Flask-Babel>=2.0
-werkzeug>=2.0
-itsdangerous>=2.0
-click>=8
+werkzeug~=2.0
+itsdangerous~=2.0
+click~=8.0
 
-celery>=5
+celery~=5.0
 redis
 
-sqlalchemy==1.4
+sqlalchemy~=1.4
 psycopg2-binary
 flask-sqlalchemy
 alembic>=1.7

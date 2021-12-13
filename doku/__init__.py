@@ -1,9 +1,16 @@
+__version__ = "0.3.2"
+__author__ = "Jonas Drotleff <j.drotleff@desk-lab.de>"
+__all__ = ["create_app", "cli"]
+
+
 import os
 from importlib import import_module
 from typing import Optional
 
 import click
 from flask_babel import Babel
+from sentry_sdk.integrations.redis import RedisIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from sqlalchemy.sql import exists
 from flask import Flask, request
 from flask.cli import FlaskGroup
@@ -63,10 +70,19 @@ def create_app(
     config_module = import_module(config)
     # Only initialize sentry if in production and SENTRY_DSN is set
     _env = os.environ.get("FLASK_ENV", "development")
-    if _env == "production" and config_module.SENTRY_DSN is not None:
-        sentry_sdk.init(dsn=config_module.SENTRY_DSN, integrations=[FlaskIntegration()])
+    _sentry_dsn = getattr(config_module, "SENTRY_DSN", None)
+    if _env == "production" and _sentry_dsn is not None:
+        sentry_sdk.init(
+            dsn=_sentry_dsn,
+            release=f"doku@{__version__}",
+            integrations=[
+                FlaskIntegration(),
+                RedisIntegration(),
+                SqlalchemyIntegration(),
+            ],
+        )
 
-    app = Flask(name, instance_relative_config=True)
+    app = Flask(name)
     app.config.from_object(config_module)
     app.static_url_path = app.config.get("STATIC_FOLDER")
     app.static_folder = os.path.join(app.root_path, app.static_url_path)
@@ -80,7 +96,9 @@ def create_app(
     )
     app.redis = redis
     # Prepare celery for tasks
-    celery.conf.update(**config_module.CELERY_CONFIG)
+    if not hasattr(config_module, "CELERY_CONFIG"):
+        raise ValueError("'CELERY_CONFIG' not provided in configuration")
+    celery.conf.update(**getattr(config_module, "CELERY_CONFIG"))
 
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
         os.makedirs(app.config["UPLOAD_FOLDER"])
