@@ -53,7 +53,7 @@ def compile_content(content: str, css_class: Optional[str], use_markdown: bool) 
                         "no_inline_svg": True,  # needed for WeasyPrint
                         "insert_fonts_css": False,
                     },
-                }
+                },
             )
         else:
             return content

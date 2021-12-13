@@ -3,7 +3,7 @@ from flask import Blueprint
 from doku.models.schemas import ResourceSchema
 from doku.utils.decorators import login_required
 
-bp = Blueprint("api.v1.resource", __name__)
+bp = Blueprint("resource", __name__)
 
 
 @bp.route("/", methods=["POST"])

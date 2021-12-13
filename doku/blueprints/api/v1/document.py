@@ -13,7 +13,7 @@ from doku.tasks import celery
 from doku.tasks.download import request_download
 from doku.utils import EMPTY
 
-bp = Blueprint("api.v1.document", __name__)
+bp = Blueprint("document", __name__)
 
 
 @bp.route("/", methods=["POST"])

@@ -31,7 +31,7 @@ class Document(db.Model, DateMixin):
     root_variables = db.relationship(
         "Variable",
         primaryjoin="and_(Variable.document_id == Document.id, Variable.group_id == null())",
-        overlaps="variables, document"
+        overlaps="variables, document",
     )
 
     def __init__(self, *args, author_id=None, author=None, **kwargs):
@@ -61,7 +61,7 @@ class Document(db.Model, DateMixin):
         return self.template.render(self.variables)
 
     def html(self):
-        return self.template.html(self.variables)        
+        return self.template.html(self.variables)
 
     def write_pdf(self, path):
         return self.template.write_pdf(self.variables, path)

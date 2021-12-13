@@ -45,9 +45,9 @@ class Template(db.Model, DateMixin):
     source = db.Column(db.UnicodeText, nullable=True, default=DEFAULT_TEMPLATE)
 
     documents = db.relationship("Document", back_populates="template")
-    styles = db.relationship("Stylesheet",
-                             secondary=template_stylesheet_relation,
-                             back_populates="templates")
+    styles = db.relationship(
+        "Stylesheet", secondary=template_stylesheet_relation, back_populates="templates"
+    )
 
     def __str__(self):
         return self.name
@@ -104,9 +104,9 @@ class Stylesheet(db.Model, DateMixin):
     name = db.Column(db.String(255), unique=False, nullable=False)
     source = db.Column(db.UnicodeText, nullable=True)
 
-    templates = db.relationship("Template",
-                                secondary=template_stylesheet_relation,
-                                back_populates="styles")
+    templates = db.relationship(
+        "Template", secondary=template_stylesheet_relation, back_populates="styles"
+    )
 
     MAX_CONTENT_LENGTH = 125000
 

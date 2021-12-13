@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import secrets
 from typing import Optional
@@ -7,7 +8,12 @@ from typing import Optional
 from itsdangerous.encoding import base64_encode, base64_decode
 from itsdangerous.exc import BadData
 from sqlalchemy.orm.exc import NoResultFound
-from werkzeug.security import generate_password_hash, check_password_hash, pbkdf2_hex
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash,
+    pbkdf2_hex,
+    DEFAULT_PBKDF2_ITERATIONS,
+)
 from flask import session, request, current_app
 
 from doku.models import db
@@ -31,12 +37,14 @@ class User(db.Model):
 
     @staticmethod
     def _hash_password(password):
-        return generate_password_hash(password.encode(), salt_length=12).encode()
+        return generate_password_hash(password, salt_length=12).encode()
 
     @staticmethod
     def _hash_token(token: str):
         salt = current_app.config.get("API_TOKEN_SALT", "salty_token")
-        return pbkdf2_hex(token, salt)
+        return hashlib.pbkdf2_hmac(
+            "sha256", token.encode(), salt.encode(), DEFAULT_PBKDF2_ITERATIONS
+        ).hex()
 
     def set_password(self, password):
         self.password = self._hash_password(password)
@@ -46,7 +54,9 @@ class User(db.Model):
 
     @property
     def token(self):
-        r = current_app.redis
+        r = getattr(current_app, "redis", None)
+        if r is None:
+            raise ValueError("app instance has no attribute 'redis'.")
         token = secrets.token_urlsafe(current_app.config.get("API_TOKEN_LENGTH", 32))
         prefix = current_app.config.get("API_TOKEN_STORAGE_PREFIX", "doku_api_token_")
         key = self._hash_token(token)

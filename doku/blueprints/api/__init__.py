@@ -1,3 +1,5 @@
+from typing import Union
+
 from werkzeug.exceptions import BadRequest, Unauthorized
 from marshmallow.exceptions import ValidationError
 from flask import Flask, request, session, Blueprint, jsonify
@@ -91,13 +93,15 @@ def handle_validation_error(error: ValidationError):
     return response
 
 
-def register(app: Flask, blueprint: Blueprint, auth=False, **kwargs):
+def register(
+    parent: Union[Flask, Blueprint], blueprint: Blueprint, auth=False, **kwargs
+):
     """Register API Endpoint
 
     Helper method designed to apply all optional and required
     middlewares to API endpoints.
 
-    :param app: Current Flask instance
+    :param parent: Current Flask or Blueprint parent instance
     :param blueprint: Blueprint to register as API endpoint
     :param auth: Indicate whether authentication is required. Will add
         the :func:`.auth_required` middleware.
@@ -110,7 +114,7 @@ def register(app: Flask, blueprint: Blueprint, auth=False, **kwargs):
     blueprint.before_request(api_auth)
     if auth:
         blueprint.before_request(auth_required)
-    app.register_blueprint(blueprint, **kwargs)
+    parent.register_blueprint(blueprint, **kwargs)
 
 
 def init_api(app: Flask):
@@ -126,11 +130,29 @@ def init_api(app: Flask):
     ###################
     # API v1 Endpoints
     ###################
-    register(app, v1.bp, auth=False, url_prefix="/api/v1")
-    register(app, document.bp, auth=True, url_prefix="/api/v1/document")
-    register(app, template.bp, auth=True, url_prefix="/api/v1/template")
-    register(app, variable.bp, auth=True, url_prefix="/api/v1/variable")
-    register(app, vargroup.bp, auth=True, url_prefix="/api/v1/vargroup")
-    register(app, stylesheet.bp, auth=True, url_prefix="/api/v1/stylesheet")
-    register(app, resource.bp, auth=True, url_prefix="/api/v1/resource")
-    register(app, snippet.bp, auth=True, url_prefix="/api/v1/snippet")
+    register(app, v1.bp, auth=False, url_prefix="/api/v1", name_prefix="api")
+    register(
+        app, document.bp, auth=True, url_prefix="/api/v1/document", name_prefix="api.v1"
+    )
+    register(
+        app, template.bp, auth=True, url_prefix="/api/v1/template", name_prefix="api.v1"
+    )
+    register(
+        app, variable.bp, auth=True, url_prefix="/api/v1/variable", name_prefix="api.v1"
+    )
+    register(
+        app, vargroup.bp, auth=True, url_prefix="/api/v1/vargroup", name_prefix="api.v1"
+    )
+    register(
+        app,
+        stylesheet.bp,
+        auth=True,
+        url_prefix="/api/v1/stylesheet",
+        name_prefix="api.v1",
+    )
+    register(
+        app, resource.bp, auth=True, url_prefix="/api/v1/resource", name_prefix="api.v1"
+    )
+    register(
+        app, snippet.bp, auth=True, url_prefix="/api/v1/snippet", name_prefix="api.v1"
+    )

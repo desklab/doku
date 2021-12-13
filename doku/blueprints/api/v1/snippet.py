@@ -2,7 +2,7 @@ from flask import Blueprint
 
 from doku.models.schemas import SnippetSchema
 
-bp = Blueprint("api.v1.snippet", __name__)
+bp = Blueprint("snippet", __name__)
 
 
 @bp.route("/", methods=["POST"])

@@ -1,5 +1,6 @@
 import os
 from importlib import import_module
+from typing import Optional
 
 import click
 from flask_babel import Babel
@@ -30,7 +31,11 @@ from doku.utils.session import RedisSessionInterface
 
 
 def create_app(
-    name="doku", config=None, minimal=False, test=False, additional_config=None
+    name="doku",
+    config: str = "config.dev",
+    minimal: bool = False,
+    test: bool = False,
+    additional_config: Optional[dict] = None,
 ) -> Flask:
     """
     App Factory - create_app
@@ -50,7 +55,7 @@ def create_app(
     :param test: Enable the testing environment. This will overwrite
         the ``config`` parameter.
     """
-    config = os.environ.get("DOKU_CONFIG", "config.dev")
+    config = os.environ.get("DOKU_CONFIG", config)
     if test:
         # Overwrite the config parameter to use a testing environment
         config = "config.test"

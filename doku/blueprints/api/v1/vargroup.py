@@ -2,7 +2,7 @@ from flask import Blueprint
 
 from doku.models.schemas import VariableGroupSchema
 
-bp = Blueprint("api.v1.vargroup", __name__)
+bp = Blueprint("vargroup", __name__)
 
 
 @bp.route("/", methods=["GET"])

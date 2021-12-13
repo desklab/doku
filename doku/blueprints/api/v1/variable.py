@@ -3,7 +3,7 @@ from flask import Blueprint
 from doku.models.schemas import VariableSchema
 from doku.utils.decorators import login_required
 
-bp = Blueprint("api.v1.variable", __name__)
+bp = Blueprint("variable", __name__)
 
 
 @bp.route("/", methods=["GET"])

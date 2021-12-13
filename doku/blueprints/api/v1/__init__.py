@@ -1,10 +1,22 @@
+from abc import ABC
+
+from flask.views import MethodView
 from werkzeug.exceptions import BadRequest, Unauthorized
 from flask import Blueprint, jsonify, request, session
 
 from doku.models.user import User
 from doku.utils.middlewares.csrf import csrf
+from doku.blueprints.api.v1 import (
+    document,
+    template,
+    variable,
+    vargroup,
+    stylesheet,
+    resource,
+    snippet,
+)
 
-bp = Blueprint("api.v1", __name__)
+bp = Blueprint("v1", __name__)
 
 
 @bp.route("/heartbeat", methods=["GET"])

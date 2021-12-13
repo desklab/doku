@@ -8,7 +8,7 @@ from doku.models.schemas import StylesheetSchema
 from doku.models.template import Stylesheet
 from doku.utils.db import get_or_404
 
-bp = Blueprint("api.v1.stylesheet", __name__)
+bp = Blueprint("stylesheet", __name__)
 
 
 @bp.route("/upload/<int:stylesheet_id>", methods=["PUT", "PATCH"])
@@ -17,8 +17,11 @@ def upload(stylesheet_id: int):
         db.session.query(Stylesheet).filter_by(id=stylesheet_id)
     )
     schema = StylesheetSchema(
-        unknown=EXCLUDE, session=db.session, instance=style, partial=True,
-        include=("source",)
+        unknown=EXCLUDE,
+        session=db.session,
+        instance=style,
+        partial=True,
+        include=("source",),
     )
 
     data = dict(request.form.copy())

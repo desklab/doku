@@ -8,7 +8,7 @@ from doku.models.template import Template, Stylesheet, template_stylesheet_relat
 from doku.utils.db import get_or_404
 from doku.utils.decorators import login_required
 
-bp = Blueprint("api.v1.template", __name__)
+bp = Blueprint("template", __name__)
 
 
 @bp.route("/", methods=["PUT", "PATCH"])
