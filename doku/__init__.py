@@ -36,6 +36,8 @@ from doku.utils.middlewares.csrf import CSRFMiddleware, csrf
 from doku.utils.middlewares.hosts import host_middleware
 from doku.utils.session import RedisSessionInterface
 
+from doku.signals.document import *
+
 
 def create_app(
     name="doku",

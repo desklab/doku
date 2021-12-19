@@ -12,8 +12,8 @@
     <script>
         window.templateObj = {{ template_json|tojson }};
         window.stylesheets = {{ stylesheets_json|tojson }};
-        window.templateApi = '{{ url_for('api.v1.template.update') }}'
-        window.stylesheetApi = '{{ url_for('api.v1.stylesheet.update') }}'
+        window.templateApi = '{{ url_for('api.v1.template.api') }}'
+        window.stylesheetApi = '{{ url_for('api.v1.stylesheet.api') }}'
         {{ create_csrf_token(output=False) }}
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='edit_template.bundle.js') }}"></script>

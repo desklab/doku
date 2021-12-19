@@ -1,31 +1,32 @@
-from flask import Blueprint
+import os
+import typing as t
 
+from flask import Blueprint, current_app, jsonify
+
+from doku.blueprints.api.v1.base import BaseApiView
+from doku.models import db
+from doku.models.resource import Resource
 from doku.models.schemas import ResourceSchema
-from doku.utils.decorators import login_required
+from doku.models.schemas.common import ApiSchema
 
 bp = Blueprint("resource", __name__)
 
 
-@bp.route("/", methods=["POST"])
-def create():
-    raise NotImplementedError()
+class ResourceApiView(BaseApiView):
+    model: t.Type[db.Model] = Resource
+    schema: t.Type[ApiSchema] = ResourceSchema
+
+    def post(self, *, commit: bool = True):
+        raise NotImplementedError()
+
+    def delete(self, pk: int, commit: bool = True):
+        instance = self.get_instance(pk)
+        filename = instance.filename
+        os.remove(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
+        db.session.delete(instance)
+        if commit:
+            db.session.commit()
+        return jsonify({"success": True})
 
 
-@bp.route("/", methods=["PUT", "PATCH"])
-def update():
-    return ResourceSchema.update()
-
-
-@bp.route("/", methods=["GET"])
-def get_all():
-    return ResourceSchema.get_all()
-
-
-@bp.route("/<int:resource_id>/", methods=["GET"])
-def get(resource_id: int):
-    return ResourceSchema.get(resource_id)
-
-
-@bp.route("/<int:resource_id>/", methods=["DELETE"])
-def delete(resource_id: int):
-    return ResourceSchema.delete(resource_id)
+ResourceApiView.register(bp, "api", "/")

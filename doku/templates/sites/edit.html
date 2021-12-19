@@ -13,9 +13,9 @@
         window.documentObj = {{ document_json|tojson }};
         window.templateObj = {{ template_json|tojson }};
         window.stylesheets = {{ stylesheets_json|tojson }};
-        window.variableApi = '{{ url_for('api.v1.variable.update') }}'
-        window.documentApi = '{{ url_for('api.v1.document.update') }}'
-        window.templateApi = '{{ url_for('api.v1.template.update') }}'
+        window.variableApi = '{{ url_for('api.v1.variable.api') }}'
+        window.documentApi = '{{ url_for('api.v1.document.api') }}'
+        window.templateApi = '{{ url_for('api.v1.template.api') }}'
         {{ create_csrf_token(output=False) }}
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='edit.bundle.js') }}"></script>

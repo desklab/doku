@@ -43,33 +43,6 @@ class TemplateSchema(ApiSchema, DateSchemaMixin):
             return None
         return url_for("api.v1.template.remove_stylesheet", template_id=template.id)
 
-    @classmethod
-    def update(cls, commit=True):
-        data = cls.all_request_data()
-        schema = cls(partial=True, session=db.session, many=isinstance(data, list))
-        try:
-            template = schema.load(data)
-        except ValidationError as e:
-            return jsonify(e.messages), BadRequest.code
-        for document in template.documents:
-            for name in template.available_fields:
-                get_or_create(Variable, document=document, name=name)
-        if commit:
-            db.session.commit()
-        result = schema.dump(template)
-        return jsonify(result)
-
-    @classmethod
-    def delete(cls, instance_id: int, commit=True):
-        instance = get_or_404(
-            db.session.query(cls.Meta.model).filter_by(id=instance_id)
-        )
-        db.session.delete(instance)
-        if commit:
-            db.session.commit()
-
-        return jsonify({"success": True})
-
 
 class StylesheetSchema(ApiSchema, DateSchemaMixin):
     class Meta:
@@ -90,19 +63,3 @@ class StylesheetSchema(ApiSchema, DateSchemaMixin):
         if stylesheet.id is None:
             return None
         return url_for("api.v1.stylesheet.upload", stylesheet_id=stylesheet.id)
-
-    def _delete_url(self, stylesheet) -> Optional[str]:
-        if stylesheet.id is None:
-            return None
-        return url_for("api.v1.stylesheet.delete", stylesheet_id=stylesheet.id)
-
-    @classmethod
-    def delete(cls, instance_id: int, commit=True):
-        instance = get_or_404(
-            db.session.query(cls.Meta.model).filter_by(id=instance_id)
-        )
-        db.session.delete(instance)
-        if commit:
-            db.session.commit()
-
-        return jsonify({"success": True})

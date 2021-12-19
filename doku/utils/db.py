@@ -1,4 +1,4 @@
-from typing import Optional
+import typing as t
 
 from sqlalchemy.orm import Query, Session
 from sqlalchemy.types import String
@@ -31,7 +31,7 @@ def get_or_404(query: Query, query_type: str = "one"):
         raise NotFound()
 
 
-def get_or_create(model: db.Model, commit=False, **kwargs) -> db.Model:
+def get_or_create(model: t.Type[db.Model], *, commit=False, **kwargs) -> db.Model:
     """Get or create"""
     try:
         return db.session.query(model).filter_by(**kwargs).one()
@@ -43,7 +43,18 @@ def get_or_create(model: db.Model, commit=False, **kwargs) -> db.Model:
         return instance
 
 
-def get_pagination_page() -> Optional[int]:
+def create_if_not_exists(model: t.Type[db.Model], *, commit=False, **model_kwargs):
+    if not db.session.query(model.query.filter_by(**model_kwargs).exists()).scalar():
+        instance = model(**model_kwargs)
+        db.session.add(instance)
+        if commit:
+            db.session.commit()
+        return False
+    else:
+        return True
+
+
+def get_pagination_page() -> t.Optional[int]:
     page = request.args.get("page", None)
     if page is not None:
         try:
@@ -54,8 +65,8 @@ def get_pagination_page() -> Optional[int]:
 
 
 def get_ordering(
-    model: type(DeclarativeMeta), default_order: str = None, default_dir: str = None
-) -> Optional[tuple]:
+    model: t.Type[db.Model], default_order: str = None, default_dir: str = None
+) -> t.Optional[tuple]:
     """Get Ordering
 
     Get ordering from request arguments

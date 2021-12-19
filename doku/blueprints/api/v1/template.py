@@ -3,6 +3,7 @@ from sqlalchemy import and_
 from werkzeug.exceptions import BadRequest
 
 from doku import db
+from doku.blueprints.api.v1.base import api_view_factory, BaseApiView
 from doku.models.schemas import TemplateSchema
 from doku.models.template import Template, Stylesheet, template_stylesheet_relation
 from doku.utils.db import get_or_404
@@ -11,29 +12,10 @@ from doku.utils.decorators import login_required
 bp = Blueprint("template", __name__)
 
 
-@bp.route("/", methods=["PUT", "PATCH"])
-def update():
-    return TemplateSchema.update()
-
-
-@bp.route("/", methods=["POST"])
-def create():
-    return TemplateSchema.create(commit=True)
-
-
-@bp.route("/", methods=["GET"])
-def get_all():
-    return TemplateSchema.get_all()
-
-
-@bp.route("/<int:template_id>/", methods=["GET"])
-def get(template_id: int):
-    return TemplateSchema.get(template_id)
-
-
-@bp.route("/<int:template_id>/", methods=["DELETE"])
-def delete(template_id: int):
-    return TemplateSchema.delete(template_id)
+TemplateApiView = api_view_factory(
+    Template, TemplateSchema,
+    register=True, register_args=(bp, "api", "/")
+)
 
 
 @bp.route("/<int:template_id>/stylesheet", methods=["POST"])
@@ -42,7 +24,7 @@ def add_stylesheet(template_id: int):
         db.session.query(Template).filter_by(id=template_id)
     )
     template_schema = TemplateSchema(include=("styles",))
-    data = TemplateSchema.all_request_data()
+    data = BaseApiView.all_request_data()
     if isinstance(data, list):
         for entry in data:
             style: Stylesheet = get_or_404(
@@ -61,7 +43,7 @@ def remove_stylesheet(template_id: int):
     template: Template = get_or_404(
         db.session.query(Template).filter_by(id=template_id)
     )
-    data = TemplateSchema.all_request_data()
+    data = BaseApiView.all_request_data()
     if isinstance(data, list):
         for entry in data:
             if not hasattr(entry, "id"):

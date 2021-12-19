@@ -1,11 +1,12 @@
 import json
 from datetime import datetime
 
-from werkzeug.exceptions import BadRequest, TooManyRequests
-from flask import Blueprint, current_app, jsonify, request, session
 from celery.result import AsyncResult
+from flask import Blueprint, current_app, jsonify, request, session
 from flask_babel import format_timedelta, format_datetime
+from werkzeug.exceptions import BadRequest, TooManyRequests
 
+from doku.blueprints.api.v1.base import api_view_factory
 from doku.models import db
 from doku.models.document import Document
 from doku.models.schemas import DocumentSchema
@@ -16,29 +17,10 @@ from doku.utils import EMPTY
 bp = Blueprint("document", __name__)
 
 
-@bp.route("/", methods=["POST"])
-def create():
-    return DocumentSchema.create(commit=True)
-
-
-@bp.route("/", methods=["PUT", "PATCH"])
-def update():
-    return DocumentSchema.update()
-
-
-@bp.route("/", methods=["GET"])
-def get_all():
-    return DocumentSchema.get_all()
-
-
-@bp.route("/<int:document_id>/", methods=["GET"])
-def get(document_id: int):
-    return DocumentSchema.get(document_id)
-
-
-@bp.route("/<int:document_id>/", methods=["DELETE"])
-def delete(document_id: int):
-    return DocumentSchema.delete(document_id)
+DocumentApiView = api_view_factory(
+    Document, DocumentSchema,
+    register=True, register_args=(bp, "api", "/")
+)
 
 
 @bp.route("/ids", methods=["GET"])

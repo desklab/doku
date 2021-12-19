@@ -29,7 +29,7 @@
 {% block extra_js %}
     <script>
         window.resources = {{ resources_json|tojson }};
-        window.resourceApi = '{{ url_for('api.v1.resource.update') }}'
+        window.resourceApi = '{{ url_for('api.v1.resource.api') }}'
         {{ create_csrf_token(output=False) }}
         document.getElementById('addButton').disabled = true;
         function check_input() {

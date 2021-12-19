@@ -13,7 +13,7 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-        window.templateApi = '{{ url_for('api.v1.template.get_all') }}';
+        window.templateApi = '{{ url_for('api.v1.template.api') }}';
     </script>
     {{ create_csrf_token(output=False) }}
     <script type="text/javascript" src="{{ url_for('static', filename='main.bundle.js') }}"></script>

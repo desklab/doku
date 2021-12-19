@@ -3,6 +3,7 @@ from marshmallow import ValidationError, EXCLUDE
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest
 
+from doku.blueprints.api.v1.base import api_view_factory
 from doku.models import db
 from doku.models.schemas import StylesheetSchema
 from doku.models.template import Stylesheet
@@ -44,26 +45,7 @@ def upload(stylesheet_id: int):
     return jsonify(result)
 
 
-@bp.route("/", methods=["PUT", "PATCH"])
-def update():
-    return StylesheetSchema.update()
-
-
-@bp.route("/", methods=["POST"])
-def create():
-    return StylesheetSchema.create()
-
-
-@bp.route("/", methods=["GET"])
-def get_all():
-    return StylesheetSchema.get_all()
-
-
-@bp.route("/<int:stylesheet_id>/", methods=["GET"])
-def get(stylesheet_id: int):
-    return StylesheetSchema.get(stylesheet_id)
-
-
-@bp.route("/<int:stylesheet_id>/", methods=["DELETE"])
-def delete(stylesheet_id: int):
-    return StylesheetSchema.delete(stylesheet_id)
+StylesheetApiView = api_view_factory(
+    Stylesheet, StylesheetSchema,
+    register=True, register_args=(bp, "api", "/")
+)

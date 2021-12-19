@@ -6,6 +6,7 @@ Flask-Babel>=2.0
 werkzeug~=2.0
 itsdangerous~=2.0
 click~=8.0
+blinker~=1.4
 
 celery~=5.0
 redis
