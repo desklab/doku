@@ -37,23 +37,23 @@ USER doku
 
 RUN mkdir -p /home/doku/.local/share/fonts
 
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Regular.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/nunito/master/fonts/TTF/Nunito-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/nunito/main/fonts/variable/Nunito-Italic[wght].ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/nunito/main/fonts/variable/Nunito[wght].ttf /home/doku/.local/share/fonts
 
 ADD --chown=doku https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Bold.ttf /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Italic.ttf /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf /home/doku/.local/share/fonts
 
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Bold.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Medium.ttf  /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Regular.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Light.ttf  /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Thin.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-BoldItalic.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-MediumItalic.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-Italic.ttf /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-LightItalic.ttf  /home/doku/.local/share/fonts
-ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/master/fonts/ttf/RobotoMono-ThinItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-Bold.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-Medium.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-Regular.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-Light.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-Thin.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-BoldItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-MediumItalic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-Italic.ttf /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-LightItalic.ttf  /home/doku/.local/share/fonts
+ADD --chown=doku https://raw.githubusercontent.com/googlefonts/RobotoMono/main/fonts/ttf/RobotoMono-ThinItalic.ttf /home/doku/.local/share/fonts
 
 ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_AMS-Regular.ttf /home/doku/.local/share/fonts
 ADD --chown=doku https://raw.githubusercontent.com/KaTeX/katex-fonts/master/fonts/KaTeX_Caligraphic-Bold.ttf /home/doku/.local/share/fonts
