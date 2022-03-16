@@ -19,12 +19,14 @@ BLEACH_ALLOWED_TAGS: List[str] = [
     "sub", "sup",
 ]
 
-
 BLEACH_ALLOWED_ATTRS: dict = {
     "*": ["class", "id", "style"],
     "img": ["src", "alt", "title", "width", "height"],
     "a": ["href", "alt", "title"],
 }
+
+BLEACH_ALLOWED_PROTOCOLS = ["http", "https", "dokures"]
+
 # fmt: on
 
 
@@ -37,7 +39,10 @@ def compile_content(content: str, css_class: Optional[str], use_markdown: bool) 
     else:
         # Make sure we sanitize content before saving it as
         # ``compiled_content`` even if we do not use markdown.
-        content = bleach.clean(content, BLEACH_ALLOWED_TAGS, BLEACH_ALLOWED_ATTRS)
+        content = bleach.clean(content,
+                               tags=BLEACH_ALLOWED_TAGS,
+                               attributes=BLEACH_ALLOWED_ATTRS,
+                               protocols=BLEACH_ALLOWED_PROTOCOLS)
         if use_markdown:
             return markdown.markdown(
                 content,
