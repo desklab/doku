@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-slim-bullseye
 LABEL maintainer="j.drotleff@desk-lab.de"
 
 ENV PYTHONUNBUFFERED 1
