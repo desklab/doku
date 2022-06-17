@@ -1,4 +1,4 @@
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __author__ = "Jonas Drotleff <j.drotleff@desk-lab.de>"
 __all__ = ["create_app", "cli"]
 
