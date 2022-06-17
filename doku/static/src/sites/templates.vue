@@ -9,6 +9,15 @@
         Create new template
       </button>
     </div>
+    <form action="" class="mb-2" method="get">
+      <input type="hidden" name="page" :value="formPage"/>
+      <div class="form-inline">
+          <input class="form-input input-sm" type="text" name="query" :value="formQuery" placeholder="Search">
+      </div>
+      <button class="btn btn-sm btn-primary" type="submit">
+          Search
+      </button>
+    </form>
 
     <template-item
       v-for="template in templates"
@@ -60,6 +69,12 @@ export default {
   name: 'Templates',
   components: {
     TemplateItem, Modal, PlusIcon
+  },
+  data() {
+    return {
+      formPage: window._formPage,
+      formQuery: window._formQuery,
+    };
   },
   computed: mapState({
     templates: state => state.template.templates,

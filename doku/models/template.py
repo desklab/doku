@@ -4,9 +4,10 @@ from typing import List, Tuple
 from jinja2 import Environment, meta
 from jinja2 import Template as Jinja2Template
 from pygments.formatters.html import HtmlFormatter
+from sqlalchemy import Index
 from weasyprint import HTML, CSS
 
-from doku.models import db, DateMixin
+from doku.models import db, DateMixin, TSVector
 from doku.utils.weasyfetch import url_fetcher
 
 DEFAULT_TEMPLATE = """<!doctype html>
@@ -47,6 +48,18 @@ class Template(db.Model, DateMixin):
     documents = db.relationship("Document", back_populates="template")
     styles = db.relationship(
         "Stylesheet", secondary=template_stylesheet_relation, back_populates="templates"
+    )
+
+    __ts_vector__ = db.Column(
+        TSVector(),
+        db.Computed(
+            "to_tsvector('english', name)",
+            persisted=True
+        )
+    )
+
+    __table_args__ = (
+        Index('doku_template___ts_vector__', __ts_vector__, postgresql_using='gin'),
     )
 
     def __str__(self):
@@ -109,6 +122,18 @@ class Stylesheet(db.Model, DateMixin):
     )
 
     MAX_CONTENT_LENGTH = 125000
+
+    __ts_vector__ = db.Column(
+        TSVector(),
+        db.Computed(
+            "to_tsvector('english', name)",
+            persisted=True
+        )
+    )
+
+    __table_args__ = (
+        Index('doku_stylesheet___ts_vector__', __ts_vector__, postgresql_using='gin'),
+    )
 
     def __str__(self):
         return self.name

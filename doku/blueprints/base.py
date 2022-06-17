@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 from doku.models import db
 from doku.models.document import Document
@@ -15,9 +15,15 @@ def index():
     ordering, order, direction = get_ordering(
         Document, default_order="last_updated", default_dir="desc"
     )
-    documents = (
-        db.session.query(Document).order_by(ordering).paginate(page=page, per_page=10)
-    )
+    query: str = request.args.get("query", "", type=str)
+    documents = db.session.query(Document)
+    if query != "":
+        documents = documents.filter(Document.__ts_vector__.match(query))
+    documents = documents.order_by(ordering).paginate(page=page, per_page=10)
     return render_template(
-        "sites/index.html", documents=documents, order=order, direction=direction
+        "sites/index.html",
+        documents=documents,
+        order=order,
+        direction=direction,
+        query=query,
     )

@@ -1,11 +1,11 @@
 {% extends "components/list.html" %}
 {% block head %}
 <th>
-    <a class="text-dark" href="{{ url_for('base.index', order='name', dir='asc', page=documents.page) }}">NAME</a>
+    <a class="text-dark" href="{{ url_for('base.index', order='name', dir='asc', page=documents.page, query=query) }}">NAME</a>
 </th>
 <th>TEMPLATE</th>
 <th>
-    <a class="text-dark" href="{{ url_for('base.index', order='last_updated', dir='desc', page=documents.page) }}">LAST UPDATED</a>
+    <a class="text-dark" href="{{ url_for('base.index', order='last_updated', dir='desc', page=documents.page, query=query) }}">LAST UPDATED</a>
 </th>
 {% endblock head %}
 {% block body %}

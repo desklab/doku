@@ -43,13 +43,18 @@ def index():
                 db.session.add(resource)
                 db.session.commit()
     page = get_pagination_page()
-    resources = db.session.query(Resource).paginate(page=page, per_page=10)
+    query: str = request.args.get("query", "", type=str)
+    resources = db.session.query(Resource)
+    if query != "":
+        resources = resources.filter(Resource.__ts_vector__.match(query))
+    resources = resources.paginate(page=page, per_page=10)
 
     resource_schemas = ResourceSchema(session=db.session, many=True)
     return render_template(
         "sites/resources.html",
         resources_json=resource_schemas.dumps(resources.items),
         resources=resources,
+        query=query,
     )
 
 

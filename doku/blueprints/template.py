@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 from doku import db
 from doku.models.schemas import TemplateSchema, StylesheetSchema
@@ -13,19 +13,17 @@ bp = Blueprint("template", __name__)
 @login_required
 def index_all():
     page = get_pagination_page()
-    ordering, order, direction = get_ordering(
-        Template, default_order="name", default_dir="asc"
-    )
-    templates = (
-        db.session.query(Template).order_by(ordering).paginate(page=page, per_page=10)
-    )
+    query: str = request.args.get("query", "", type=str)
+    templates = db.session.query(Template)
+    if query != "":
+        templates = templates.filter(Template.__ts_vector__.match(query))
+    templates = templates.paginate(page=page, per_page=10)
     template_schema = TemplateSchema(session=db.session, many=True)
     return render_template(
         "sites/templates.html",
         templates_json=template_schema.dumps(templates.items),
         templates=templates,
-        order=order,
-        direction=direction,
+        query=query,
     )
 
 

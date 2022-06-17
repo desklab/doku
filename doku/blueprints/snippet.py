@@ -15,8 +15,16 @@ bp = Blueprint("snippet", __name__)
 @login_required
 def index():
     page = get_pagination_page()
-    snippets = db.session.query(Snippet).paginate(page=page, per_page=10)
-    return render_template("sites/snippets.html", snippets=snippets)
+    query: str = request.args.get("query", "", type=str)
+    snippets = db.session.query(Snippet)
+    if query != "":
+        snippets = snippets.filter(Snippet.__ts_vector__.match(query))
+    snippets = snippets.paginate(page=page, per_page=10)
+    return render_template(
+        "sites/snippets.html",
+        snippets=snippets,
+        query=query,
+    )
 
 
 @bp.route("/<int:snippet_id>", methods=["GET", "POST"])

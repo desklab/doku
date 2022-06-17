@@ -5,6 +5,15 @@
     <div class="pt-4 px-4">
         <h3>Resources</h3>
     </div>
+    <form action="" class="ml-2" method="get">
+        <input type="hidden" name="page" value="{{ resources.page }}"/>
+        <div class="form-inline">
+            <input class="form-input input-sm" type="text" name="query" value="{{ query }}" placeholder="Search">
+        </div>
+        <button class="btn btn-sm btn-primary" type="submit">
+            Search
+        </button>
+    </form>
     <div class="container">
         <div class="border rounded p-4 my-2 bg-gray resource-form">
             <form action="" method="post" enctype="multipart/form-data">

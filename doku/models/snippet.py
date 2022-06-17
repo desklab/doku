@@ -1,6 +1,6 @@
-from sqlalchemy import event
+from sqlalchemy import event, Index
 
-from doku.models import db, DateMixin
+from doku.models import db, DateMixin, TSVector
 from doku.utils.markdown import compile_content
 
 
@@ -22,6 +22,18 @@ class Snippet(db.Model, DateMixin):
     compiled_content = db.Column(db.UnicodeText, nullable=False, default="")
 
     used_by = db.relationship("Variable")
+
+    __ts_vector__ = db.Column(
+        TSVector(),
+        db.Computed(
+            "to_tsvector('english', name)",
+            persisted=True
+        )
+    )
+
+    __table_args__ = (
+        Index('doku_snippet___ts_vector__', __ts_vector__, postgresql_using='gin'),
+    )
 
     def __str__(self):
         return f"Snippet {self.name}"

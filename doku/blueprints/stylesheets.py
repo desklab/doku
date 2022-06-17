@@ -46,7 +46,11 @@ def index():
             db.session.commit()
 
     page = get_pagination_page()
-    stylesheets = db.session.query(Stylesheet).paginate(page=page, per_page=10)
+    query: str = request.args.get("query", "", type=str)
+    stylesheets = db.session.query(Stylesheet)
+    if query != "":
+        stylesheets = stylesheets.filter(Stylesheet.__ts_vector__.match(query))
+    stylesheets = stylesheets.paginate(page=page, per_page=10)
 
     stylesheet_schemas = StylesheetSchema(
         session=db.session, many=True, include=("source",)
@@ -54,5 +58,5 @@ def index():
     return render_template(
         "sites/stylesheets.html",
         stylesheets_json=stylesheet_schemas.dumps(stylesheets.items),
-        stylesheets=stylesheets,
+        stylesheets=stylesheets, query=query
     )

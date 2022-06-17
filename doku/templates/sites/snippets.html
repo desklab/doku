@@ -13,6 +13,15 @@
             </form>
         </div>
     </div>
+    <form action="" class="ml-2 mb-3" method="get">
+        <input type="hidden" name="page" value="{{ snippets.page }}"/>
+        <div class="form-inline">
+            <input class="form-input input-sm" type="text" name="query" value="{{ query }}" placeholder="Search">
+        </div>
+        <button class="btn btn-sm btn-primary" type="submit">
+            Search
+        </button>
+    </form>
     <div class="mx-2 columns">
         {% for item in snippets.items %}
             <div class="column col-6 col-md-12">

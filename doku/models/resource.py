@@ -2,9 +2,10 @@ import random
 import string
 
 from flask import url_for
+from sqlalchemy import Index
 from werkzeug.utils import secure_filename
 
-from doku.models import db, DateMixin
+from doku.models import db, DateMixin, TSVector
 
 
 class Resource(db.Model, DateMixin):
@@ -15,6 +16,18 @@ class Resource(db.Model, DateMixin):
 
     name = db.Column(db.String(255), unique=False, nullable=False)
     filename = db.Column(db.String(255), unique=True, nullable=False)
+
+    __ts_vector__ = db.Column(
+        TSVector(),
+        db.Computed(
+            "to_tsvector('english', name)",
+            persisted=True
+        )
+    )
+
+    __table_args__ = (
+        Index('doku_resource___ts_vector__', __ts_vector__, postgresql_using='gin'),
+    )
 
     @property
     def url(self):

@@ -3,8 +3,14 @@ from datetime import datetime, timezone
 from flask_babel import format_timedelta, format_datetime
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import auto_field
+from sqlalchemy import TypeDecorator
+from sqlalchemy.dialects.postgresql import TSVECTOR
 
 db = SQLAlchemy(session_options={"autoflush": False})
+
+
+class TSVector(TypeDecorator):
+    impl = TSVECTOR
 
 
 class DateMixin:

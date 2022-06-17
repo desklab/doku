@@ -1,13 +1,13 @@
 <ul class="pagination mt-auto">
     <li class="page-item{% if not pagination.has_prev %} disabled{% endif %}">
-        <a href="{{ url_for(page_url, page=pagination.prev_num, order=order, dir=direction) }}" tabindex="-1">
+        <a href="{{ url_for(page_url, page=pagination.prev_num, order=order, dir=direction, query=query) }}" tabindex="-1">
             {% include "components/icons/arrow-left.html" %}
         </a>
     </li>
     {%- for page in pagination.iter_pages() %}
         {% if page %}
             <li class="page-item{% if page == pagination.page %} active{% endif %}">
-                <a href="{{ url_for(page_url, page=page, order=order, dir=direction) }}">{{ page }}</a>
+                <a href="{{ url_for(page_url, page=page, order=order, dir=direction, query=query) }}">{{ page }}</a>
             </li>
         {% else %}
             <li class="page-item">
@@ -16,7 +16,7 @@
         {% endif %}
     {%- endfor %}
     <li class="page-item{% if not pagination.has_next %} disabled{% endif %}">
-        <a href="{{ url_for(page_url, page=pagination.next_num, order=order, dir=direction) }}">
+        <a href="{{ url_for(page_url, page=pagination.next_num, order=order, dir=direction, query=query) }}">
             {% include "components/icons/arrow-right.html" %}
         </a>
     </li>

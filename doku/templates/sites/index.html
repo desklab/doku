@@ -2,6 +2,17 @@
 {% block content %}
     {{ super() }}
     <div id="app"></div>
+    <form action="" class="ml-2" method="get">
+        <input type="hidden" name="page" value="{{ documents.page }}"/>
+        <input type="hidden" name="order" value="{{ order }}"/>
+        <input type="hidden" name="dir" value="{{ direction }}"/>
+        <div class="form-inline">
+            <input class="form-input input-sm" type="text" name="query" value="{{ query }}" placeholder="Search">
+        </div>
+        <button class="btn btn-sm btn-primary" type="submit">
+            Search
+        </button>
+    </form>
     <div class="mx-2">
         {% with items=documents.items %}
             {% include "components/document_list.html" %}

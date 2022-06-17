@@ -15,6 +15,8 @@
         window.templates = {{ templates_json|tojson }};
         window.templateApi = '{{ url_for('api.v1.template.api') }}';
         {{ create_csrf_token(output=False) }}
+        window._formPage = "{{ templates.page }}";
+        window._formQuery = "{{ query }}";
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='templates.bundle.js') }}"></script>
 {% endblock %}

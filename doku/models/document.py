@@ -1,6 +1,7 @@
 from flask import session
+from sqlalchemy import Index
 
-from doku.models import db, DateMixin
+from doku.models import db, DateMixin, TSVector
 
 
 class Document(db.Model, DateMixin):
@@ -32,6 +33,18 @@ class Document(db.Model, DateMixin):
         "Variable",
         primaryjoin="and_(Variable.document_id == Document.id, Variable.group_id == null())",
         overlaps="variables, document",
+    )
+
+    __ts_vector__ = db.Column(
+        TSVector(),
+        db.Computed(
+            "to_tsvector('english', name)",
+            persisted=True
+        )
+    )
+
+    __table_args__ = (
+        Index('doku_document___ts_vector__', __ts_vector__, postgresql_using='gin'),
     )
 
     def __init__(self, *args, author_id=None, author=None, **kwargs):
