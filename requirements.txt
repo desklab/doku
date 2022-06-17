@@ -18,9 +18,9 @@ alembic>=1.7
 marshmallow>=3.14
 marshmallow_sqlalchemy
 
-WeasyPrint>=53
 Markdown>=3.3
 bleach
+WeasyPrint>=52,<53
 Pygments>=2.6.1
 jinja2>=3
 markdown-katex
