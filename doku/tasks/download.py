@@ -3,7 +3,7 @@ import zipfile
 import shutil
 from typing import List, Optional
 
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 from werkzeug.security import safe_join
 
 from doku.tasks import celery

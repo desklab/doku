@@ -26,8 +26,8 @@ def upload(stylesheet_id: int):
     )
 
     data = dict(request.form.copy())
-    if request.json is not None:
-        data.update(request.json)
+    if request.get_json(silent=True) is not None:
+        data.update(request.get_json(silent=True))
 
     if request.files.get("source", None) is not None:
         file: FileStorage = request.files.get("source")

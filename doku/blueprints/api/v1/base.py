@@ -146,10 +146,10 @@ class BaseApiView(MethodView):
         """
         base_data = request.values if include_args else request.form
         data = dict(base_data.copy())
-        if request.json is not None:
-            if isinstance(request.json, list):
-                return request.json
-            data.update(request.json)
+        if request.get_json(silent=True) is not None:
+            if isinstance(request.get_json(silent=True), list):
+                return request.get_json(silent=True)
+            data.update(request.get_json(silent=True))
         return data
 
     @classmethod

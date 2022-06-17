@@ -1,10 +1,8 @@
 from typing import Optional
 
-from sqlalchemy.orm.exc import NoResultFound
-from werkzeug.exceptions import Unauthorized, Forbidden, NotFound, BadRequest
 from flask import Blueprint, session, redirect, url_for, request, render_template
+from werkzeug.exceptions import Unauthorized
 
-from doku.models import db
 from doku.models.user import User
 from doku.utils.decorators import login_required
 

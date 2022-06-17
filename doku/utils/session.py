@@ -13,18 +13,14 @@ Flask-based sessions used for doku
 import json
 import secrets
 from json import JSONDecodeError
-from typing import List
 
 from flask import Flask, Response
-from flask.helpers import total_seconds
-from werkzeug.exceptions import Unauthorized
 from flask.sessions import SessionInterface, SessionMixin
+from itsdangerous import Signer, BadSignature
 from redis import Redis
 from werkzeug.datastructures import CallbackDict
-from itsdangerous import Signer, BadSignature, want_bytes
 
 from doku.utils import EMPTY
-from doku.models.user import User
 
 
 class Session(CallbackDict, SessionMixin):

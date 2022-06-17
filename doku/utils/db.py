@@ -3,8 +3,8 @@ import typing as t
 from sqlalchemy.orm import Query, Session
 from sqlalchemy.types import String
 from sqlalchemy import inspect, desc, asc, func
-from sqlalchemy.orm.exc import NoResultFound
-from flask_sqlalchemy.model import DeclarativeMeta
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy.ext.declarative import DeclarativeMeta
 from werkzeug.exceptions import NotFound
 from flask import request
 

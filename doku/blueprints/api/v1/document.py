@@ -47,9 +47,9 @@ def download():
     if len(downloads) >= limit:
         raise TooManyRequests(f"You have {len(downloads)} pending downloads.")
     r = current_app.redis
-    download_all = request.json.get("all", False)
-    include = request.json.get("include")
-    exclude = request.json.get("exclude")
+    download_all = request.get_json(silent=True).get("all", False)
+    include = request.get_json(silent=True).get("include")
+    exclude = request.get_json(silent=True).get("exclude")
     task = request_download.apply_async(args=(download_all, include, exclude))
     tasks = r.get(f"doku_downloads_user_{user_id:d}")
     if tasks in EMPTY:

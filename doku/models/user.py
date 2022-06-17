@@ -7,11 +7,10 @@ from typing import Optional
 
 from itsdangerous.encoding import base64_encode, base64_decode
 from itsdangerous.exc import BadData
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash,
-    pbkdf2_hex,
     DEFAULT_PBKDF2_ITERATIONS,
 )
 from flask import session, request, current_app

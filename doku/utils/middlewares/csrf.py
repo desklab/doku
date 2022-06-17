@@ -65,8 +65,8 @@ class CSRFMiddleware:
             csrf_token = request.headers.get(self._config["HEADER_NAME"])
             if csrf_token is None:
                 data = request.values.copy()
-                if request.json is not None:
-                    data.update(request.json)
+                if request.get_json(silent=True) is not None:
+                    data.update(request.get_json(silent=True))
                 csrf_token = data.get("csrf_token", None)
             if csrf_token is None:
                 raise BadRequest(
